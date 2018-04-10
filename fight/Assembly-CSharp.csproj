@@ -53,6 +53,9 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Grid\GridInfo.cs" />
      <Compile Include="Assets\Scripts\Grid\GridMgr.cs" />
+     <Compile Include="Assets\Scripts\GUI\GUIImpl.cs" />
+     <Compile Include="Assets\Scripts\GUI\GUILogic.cs" />
+     <Compile Include="Assets\Scripts\Mgr\GameStatic.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
