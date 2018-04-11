@@ -4,9 +4,25 @@ using UnityEngine;
 
 public class GameStatic : MonoBehaviour {
     public static int gridMask;
-	
-	void Awake () {
+    public static GridMgr gridMgr;
+    public static EntityMgr entityMgr;
+
+    void Awake()
+    {
         SetMasks();
+    }
+
+	void Start () {
+        gridMgr = GameObject.Find("GridMgr").GetComponent<GridMgr>();
+        entityMgr = GameObject.Find("EntityMgr").GetComponent<EntityMgr>();
+        if (gridMgr == null)
+        {
+            Debug.LogError("GridMgr");
+        }
+        if (entityMgr == null)
+        {
+            Debug.LogError("EntityMgr");
+        }
 	}
 
     public static void SetMasks()

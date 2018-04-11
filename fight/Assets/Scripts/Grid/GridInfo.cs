@@ -15,4 +15,25 @@ public class GridInfo : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void SetGridUsed()
+    {
+        transform.GetComponent<Renderer>().material = GameStatic.gridMgr.usedMat;
+    }
+
+    public void SetGridUnUsed()
+    {
+        transform.GetComponent<Renderer>().material = GameStatic.gridMgr.unUsedMat;
+    }
+
+    void OnMouseEnter()
+    {
+        //transform.GetComponent<Renderer>().enabled = true;
+    }
+
+    void OnMouseExit()
+    {
+        //transform.GetComponent<Renderer>().enabled = false;
+    }
+
 }

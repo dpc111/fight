@@ -51,6 +51,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Entity\Entity.cs" />
+     <Compile Include="Assets\Scripts\Entity\EntityMgr.cs" />
      <Compile Include="Assets\Scripts\Grid\GridInfo.cs" />
      <Compile Include="Assets\Scripts\Grid\GridMgr.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIImpl.cs" />

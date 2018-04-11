@@ -7,6 +7,11 @@ public class GridMgr : MonoBehaviour {
     public Dictionary<int, GridInfo> grids = new Dictionary<int, GridInfo>();
     public Material unUsedMat;
     public Material usedMat;
+
+    public Camera raycastCam;
+    private Ray ray;
+    private RaycastHit gridHit;
+
     public int high = 20;
     public int width = 20;
     public int rowNum = 10;
@@ -22,7 +27,14 @@ public class GridMgr : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        ray = raycastCam.ScreenPointToRay(Input.mousePosition);
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (Physics.Raycast(ray, out gridHit, 1000, GameStatic.gridMask))
+            {
+                gridHit.transform.GetComponent<GridInfo>().SetGridUsed();
+            }
+        }
 	}
 
     public void ChangeVisible(bool visible)
@@ -36,17 +48,6 @@ public class GridMgr : MonoBehaviour {
         {
             tran.GetComponent<Renderer>().enabled = isVisible;
         }
-    }
-
-    public void SetGridUsed(Transform grid)
-    {
-        grid.GetComponent<Renderer>().material = usedMat;
-    }
-
-
-    public void SetGridUnUsed(Transform grid)
-    {
-        grid.GetComponent<Renderer>().material = unUsedMat;
     }
 
     public int GridId(int row, int col)
@@ -68,4 +69,6 @@ public class GridMgr : MonoBehaviour {
             }
         }
     }
+
+   
 }
