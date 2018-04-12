@@ -7,6 +7,7 @@ public class GridMgr : MonoBehaviour {
     public Dictionary<int, GridInfo> grids = new Dictionary<int, GridInfo>();
     public Material unUsedMat;
     public Material usedMat;
+    public Material focusMat;
 
     public Camera raycastCam;
     private Ray ray;
@@ -19,23 +20,78 @@ public class GridMgr : MonoBehaviour {
     public int gridSize = 20;
     public bool isVisible = true;
 
-	// Use this for initialization
 	void Start () {
         initGrids();
         ChangeVisible(true);
 	}
 	
-	// Update is called once per frame
 	void Update () {
-        ray = raycastCam.ScreenPointToRay(Input.mousePosition);
-        if (Input.GetMouseButtonUp(0))
+        if (isVisible && GameStatic.curEntity == null)
         {
-            if (Physics.Raycast(ray, out gridHit, 1000, GameStatic.gridMask))
+            ChangeVisible(false);
+        }
+        if (!isVisible && GameStatic.curEntity != null)
+        {
+            ChangeVisible(true);
+        }
+        //if (GameStatic.curEntity != null)
+        //{
+        //    GameStatic.curEntity.transform.position = Input.mousePosition;
+        //}
+        //ray = raycastCam.ScreenPointToRay(Input.mousePosition);
+        //if (Input.GetMouseButtonUp(0))
+        //{
+        //    if (Physics.Raycast(ray, out gridHit, 1000, GameStatic.gridMask))
+        //    {
+        //        GridInfo gridInfo = gridHit.transform.GetComponent<GridInfo>();
+        //        if (!gridInfo.used)
+        //        {
+        //            if (GameStatic.curEntity == null)
+        //            {
+        //                return;
+        //            }
+        //            gridInfo.SetGridUsed();
+        //            GameStatic.curGridInfo = gridInfo;
+        //            GameStatic.entityMgr.AddEntity();
+        //        }
+        //    }
+        //}
+        ray = raycastCam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out gridHit, 1000, GameStatic.gridMask))
+        {
+            if (GameStatic.curEntity != null)
             {
-                gridHit.transform.GetComponent<GridInfo>().SetGridUsed();
+                GameStatic.curEntity.transform.position = gridHit.transform.position;
+            }
+            if (Input.GetMouseButtonUp(0)) 
+            { 
+                GridInfo gridInfo = gridHit.transform.GetComponent<GridInfo>();
+                if (!gridInfo.used)
+                {
+                    if (GameStatic.curEntity == null)
+                    {
+                        return;
+                    }
+                    gridInfo.SetGridUsed();
+                    GameStatic.curGridInfo = gridInfo;
+                    GameStatic.entityMgr.AddEntity();
+                }
             }
         }
 	}
+
+    void OnMouseEnter()
+    {
+        Debug.LogError("121111");
+        ChangeVisible(true);
+    }
+
+    void OnMouseExit()
+    {
+        Debug.LogError("121111");
+        ChangeVisible(false);
+    }
+
 
     public void ChangeVisible(bool visible)
     {

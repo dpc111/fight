@@ -18,22 +18,35 @@ public class GridInfo : MonoBehaviour {
 
     public void SetGridUsed()
     {
+        used = true;
         transform.GetComponent<Renderer>().material = GameStatic.gridMgr.usedMat;
     }
 
     public void SetGridUnUsed()
     {
+        used = false;
         transform.GetComponent<Renderer>().material = GameStatic.gridMgr.unUsedMat;
     }
 
     void OnMouseEnter()
     {
-        //transform.GetComponent<Renderer>().enabled = true;
+        if (GameStatic.curEntity == null)
+        {
+            return;
+        }
+        transform.GetComponent<Renderer>().material = GameStatic.gridMgr.focusMat;
     }
 
     void OnMouseExit()
     {
-        //transform.GetComponent<Renderer>().enabled = false;
+        if (used)
+        {
+            SetGridUsed();
+        }
+        else
+        {
+            SetGridUnUsed();
+        }
     }
 
 }

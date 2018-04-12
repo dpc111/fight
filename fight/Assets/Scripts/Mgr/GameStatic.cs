@@ -6,6 +6,8 @@ public class GameStatic : MonoBehaviour {
     public static int gridMask;
     public static GridMgr gridMgr;
     public static EntityMgr entityMgr;
+    public static GridInfo curGridInfo;
+    public static GameObject curEntity;
 
     void Awake()
     {
@@ -27,7 +29,6 @@ public class GameStatic : MonoBehaviour {
 
     public static void SetMasks()
     {
-        //gridMask = LayerMask.NameToLayer("Grid");
         gridMask = 1 << LayerMask.NameToLayer("Grid");
     }
 }
