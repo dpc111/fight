@@ -1012,7 +1012,7 @@ static public class NGUIText
 						}
 					}
 
-					if (finalSpacingX < 0f) w += finalSpacingX;
+					w += finalSpacingX;
 
 					var mx = x + w;
 
@@ -1235,8 +1235,7 @@ static public class NGUIText
 			var previousSubscript = subscriptMode;
 
 			// When encoded symbols such as [RrGgBb] or [-] are encountered, skip past them
-			if (encoding && ParseSymbol(text, ref offset, mColors, premultiply, ref subscriptMode, ref bold,
-				ref italic, ref underline, ref strikethrough, ref ignoreColor))
+			if (encoding && ParseSymbol(text, ref offset, mColors, premultiply, ref subscriptMode, ref bold, ref italic, ref underline, ref strikethrough, ref ignoreColor))
 			{
 				// Adds "..." at the end of text that doesn't fit
 				if (lineCount == maxLineCount && useEllipsis && start < lastValidChar)
@@ -1338,7 +1337,7 @@ static public class NGUIText
 			if (useEllipsis && !space && x < ew) lastValidChar = offset;
 
 			// Doesn't fit?
-			if (x > maxWidth)
+			if (x > ew)
 			{
 				// Can't start a new line
 				if (lastLine)
@@ -1400,6 +1399,10 @@ static public class NGUIText
 				}
 				else
 				{
+					// Skip spaces at the beginning of the line
+					//while (start < offset && IsSpace(text[start])) ++start;
+					while (start < textLength && IsSpace(text[start])) ++start;
+
 					// Revert the position to the beginning of the word and reset the line
 					lineIsEmpty = true;
 					x = 0f;
@@ -1641,7 +1644,7 @@ static public class NGUIText
 					}
 				}
 
-				if (finalSpacingX < 0f) w += finalSpacingX;
+				w += finalSpacingX;
 
 				v0x = glyph.v0.x + x;
 				v0y = glyph.v0.y - y;
@@ -1834,11 +1837,8 @@ static public class NGUIText
 						}
 					}
 
-					if (strikethrough)
-					{
-						v0y = (-y + dash.v0.y);
-						v1y = (-y + dash.v1.y);
-					}
+					v0y = (-y + dash.v0.y);
+					v1y = (-y + dash.v1.y);
 
 					if (bold)
 					{

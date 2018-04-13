@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GUIImpl : MonoBehaviour {
-	// Use this for initialization
     public GameObject buttonAddEntity1;
     public GameObject buttonAddEntity2;
     public GameObject buttonAddEntity3;
 
 	void Start () {
-        buttonAddEntity1 = GameObject.Find("UI Root/ButtonAddEntity1");
+        buttonAddEntity1 = GameObject.Find("UI Root/Camera/ButtonAddEntity1");
+        if (buttonAddEntity1 == null)
+        {
+            Debug.LogError(".....");
+        }
         UIEventListener.Get(buttonAddEntity1).onClick = OnClickButtonAddEntity1;
-        buttonAddEntity2 = GameObject.Find("UI Root/ButtonAddEntity2");
+        buttonAddEntity2 = GameObject.Find("UI Root/Camera/ButtonAddEntity2");
         UIEventListener.Get(buttonAddEntity2).onClick = OnClickButtonAddEntity2;
-        buttonAddEntity3 = GameObject.Find("UI Root/ButtonAddEntity3");
+        buttonAddEntity3 = GameObject.Find("UI Root/Camera/ButtonAddEntity3");
         UIEventListener.Get(buttonAddEntity3).onClick = OnClickButtonAddEntity3;
 	}
 	
-	// Update is called once per frame
 	void Update () {
     }
 

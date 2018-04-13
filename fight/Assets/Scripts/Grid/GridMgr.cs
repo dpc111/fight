@@ -34,34 +34,12 @@ public class GridMgr : MonoBehaviour {
         {
             ChangeVisible(true);
         }
-        //if (GameStatic.curEntity != null)
-        //{
-        //    GameStatic.curEntity.transform.position = Input.mousePosition;
-        //}
-        //ray = raycastCam.ScreenPointToRay(Input.mousePosition);
-        //if (Input.GetMouseButtonUp(0))
-        //{
-        //    if (Physics.Raycast(ray, out gridHit, 1000, GameStatic.gridMask))
-        //    {
-        //        GridInfo gridInfo = gridHit.transform.GetComponent<GridInfo>();
-        //        if (!gridInfo.used)
-        //        {
-        //            if (GameStatic.curEntity == null)
-        //            {
-        //                return;
-        //            }
-        //            gridInfo.SetGridUsed();
-        //            GameStatic.curGridInfo = gridInfo;
-        //            GameStatic.entityMgr.AddEntity();
-        //        }
-        //    }
-        //}
         ray = raycastCam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out gridHit, 1000, GameStatic.gridMask))
         {
             if (GameStatic.curEntity != null)
             {
-                GameStatic.curEntity.transform.position = gridHit.transform.position;
+                GameStatic.curEntity.transform.position = gridHit.point + new Vector3(0, 5, 0);
             }
             if (Input.GetMouseButtonUp(0)) 
             { 

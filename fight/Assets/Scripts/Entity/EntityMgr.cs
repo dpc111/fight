@@ -3,11 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EntityMgr : MonoBehaviour {
-    public List<GameObject> entityPerfabs = new List<GameObject>();
+    public struct EntityType
+    {
+        public int blood;
+        public float cd;
+        public int damage;
+        public int bulletSpeed;
+    }
+    public List<GameObject> entityPrefabs = new List<GameObject>();
+    public List<GameObject> bulletPrefabs = new List<GameObject>();
+    public List<EntityType> entityTypes = new List<EntityType>();
     public Dictionary<int, GameObject> entitys = new Dictionary<int, GameObject>(); 
 
 	void Start () {
-		
+        entityTypes.Add(new EntityType { blood = 1000, cd = 1f, damage = 10, bulletSpeed = 10 });
+        entityTypes.Add(new EntityType { blood = 2000, cd = 0.5f, damage = 20, bulletSpeed = 20 });
+        entityTypes.Add(new EntityType { blood = 3000, cd = 0.3f, damage = 30, bulletSpeed = 30 });
 	}
 	
 	void Update () {
@@ -16,7 +27,7 @@ public class EntityMgr : MonoBehaviour {
 
     public void AddEntity ()
     {
-        if (entityPerfabs.Count <= 0)
+        if (entityPrefabs.Count <= 0)
         {
             return;
         }
@@ -28,19 +39,26 @@ public class EntityMgr : MonoBehaviour {
         {
             return;
         }
-        //int rand = Random.Range(0, entityPerfabs.Count);
-        //GameObject entPrefab = entityPerfabs[GameStatic.];
-        //GameObject entObject = Instantiate(entPrefab);
-        //entObject.transform.position = GameStatic.curGridInfo.center + new Vector3(0, 5, 0);
         GameStatic.curEntity.transform.position = GameStatic.curGridInfo.center + new Vector3(0, 5, 0);
+        GameStatic.curEntity.GetComponent<Fire>().open = true;
+        GameStatic.curEntity.GetComponent<Entity>().pos = GameStatic.curEntity.transform.position;
         GameStatic.curEntity = null;
     }
 
     public GameObject CreateEntity(int entityType)
     {
-        GameObject entPrefab = entityPerfabs[entityType];
+        GameObject entPrefab = entityPrefabs[entityType];
         GameObject entObject = Instantiate(entPrefab);
+        entObject.AddComponent<Entity>();   
+        entObject.AddComponent<Fire>();
         entObject.transform.position = Input.mousePosition;
+        EntityType entType = entityTypes[entityType];
+        Entity ent = entObject.GetComponent<Entity>();
+        ent.blood = entType.blood;
+        ent.cd = entType.cd;
+        ent.damage = entType.damage;
+        ent.bulletSpeed = entType.bulletSpeed;
+        ent.bulletPrefab = bulletPrefabs[entityType];
         return entObject;
     }
 }
