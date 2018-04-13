@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameStatic : MonoBehaviour {
+    public static int entityLayer;
     public static int gridMask;
+    public static int entityMask;
     public static GridMgr gridMgr;
     public static EntityMgr entityMgr;
     public static GridInfo curGridInfo;
@@ -29,6 +31,8 @@ public class GameStatic : MonoBehaviour {
 
     public static void SetMasks()
     {
+        entityLayer = LayerMask.NameToLayer("Entity");
         gridMask = 1 << LayerMask.NameToLayer("Grid");
+        entityMask = 1 << LayerMask.NameToLayer("Entity");
     }
 }

@@ -16,9 +16,9 @@ public class EntityMgr : MonoBehaviour {
     public Dictionary<int, GameObject> entitys = new Dictionary<int, GameObject>(); 
 
 	void Start () {
-        entityTypes.Add(new EntityType { blood = 1000, cd = 1f, damage = 10, bulletSpeed = 10 });
-        entityTypes.Add(new EntityType { blood = 2000, cd = 0.5f, damage = 20, bulletSpeed = 20 });
-        entityTypes.Add(new EntityType { blood = 3000, cd = 0.3f, damage = 30, bulletSpeed = 30 });
+        entityTypes.Add(new EntityType { blood = 100, cd = 1f, damage = 10, bulletSpeed = 10 });
+        entityTypes.Add(new EntityType { blood = 200, cd = 0.5f, damage = 20, bulletSpeed = 20 });
+        entityTypes.Add(new EntityType { blood = 300, cd = 0.3f, damage = 30, bulletSpeed = 30 });
 	}
 	
 	void Update () {
@@ -42,7 +42,18 @@ public class EntityMgr : MonoBehaviour {
         GameStatic.curEntity.transform.position = GameStatic.curGridInfo.center + new Vector3(0, 5, 0);
         GameStatic.curEntity.GetComponent<Fire>().open = true;
         GameStatic.curEntity.GetComponent<Entity>().pos = GameStatic.curEntity.transform.position;
+        GameStatic.curEntity.GetComponent<Entity>().grid = GameStatic.curGridInfo;
         GameStatic.curEntity = null;
+    }
+
+    public void RemoveEntity(GameObject entity)
+    {
+        GridInfo gridInfo = entity.GetComponent<Entity>().grid;
+        if (gridInfo != null)
+        {
+            gridInfo.SetGridUnUsed();
+        }
+        Destroy(entity);
     }
 
     public GameObject CreateEntity(int entityType)

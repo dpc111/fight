@@ -48,7 +48,9 @@ public class Fire : MonoBehaviour {
             return;
         }
         GameObject bullet = Instantiate(self.bulletPrefab);
-        bullet.transform.position = self.pos;
+        bullet.transform.position = self.pos + new Vector3(0, 0, 5);
+        bullet.AddComponent<Bullet>();
+        bullet.GetComponent<Bullet>().damage = self.damage;
         Rigidbody rig = bullet.GetComponent<Rigidbody>();
         rig.velocity = new Vector3(0, 0, self.bulletSpeed);
         Destroy(bullet, 5);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Entity : MonoBehaviour {
-    public Transform grid;
+    public GridInfo grid;
     public GameObject bulletPrefab;
     public Vector3 pos;
     public int blood;
@@ -18,4 +18,14 @@ public class Entity : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void AddBlood(int b)
+    {
+        blood = blood + b;
+        if (blood <= 0)
+        {
+            GameStatic.entityMgr.RemoveEntity(gameObject);
+            //Destroy(gameObject);
+        }
+    }
 }
