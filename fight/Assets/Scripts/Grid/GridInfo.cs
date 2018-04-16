@@ -5,6 +5,8 @@ using UnityEngine;
 public class GridInfo : MonoBehaviour {
     public bool used = false;
     public Vector3 center = new Vector3(0, 0, 0);
+    public int row;
+    public int col;
 
 	void Start () {
 		

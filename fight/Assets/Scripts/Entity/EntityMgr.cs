@@ -16,9 +16,9 @@ public class EntityMgr : MonoBehaviour {
     public Dictionary<int, GameObject> entitys = new Dictionary<int, GameObject>(); 
 
 	void Start () {
-        entityTypes.Add(new EntityType { blood = 100, cd = 1f, damage = 10, bulletSpeed = 10 });
-        entityTypes.Add(new EntityType { blood = 200, cd = 0.5f, damage = 20, bulletSpeed = 20 });
-        entityTypes.Add(new EntityType { blood = 300, cd = 0.3f, damage = 30, bulletSpeed = 30 });
+        entityTypes.Add(new EntityType { blood = 100, cd = 1f, damage = 3, bulletSpeed = 10 });
+        entityTypes.Add(new EntityType { blood = 200, cd = 0.5f, damage = 5, bulletSpeed = 20 });
+        entityTypes.Add(new EntityType { blood = 300, cd = 0.3f, damage = 10, bulletSpeed = 30 });
 	}
 	
 	void Update () {
@@ -43,6 +43,14 @@ public class EntityMgr : MonoBehaviour {
         GameStatic.curEntity.GetComponent<Fire>().open = true;
         GameStatic.curEntity.GetComponent<Entity>().pos = GameStatic.curEntity.transform.position;
         GameStatic.curEntity.GetComponent<Entity>().grid = GameStatic.curGridInfo;
+        if (GameStatic.curGridInfo.row <= 5)
+        {
+            GameStatic.curEntity.GetComponent<Entity>().camp = 1;
+        }
+        else
+        {
+            GameStatic.curEntity.GetComponent<Entity>().camp = 2;
+        }
         GameStatic.curEntity = null;
     }
 

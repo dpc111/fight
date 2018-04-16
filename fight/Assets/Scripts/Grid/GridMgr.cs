@@ -60,13 +60,11 @@ public class GridMgr : MonoBehaviour {
 
     void OnMouseEnter()
     {
-        Debug.LogError("121111");
         ChangeVisible(true);
     }
 
     void OnMouseExit()
     {
-        Debug.LogError("121111");
         ChangeVisible(false);
     }
 
@@ -99,7 +97,10 @@ public class GridMgr : MonoBehaviour {
                 gridGO.transform.position = new Vector3((j - 1) * gridSize + gridSize / 2, 0, (i - 1) * gridSize + gridSize / 2);
                 gridGO.transform.localScale = new Vector3(gridSize, 0.01f, gridSize);
                 gridGO.transform.parent = transform;
-                gridGO.GetComponent<GridInfo>().center = gridGO.transform.position;
+                GridInfo info = gridGO.GetComponent<GridInfo>();
+                info.center = gridGO.transform.position;
+                info.row = i;
+                info.col = j;
             }
         }
     }
