@@ -43,6 +43,7 @@ public class EntityMgr : MonoBehaviour {
         GameStatic.curEntity.GetComponent<Fire>().open = true;
         GameStatic.curEntity.GetComponent<Entity>().pos = GameStatic.curEntity.transform.position;
         GameStatic.curEntity.GetComponent<Entity>().grid = GameStatic.curGridInfo;
+        GameStatic.curEntity.GetComponent<Entity>().SetBloodBar();
         if (GameStatic.curGridInfo.row <= 5)
         {
             GameStatic.curEntity.GetComponent<Entity>().camp = 1;
@@ -73,6 +74,7 @@ public class EntityMgr : MonoBehaviour {
         entObject.transform.position = Input.mousePosition;
         EntityType entType = entityTypes[entityType];
         Entity ent = entObject.GetComponent<Entity>();
+        ent.bloodMax = entType.blood;
         ent.blood = entType.blood;
         ent.cd = entType.cd;
         ent.damage = entType.damage;

@@ -50,6 +50,7 @@ public class Fire : MonoBehaviour {
         GameObject bullet = Instantiate(self.bulletPrefab);
         bullet.AddComponent<Bullet>();
         bullet.GetComponent<Bullet>().damage = self.damage;
+        bullet.GetComponent<Bullet>().camp = self.camp;
         Rigidbody rig = bullet.GetComponent<Rigidbody>();
         if (self.camp == 1)
         {

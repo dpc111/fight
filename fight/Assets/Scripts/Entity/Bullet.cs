@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
     public int damage;
+    public int camp;
+
 	void Start () {
 		
 	}
@@ -14,7 +16,10 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.layer == GameStatic.entityLayer)
+           
+        if (col.gameObject.layer == GameStatic.entityLayer
+            && col.gameObject.GetComponent<Entity>().grid != null
+            && col.gameObject.GetComponent<Entity>().camp != camp)
         {
             Destroy(gameObject);
             col.gameObject.GetComponent<Entity>().AddBlood(-damage);
