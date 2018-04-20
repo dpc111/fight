@@ -1,4 +1,4 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
 	using System; 
 	
@@ -15,7 +15,7 @@
 		
 		// 客户端类型
 		// Reference: http://www.kbengine.org/docs/programming/clientsdkprogramming.html, client types
-		public KBEngineApp.CLIENT_TYPE clientType = KBEngineApp.CLIENT_TYPE.CLIENT_TYPE_MINI;
+		public NetApp.CLIENT_TYPE clientType = NetApp.CLIENT_TYPE.CLIENT_TYPE_MINI;
 		
 		// 持久化插件信息， 例如：从服务端导入的协议可以持久化到本地，下次登录版本不发生改变
 		// 可以直接从本地加载来提供登录速度
@@ -34,10 +34,10 @@
         public bool isOnInitCallPropertysSetMethods = true;
         
 		// 发送缓冲大小
-		public MessageLengthEx SEND_BUFFER_MAX = NetworkInterface.TCP_PACKET_MAX;
+		public MessageLengthEx SEND_BUFFER_MAX = NetworkInterface.tcpPacketMax;
 
 		// 接收缓冲区大小
-		public MessageLengthEx RECV_BUFFER_MAX = NetworkInterface.TCP_PACKET_MAX;
+		public MessageLengthEx RECV_BUFFER_MAX = NetworkInterface.tcpPacketMax;
 
 		// 是否多线程启动
 		public bool isMultiThreads = false;

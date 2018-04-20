@@ -1,4 +1,4 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
 	using System; 
 	using System.Net.Sockets; 
@@ -10,31 +10,25 @@
 	using System.Threading;
 	using System.Runtime.Remoting.Messaging;
 
-	using MessageID = System.UInt16;
-	using MessageLength = System.UInt16;
+	using MsgID = System.UInt16;
+	using MsgLength = System.UInt16;
 	
-	/*
-		包接收模块(与服务端网络部分的名称对应)
-		处理网络数据的接收
-	*/
+    //包接收模块(与服务端网络部分的名称对应)
+    //处理网络数据的接收
 	public class PacketReceiver
 	{
 		public delegate void AsyncReceiveMethod(); 
-
 		private MessageReader messageReader = null;
-		private NetworkInterface _networkInterface = null;
-
-		private byte[] _buffer;
-
-		// socket向缓冲区写的起始位置
-		int _wpos = 0;
-
-		// 主线程读取数据的起始位置
-		int _rpos = 0;
+		private NetworkInterface networkInterface = null;
+		private byte[] buffer;
+		//socket向缓冲区写的起始位置
+		int wpos = 0;
+		//主线程读取数据的起始位置
+		int rpos = 0;
 
 		public PacketReceiver(NetworkInterface networkInterface)
 		{
-			_init(networkInterface);
+			Init(networkInterface);
 		}
 
 		~PacketReceiver()
@@ -42,33 +36,31 @@
 			Dbg.DEBUG_MSG("PacketReceiver::~PacketReceiver(), destroyed!");
 		}
 
-		void _init(NetworkInterface networkInterface)
+		void Init(NetworkInterface network)
 		{
-			_networkInterface = networkInterface;
-			_buffer = new byte[KBEngineApp.app.getInitArgs().RECV_BUFFER_MAX];
-
+            networkInterface = network;
+			buffer = new byte[NetApp.app.getInitArgs().RECV_BUFFER_MAX];
 			messageReader = new MessageReader();
 		}
 
-		public NetworkInterface networkInterface()
+		public NetworkInterface NetworkInterface()
 		{
-			return _networkInterface;
+			return networkInterface;
 		}
 
-		public void process()
+		public void Process()
 		{
-			int t_wpos = Interlocked.Add(ref _wpos, 0);
-
-			if (_rpos < t_wpos)
+			int twpos = Interlocked.Add(ref wpos, 0);
+			if (rpos < twpos)
 			{
-				messageReader.process(_buffer, (UInt32)_rpos, (UInt32)(t_wpos - _rpos));
-				Interlocked.Exchange(ref _rpos, t_wpos);
+				messageReader.process(buffer, (UInt32)rpos, (UInt32)(twpos - rpos));
+				Interlocked.Exchange(ref rpos, twpos);
 			}
-			else if (t_wpos < _rpos)
+			else if (twpos < rpos)
 			{
-				messageReader.process(_buffer, (UInt32)_rpos, (UInt32)(_buffer.Length - _rpos));
-				messageReader.process(_buffer, (UInt32)0, (UInt32)t_wpos);
-				Interlocked.Exchange(ref _rpos, t_wpos);
+				messageReader.process(buffer, (UInt32)rpos, (UInt32)(buffer.Length - rpos));
+				messageReader.process(buffer, (UInt32)0, (UInt32)twpos);
+				Interlocked.Exchange(ref rpos, twpos);
 			}
 			else
 			{
@@ -76,97 +68,87 @@
 			}
 		}
 
-		int _free()
+		int Free()
 		{
-			int t_rpos = Interlocked.Add(ref _rpos, 0);
-
-			if (_wpos == _buffer.Length)
+			int trpos = Interlocked.Add(ref rpos, 0);
+			if (wpos == buffer.Length)
 			{
-				if (t_rpos == 0)
+				if (trpos == 0)
 				{
 					return 0;
 				}
-
-				Interlocked.Exchange(ref _wpos, 0);
+				Interlocked.Exchange(ref wpos, 0);
 			}
-
-			if (t_rpos <= _wpos)
+			if (trpos <= wpos)
 			{
-				return _buffer.Length - _wpos;
+				return buffer.Length - wpos;
 			}
-
-			return t_rpos - _wpos - 1;
+			return trpos - wpos - 1;
 		}
 
-		public void startRecv()
+		public void StartRecv()
 		{
-
-			var v = new AsyncReceiveMethod(this._asyncReceive);
-			v.BeginInvoke(new AsyncCallback(_onRecv), null);
+			var v = new AsyncReceiveMethod(this.AsyncReceive);
+			v.BeginInvoke(new AsyncCallback(OnRecv), null);
 		}
 
-		private void _asyncReceive()
+		private void AsyncReceive()
 		{
-			if (_networkInterface == null || !_networkInterface.valid())
+			if (networkInterface == null || !networkInterface.Valid())
 			{
-				Dbg.WARNING_MSG("PacketReceiver::_asyncReceive(): network interface invalid!");
+				Dbg.WARNING_MSG("network interface invalid!");
 				return;
 			}
 
-			var socket = _networkInterface.sock();
+			var socket = networkInterface.Sock();
 
 			while (true)
 			{
-				// 必须有空间可写，否则我们阻塞在线程中直到有空间为止
+				//必须有空间可写，否则我们阻塞在线程中直到有空间为止
 				int first = 0;
-				int space = _free();
-
+				int space = Free();
 				while (space == 0)
 				{
 					if (first > 0)
 					{
 						if (first > 1000)
 						{
-							Dbg.ERROR_MSG("PacketReceiver::_asyncReceive(): no space!");
-							Event.fireIn("_closeNetwork", new object[] { _networkInterface });
+							Dbg.ERROR_MSG("no space!");
+							Event.FireIn("_closeNetwork", new object[] { networkInterface });
 							return;
 						}
-
-						Dbg.WARNING_MSG("PacketReceiver::_asyncReceive(): waiting for space, Please adjust 'RECV_BUFFER_MAX'! retries=" + first);
+						Dbg.WARNING_MSG("waiting for space");
 						System.Threading.Thread.Sleep(5);
 					}
-
 					first += 1;
-					space = _free();
+					space = Free();
 				}
-
 				int bytesRead = 0;
 				try
 				{
-					bytesRead = socket.Receive(_buffer, _wpos, space, 0);
+					bytesRead = socket.Receive(buffer, wpos, space, 0);
 				}
 				catch (SocketException se)
 				{
-					Dbg.ERROR_MSG(string.Format("PacketReceiver::_asyncReceive(): receive error, disconnect from '{0}'! error = '{1}'", socket.RemoteEndPoint, se));
-					Event.fireIn("_closeNetwork", new object[] { _networkInterface });
+					Dbg.ERROR_MSG(string.Format("receive error, disconnect from '{0}'! error = '{1}'", socket.RemoteEndPoint, se));
+					Event.FireIn("_closeNetwork", new object[] { networkInterface });
 					return;
 				}
-
 				if (bytesRead > 0)
 				{
 					// 更新写位置
-					Interlocked.Add(ref _wpos, bytesRead);
+					Interlocked.Add(ref wpos, bytesRead);
 				}
 				else
 				{
 					Dbg.WARNING_MSG(string.Format("PacketReceiver::_asyncReceive(): receive 0 bytes, disconnect from '{0}'!", socket.RemoteEndPoint));
-					Event.fireIn("_closeNetwork", new object[] { _networkInterface });
+					Event.FireIn("_closeNetwork", new object[] { networkInterface });
 					return;
 				}
 			}
 		}
 
-		private void _onRecv(IAsyncResult ar)
+		private void OnRecv(IAsyncResult ar)
 		{
 			AsyncResult result = (AsyncResult)ar;
 			AsyncReceiveMethod caller = (AsyncReceiveMethod)result.AsyncDelegate;

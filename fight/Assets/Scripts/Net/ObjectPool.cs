@@ -4,25 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
-
-namespace KBEngine
+namespace Net
 {
-	/// <summary>
-	/// 简单的对象池
-	/// </summary>
-	/// <typeparam name="T">对象类型</typeparam>
+	//对象池
 	public class ObjectPool<T> where T : new()
 	{
-		private static Stack<T> _objects = new Stack<T>();
+		private static Stack<T> objects = new Stack<T>();
 		private static T v;
 		
-		public static T createObject()
+		public static T CreateObject()
 		{
-			lock (_objects)
+			lock (objects)
 			{
-				if (_objects.Count > 0)
+				if (objects.Count > 0)
 				{
-					v = _objects.Pop();
+					v = objects.Pop();
 					return v;
 				}
 				else
@@ -32,11 +28,11 @@ namespace KBEngine
 			}
 		}
 
-		public static void reclaimObject(T item)
+		public static void ReclaimObject(T item)
 		{
-			lock (_objects)
+			lock (objects)
 			{
-				_objects.Push(item);
+				objects.Push(item);
 			}
 		}
 	}

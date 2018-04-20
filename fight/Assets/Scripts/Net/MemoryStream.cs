@@ -1,4 +1,4 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
   	using UnityEngine; 
 	using System; 
@@ -42,7 +42,7 @@
 		public void reclaimObject()
 		{
 			clear();
-			reclaimObject(this);
+			ReclaimObject(this);
 		}
 		
 		public byte[] data()

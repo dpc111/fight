@@ -1,4 +1,4 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
   	using UnityEngine; 
 	using System; 
@@ -6,16 +6,14 @@
 	using System.Collections.Generic;
 	using System.Threading;
 	
-	/*
-		事件模块
-		KBEngine插件层与Unity3D表现层通过事件来交互
-	*/
+    //事件模块
+    //Net插件层与Unity3D表现层通过事件来交互
     public class Event
     {
 		public struct Pair
 		{
 			public object obj;
-			public string funcname;
+			public string funcName;
 			public System.Reflection.MethodInfo method;
 		};
 		
@@ -25,17 +23,15 @@
 			public object[] args;
 		};
 		
-    	static Dictionary<string, List<Pair>> events_out = new Dictionary<string, List<Pair>>();
+    	static Dictionary<string, List<Pair>> eventsOut = new Dictionary<string, List<Pair>>();
+		static LinkedList<EventObj> firedEventsOut = new LinkedList<EventObj>();
+		static LinkedList<EventObj> doingEventsOut = new LinkedList<EventObj>();
 		
-		static LinkedList<EventObj> firedEvents_out = new LinkedList<EventObj>();
-		static LinkedList<EventObj> doingEvents_out = new LinkedList<EventObj>();
-		
-    	static Dictionary<string, List<Pair>> events_in = new Dictionary<string, List<Pair>>();
-		
-		static LinkedList<EventObj> firedEvents_in = new LinkedList<EventObj>();
-		static LinkedList<EventObj> doingEvents_in = new LinkedList<EventObj>();
+    	static Dictionary<string, List<Pair>> eventsIn = new Dictionary<string, List<Pair>>();
+		static LinkedList<EventObj> firedEventsIn = new LinkedList<EventObj>();
+		static LinkedList<EventObj> doingEventsIn = new LinkedList<EventObj>();
 
-		static bool _isPauseOut = false;
+		static bool isPause = false;
 	
 		public Event()
 		{
@@ -43,334 +39,298 @@
 		
 		public static void clear()
 		{
-			events_out.Clear();
-			events_in.Clear();
+			eventsOut.Clear();
+			eventsIn.Clear();
 			clearFiredEvents();
 		}
 
 		public static void clearFiredEvents()
 		{
-			monitor_Enter(events_out);
-			firedEvents_out.Clear();
-			monitor_Exit(events_out);
+			MonitorEnter(eventsOut);
+			firedEventsOut.Clear();
+			MonitorExit(eventsOut);
 			
-			doingEvents_out.Clear();
+			doingEventsOut.Clear();
 			
-			monitor_Enter(events_in);
-			firedEvents_in.Clear();
-			monitor_Exit(events_in);
+			MonitorEnter(eventsIn);
+			firedEventsIn.Clear();
+			MonitorExit(eventsIn);
 			
-			doingEvents_in.Clear();
+			doingEventsIn.Clear();
 			
-			_isPauseOut = false;
+			isPause = false;
 		}
 		
-		public static void pause()
+		public static void Pause()
 		{
-			_isPauseOut = true;
+			isPause = true;
 		}
 
-		public static void resume()
+		public static void Resume()
 		{
-			_isPauseOut = false;
+			isPause = false;
 		}
 
-		public static bool isPause()
+		public static bool IsPause()
 		{
-			return _isPauseOut;
+			return isPause;
 		}
 
-		public static void monitor_Enter(object obj)
+		public static void MonitorEnter(object obj)
 		{
-			if(KBEngineApp.app == null)
+			if(NetApp.app == null)
 				return;
 			
 			Monitor.Enter(obj);
 		}
 
-		public static void monitor_Exit(object obj)
+		public static void MonitorExit(object obj)
 		{
-			if(KBEngineApp.app == null)
+			if(NetApp.app == null)
 				return;
 			
 			Monitor.Exit(obj);
 		}
 		
-		public static bool hasRegisterOut(string eventname)
+		public static bool HasRegisterOut(string eventName)
 		{
-			return _hasRegister(events_out, eventname);
+			return HasRegister(eventsOut, eventName);
 		}
 
-		public static bool hasRegisterIn(string eventname)
+		public static bool hasRegisterIn(string eventName)
 		{
-			return _hasRegister(events_in, eventname);
+			return HasRegister(eventsIn, eventName);
 		}
 		
-		private static bool _hasRegister(Dictionary<string, List<Pair>> events, string eventname)
+		private static bool HasRegister(Dictionary<string, List<Pair>> events, string eventName)
 		{
 			bool has = false;
-			
-			monitor_Enter(events);
-			has = events.ContainsKey(eventname);
-			monitor_Exit(events);
-			
+			MonitorEnter(events);
+			has = events.ContainsKey(eventName);
+			MonitorExit(events);
 			return has;
 		}
 		
-		/*
-			注册监听由kbe插件抛出的事件。(out = kbe->render)
-			通常由渲染表现层来注册, 例如：监听角色血量属性的变化， 如果UI层注册这个事件，
-			事件触发后就可以根据事件所附带的当前血量值来改变角色头顶的血条值。
-		*/
-		public static bool registerOut(string eventname, object obj, string funcname)
+        //注册监听由Net插件抛出的事件。(out = Net->render)
+        //通常由渲染表现层来注册, 例如：监听角色血量属性的变化， 如果UI层注册这个事件，
+        //事件触发后就可以根据事件所附带的当前血量值来改变角色头顶的血条值。
+		public static bool RegisterOut(string eventName, object obj, string funcName)
 		{
-			return register(events_out, eventname, obj, funcname);
+			return Register(eventsOut, eventName, obj, funcName);
 		}
 
-		/*
-			注册监听由渲染表现层抛出的事件(in = render->kbe)
-			通常由kbe插件层来注册， 例如：UI层点击登录， 此时需要触发一个事件给kbe插件层进行与服务端交互的处理。
-		*/
-		public static bool registerIn(string eventname, object obj, string funcname)
+        //注册监听由渲染表现层抛出的事件(in = render->Net)
+        //通常由kbe插件层来注册， 例如：UI层点击登录， 此时需要触发一个事件给kbe插件层进行与服务端交互的处理。
+		public static bool RegisterIn(string eventName, object obj, string funcName)
 		{
-			return register(events_in, eventname, obj, funcname);
+			return Register(eventsIn, eventName, obj, funcName);
 		}
 		
-		private static bool register(Dictionary<string, List<Pair>> events, string eventname, object obj, string funcname)
+		private static bool Register(Dictionary<string, List<Pair>> events, string eventName, object obj, string funcName)
 		{
-			deregister(events, eventname, obj, funcname);
+			Deregister(events, eventName, obj, funcName);
 			List<Pair> lst = null;
 			
 			Pair pair = new Pair();
 			pair.obj = obj;
-			pair.funcname = funcname;
-			pair.method = obj.GetType().GetMethod(funcname);
+			pair.funcName = funcName;
+			pair.method = obj.GetType().GetMethod(funcName);
 			if(pair.method == null)
 			{
-				Dbg.ERROR_MSG("Event::register: " + obj + "not found method[" + funcname + "]");
+				Dbg.ERROR_MSG("Event::register/" + obj + "/not found method/" + funcName);
 				return false;
 			}
 			
-			monitor_Enter(events);
-			if(!events.TryGetValue(eventname, out lst))
+			MonitorEnter(events);
+			if(!events.TryGetValue(eventName, out lst))
 			{
 				lst = new List<Pair>();
 				lst.Add(pair);
-				//Dbg.DEBUG_MSG("Event::register: event(" + eventname + ")!");
-				events.Add(eventname, lst);
-				monitor_Exit(events);
+				events.Add(eventName, lst);
+				MonitorExit(events);
 				return true;
 			}
 			
-			//Dbg.DEBUG_MSG("Event::register: event(" + eventname + ")!");
 			lst.Add(pair);
-			monitor_Exit(events);
+			MonitorExit(events);
 			return true;
 		}
 
-		public static bool deregisterOut(string eventname, object obj, string funcname)
+		public static bool DeregisterOut(string eventName, object obj, string funcName)
 		{
-			return deregister(events_out, eventname, obj, funcname);
+			return Deregister(eventsOut, eventName, obj, funcName);
 		}
 
-		public static bool deregisterIn(string eventname, object obj, string funcname)
+		public static bool DeregisterIn(string eventName, object obj, string funcName)
 		{
-			return deregister(events_in, eventname, obj, funcname);
+			return Deregister(eventsIn, eventName, obj, funcName);
 		}
 		
-		private static bool deregister(Dictionary<string, List<Pair>> events, string eventname, object obj, string funcname)
+		private static bool Deregister(Dictionary<string, List<Pair>> events, string eventName, object obj, string funcName)
 		{
-			monitor_Enter(events);
+			MonitorEnter(events);
 			List<Pair> lst = null;
 			
-			if(!events.TryGetValue(eventname, out lst))
+			if(!events.TryGetValue(eventName, out lst))
 			{
-				monitor_Exit(events);
+				MonitorExit(events);
 				return false;
 			}
 			
 			for(int i=0; i<lst.Count; i++)
 			{
-				if(obj == lst[i].obj && lst[i].funcname == funcname)
+				if(obj == lst[i].obj && lst[i].funcName == funcName)
 				{
-					//Dbg.DEBUG_MSG("Event::deregister: event(" + eventname + ":" + funcname + ")!");
 					lst.RemoveAt(i);
-					monitor_Exit(events);
+					MonitorExit(events);
 					return true;
 				}
 			}
 			
-			monitor_Exit(events);
+			MonitorExit(events);
 			return false;
 		}
 
-		public static bool deregisterOut(object obj)
+		public static bool DeregisterOut(object obj)
 		{
-			return deregister(events_out, obj);
+			return Deregister(eventsOut, obj);
 		}
 
-		public static bool deregisterIn(object obj)
+		public static bool DeregisterIn(object obj)
 		{
-			return deregister(events_in, obj);
+			return Deregister(eventsIn, obj);
 		}
 		
-		private static bool deregister(Dictionary<string, List<Pair>> events, object obj)
+		private static bool Deregister(Dictionary<string, List<Pair>> events, object obj)
 		{
-			monitor_Enter(events);
+			MonitorEnter(events);
 			
 			var iter = events.GetEnumerator();
 			while (iter.MoveNext())
 			{
 				List<Pair> lst = iter.Current.Value;
-				// 从后往前遍历，以避免中途删除的问题
 				for (int i = lst.Count - 1; i >= 0; i--)
 				{
 					if (obj == lst[i].obj)
 					{
-						//Dbg.DEBUG_MSG("Event::deregister: event(" + e.Key + ":" + lst[i].funcname + ")!");
 						lst.RemoveAt(i);
 					}
 				}
 			}
 			
-			monitor_Exit(events);
+			MonitorExit(events);
 			return true;
 		}
 
-		/*
-			kbe插件触发事件(out = kbe->render)
-			通常由渲染表现层来注册, 例如：监听角色血量属性的变化， 如果UI层注册这个事件，
-			事件触发后就可以根据事件所附带的当前血量值来改变角色头顶的血条值。
-		*/
-		public static void fireOut(string eventname, params object[] args)
+        //Net插件触发事件(out = Net->render)
+        //通常由渲染表现层来注册, 例如：监听角色血量属性的变化， 如果UI层注册这个事件，
+        //事件触发后就可以根据事件所附带的当前血量值来改变角色头顶的血条值。
+		public static void FireOut(string eventName, params object[] args)
 		{
-			fire_(events_out, firedEvents_out, eventname, args);
+			Fire(eventsOut, firedEventsOut, eventName, args);
 		}
 
-		/*
-			渲染表现层抛出事件(in = render->kbe)
-			通常由kbe插件层来注册， 例如：UI层点击登录， 此时需要触发一个事件给kbe插件层进行与服务端交互的处理。
-		*/
-		public static void fireIn(string eventname, params object[] args)
+        //渲染表现层抛出事件(in = render->Net)
+        //通常由Net插件层来注册， 例如：UI层点击登录， 此时需要触发一个事件给Net插件层进行与服务端交互的处理。
+		public static void FireIn(string eventName, params object[] args)
 		{
-			fire_(events_in, firedEvents_in, eventname, args);
+			Fire(eventsIn, firedEventsIn, eventName, args);
 		}
 
 		/*
 			触发kbe插件和渲染表现层都能够收到的事件
 		*/
-		public static void fireAll(string eventname, params object[] args)
+		public static void FireAll(string eventName, params object[] args)
 		{
-			fire_(events_in, firedEvents_in, eventname, args);
-			fire_(events_out, firedEvents_out, eventname, args);
+			Fire(eventsIn, firedEventsIn, eventName, args);
+			Fire(eventsOut, firedEventsOut, eventName, args);
 		}
 		
-		private static void fire_(Dictionary<string, List<Pair>> events, LinkedList<EventObj> firedEvents, string eventname, object[] args)
+		private static void Fire(Dictionary<string, List<Pair>> events, LinkedList<EventObj> firedEvents, string eventName, object[] args)
 		{
-			monitor_Enter(events);
+			MonitorEnter(events);
 			List<Pair> lst = null;
 			
-			if(!events.TryGetValue(eventname, out lst))
+			if(!events.TryGetValue(eventName, out lst))
 			{
-				if(events == events_in)
-					Dbg.WARNING_MSG("Event::fireIn: event(" + eventname + ") not found!");
+				if(events == eventsIn)
+					Dbg.WARNING_MSG("Event::fireIn: event/" + eventName + "/not found!");
 				else
-					Dbg.WARNING_MSG("Event::fireOut: event(" + eventname + ") not found!");
+					Dbg.WARNING_MSG("Event::fireOut: event/" + eventName + "/not found!");
 				
-				monitor_Exit(events);
+				MonitorExit(events);
 				return;
 			}
 			
 			for(int i=0; i<lst.Count; i++)
 			{
-				EventObj eobj = new EventObj();
-				eobj.info = lst[i];
-				eobj.args = args;
-				firedEvents.AddLast(eobj);
+				EventObj eObj = new EventObj();
+				eObj.info = lst[i];
+				eObj.args = args;
+				firedEvents.AddLast(eObj);
 			}
-			
-			monitor_Exit(events);
+			MonitorExit(events);
 		}
 		
-		public static void processOutEvents()
+		public static void ProcessOutEvents()
 		{
-			monitor_Enter(events_out);
-
-			if(firedEvents_out.Count > 0)
+			MonitorEnter(eventsOut);
+			if(firedEventsOut.Count > 0)
 			{
-				var iter = firedEvents_out.GetEnumerator();
+				var iter = firedEventsOut.GetEnumerator();
 				while (iter.MoveNext())
 				{
-					doingEvents_out.AddLast(iter.Current);
+					doingEventsOut.AddLast(iter.Current);
 				}
 
-				firedEvents_out.Clear();
+				firedEventsOut.Clear();
 			}
+			MonitorExit(eventsOut);
 
-			monitor_Exit(events_out);
-
-			while (doingEvents_out.Count > 0 && !_isPauseOut) 
+			while (doingEventsOut.Count > 0 && !isPause) 
 			{
-
-				EventObj eobj = doingEvents_out.First.Value;
-
-				//Debug.Log("processOutEvents:" + eobj.info.funcname + "(" + eobj.info + ")");
-				//foreach(object v in eobj.args)
-				//{
-				//	Debug.Log("processOutEvents:args=" + v);
-				//}
+				EventObj eObj = doingEventsOut.First.Value;
 				try
 				{
-					eobj.info.method.Invoke (eobj.info.obj, eobj.args);
+					eObj.info.method.Invoke(eObj.info.obj, eObj.args);
 				}
 	            catch (Exception e)
 	            {
-	            	Dbg.ERROR_MSG("Event::processOutEvents: event=" + eobj.info.funcname + "\n" + e.ToString());
+	            	Dbg.ERROR_MSG("Event::processOutEvents/" + eObj.info.funcName + "/" + e.ToString());
 	            }
-            
-				if(doingEvents_out.Count > 0)
-					doingEvents_out.RemoveFirst();
+				if(doingEventsOut.Count > 0)
+					doingEventsOut.RemoveFirst();
 			}
 		}
 		
-		public static void processInEvents()
+		public static void ProcessInEvents()
 		{
-			monitor_Enter(events_in);
-
-			if(firedEvents_in.Count > 0)
+			MonitorEnter(eventsIn);
+			if(firedEventsIn.Count > 0)
 			{
-				var iter = firedEvents_in.GetEnumerator();
+				var iter = firedEventsIn.GetEnumerator();
 				while (iter.MoveNext())
 				{
-					doingEvents_in.AddLast(iter.Current);
+					doingEventsIn.AddLast(iter.Current);
 				}
 
-				firedEvents_in.Clear();
+				firedEventsIn.Clear();
 			}
+			MonitorExit(eventsIn);
 
-			monitor_Exit(events_in);
-
-			while (doingEvents_in.Count > 0) 
+			while (doingEventsIn.Count > 0) 
 			{
-				
-				EventObj eobj = doingEvents_in.First.Value;
-				
-				//Debug.Log("processInEvents:" + eobj.info.funcname + "(" + eobj.info + ")");
-				//foreach(object v in eobj.args)
-				//{
-				//	Debug.Log("processInEvents:args=" + v);
-				//}
+				EventObj eobj = doingEventsIn.First.Value;
 				try
 				{
-					eobj.info.method.Invoke (eobj.info.obj, eobj.args);
+					eobj.info.method.Invoke(eobj.info.obj, eobj.args);
 				}
 	            catch (Exception e)
 	            {
-	            	Dbg.ERROR_MSG("Event::processInEvents: event=" + eobj.info.funcname + "\n" + e.ToString());
+	            	Dbg.ERROR_MSG("Event::processInEvents/" + eobj.info.funcName + "/" + e.ToString());
 	            }
-	            
-				if(doingEvents_in.Count > 0)
-					doingEvents_in.RemoveFirst();
+				if(doingEventsIn.Count > 0)
+					doingEventsIn.RemoveFirst();
 			}
 		}
 	

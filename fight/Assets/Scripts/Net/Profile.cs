@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace KBEngine
+namespace Net
 {
 	public class Profile 
 	{

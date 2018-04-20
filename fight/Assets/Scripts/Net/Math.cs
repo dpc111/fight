@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using KBEngine;
+using Net;
 using System; 
 using System.Collections;
 
-namespace KBEngine
+namespace Net
 {
 
 /*

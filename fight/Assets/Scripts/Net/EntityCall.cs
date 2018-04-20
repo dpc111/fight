@@ -1,4 +1,4 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
   	using UnityEngine; 
 	using System; 
@@ -29,7 +29,7 @@
 		
 		public EntityCall()
 		{
-			networkInterface_ = KBEngineApp.app.networkInterface();
+			networkInterface_ = NetApp.app.networkInterface();
 		}
 		
 		public virtual void __init__()
@@ -52,7 +52,7 @@
 		public Bundle newCall()
 		{  
 			if(bundle == null)
-				bundle = Bundle.createObject();
+				bundle = Bundle.CreateObject();
 			
 			if(type == EntityCall.ENTITYCALL_TYPE.ENTITYCALL_TYPE_CELL)
 				bundle.newMessage(Message.messages["Baseapp_onRemoteCallCellMethodFromClient"]);

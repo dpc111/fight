@@ -1,4 +1,4 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
   	using UnityEngine; 
 	using System; 
@@ -76,7 +76,7 @@
 		
 		public bool isPlayer()
 		{
-			return id == KBEngineApp.app.entity_id;
+			return id == NetApp.app.entity_id;
 		}
 		
 		public void addDefinedProperty(string name, object v)
@@ -166,9 +166,9 @@
 		
 		public void baseCall(string methodname, params object[] arguments)
 		{			
-			if(KBEngineApp.app.currserver == "loginapp")
+			if(NetApp.app.currserver == "loginapp")
 			{
-				Dbg.ERROR_MSG(className + "::baseCall(" + methodname + "), currserver=!" + KBEngineApp.app.currserver);  
+				Dbg.ERROR_MSG(className + "::baseCall(" + methodname + "), currserver=!" + NetApp.app.currserver);  
 				return;
 			}
 
@@ -223,9 +223,9 @@
 		
 		public void cellCall(string methodname, params object[] arguments)
 		{
-			if(KBEngineApp.app.currserver == "loginapp")
+			if(NetApp.app.currserver == "loginapp")
 			{
-				Dbg.ERROR_MSG(className + "::cellCall(" + methodname + "), currserver=!" + KBEngineApp.app.currserver);  
+				Dbg.ERROR_MSG(className + "::cellCall(" + methodname + "), currserver=!" + NetApp.app.currserver);  
 				return;
 			}
 			
@@ -297,7 +297,7 @@
 				Dbg.ERROR_MSG(className + "::onEnterWorld: error=" + e.ToString());
 			}
 
-			Event.fireOut("onEnterWorld", new object[]{this});
+			Event.FireOut("onEnterWorld", new object[]{this});
 		}
 		
 		public virtual void onEnterWorld()
@@ -317,7 +317,7 @@
 				Dbg.ERROR_MSG(className + "::onLeaveWorld: error=" + e.ToString());
 			}
 
-			Event.fireOut("onLeaveWorld", new object[]{this});
+			Event.FireOut("onLeaveWorld", new object[]{this});
 		}
 		
 		public virtual void onLeaveWorld()
@@ -337,11 +337,11 @@
 				Dbg.ERROR_MSG(className + "::onEnterSpace: error=" + e.ToString());
 			}
 			
-			Event.fireOut("onEnterSpace", new object[]{this});
+			Event.FireOut("onEnterSpace", new object[]{this});
 			
 			// 要立即刷新表现层对象的位置
-			Event.fireOut("set_position", new object[]{this});
-			Event.fireOut("set_direction", new object[]{this});
+			Event.FireOut("set_position", new object[]{this});
+			Event.FireOut("set_direction", new object[]{this});
 		}
 		
 		public virtual void onEnterSpace()
@@ -361,7 +361,7 @@
 				Dbg.ERROR_MSG(className + "::onLeaveSpace: error=" + e.ToString());
 			}
 			
-			Event.fireOut("onLeaveSpace", new object[]{this});
+			Event.FireOut("onLeaveSpace", new object[]{this});
 		}
 
 		public virtual void onLeaveSpace()
@@ -375,10 +375,10 @@
 			//Dbg.DEBUG_MSG(className + "::set_position: " + old + " => " + v); 
 			
 			if(isPlayer())
-				KBEngineApp.app.entityServerPos(position);
+				NetApp.app.entityServerPos(position);
 			
 			if(inWorld)
-				Event.fireOut("set_position", new object[]{this});
+				Event.FireOut("set_position", new object[]{this});
 		}
 
 		public virtual void onUpdateVolatileData()
@@ -396,7 +396,7 @@
 			//Dbg.DEBUG_MSG(className + "::set_direction: " + old + " => " + v); 
 			
 			if(inWorld)
-				Event.fireOut("set_direction", new object[]{this});
+				Event.FireOut("set_direction", new object[]{this});
 		}
 
 		/// <summary>

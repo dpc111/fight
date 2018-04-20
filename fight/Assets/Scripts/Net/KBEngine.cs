@@ -1,4 +1,4 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
   	using UnityEngine; 
 	using System; 
@@ -11,27 +11,16 @@
 	using MessageID = System.UInt16;
 	using MessageLength = System.UInt16;
 	
-	/*
-		这是KBEngine插件的核心模块
-		包括网络创建、持久化协议、entities的管理、以及引起对外可调用接口。
-		
-		一些可以参考的地方:
-		http://www.kbengine.org/docs/programming/clientsdkprogramming.html
-		http://www.kbengine.org/docs/programming/kbe_message_format.html
-		
-		http://www.kbengine.org/cn/docs/programming/clientsdkprogramming.html
-		http://www.kbengine.org/cn/docs/programming/kbe_message_format.html
-	*/
-	public class KBEngineApp
+    //这是Net插件的核心模块
+    //包括网络创建、持久化协议、entities的管理、以及引起对外可调用接口。
+	public class NetApp
 	{
-		public static KBEngineApp app = null;
+		public static NetApp app = null;
 		private NetworkInterface _networkInterface = null;
         
         KBEngineArgs _args = null;
         
     	// 客户端的类别
-    	// http://www.kbengine.org/docs/programming/clientsdkprogramming.html
-    	// http://www.kbengine.org/cn/docs/programming/clientsdkprogramming.html
 		public enum CLIENT_TYPE
 		{
 			// Mobile(Phone, Pad)
@@ -144,7 +133,7 @@
 		// 按照标准，每个客户端部分都应该包含这个属性
 		public const string component = "client"; 
 		
-        public KBEngineApp(KBEngineArgs args)
+        public NetApp(KBEngineArgs args)
         {
 			if (app != null)
 				throw new Exception("Only one instance of KBEngineApp!");
@@ -172,21 +161,21 @@
 		
 		void initNetwork()
 		{
-			Message.bindFixedMessage();
+			Message.BindFixedMessage();
         	_networkInterface = new NetworkInterface();
 		}
 		
 		void installEvents()
 		{
-			Event.registerIn("createAccount", this, "createAccount");
-			Event.registerIn("login", this, "login");
-			Event.registerIn("reloginBaseapp", this, "reloginBaseapp");
-			Event.registerIn("resetPassword", this, "resetPassword");
-			Event.registerIn("bindAccountEmail", this, "bindAccountEmail");
-			Event.registerIn("newPassword", this, "newPassword");
+			Event.RegisterIn("createAccount", this, "createAccount");
+			Event.RegisterIn("login", this, "login");
+			Event.RegisterIn("reloginBaseapp", this, "reloginBaseapp");
+			Event.RegisterIn("resetPassword", this, "resetPassword");
+			Event.RegisterIn("bindAccountEmail", this, "bindAccountEmail");
+			Event.RegisterIn("newPassword", this, "newPassword");
 			
 			// 内部事件
-			Event.registerIn("_closeNetwork", this, "_closeNetwork");
+			Event.RegisterIn("_closeNetwork", this, "_closeNetwork");
 		}
 
 		public KBEngineArgs getInitArgs()
@@ -199,10 +188,10 @@
         	Dbg.WARNING_MSG("KBEngine::destroy()");
         	
         	reset();
-        	KBEngine.Event.deregisterIn(this);
+        	Net.Event.DeregisterIn(this);
         	resetMessages();
         	
-        	KBEngineApp.app = null;
+        	NetApp.app = null;
         }
         
         public NetworkInterface networkInterface()
@@ -228,7 +217,7 @@
 			entitydefImported_ = false;
 			isImportServerErrorsDescr_ = false;
 			serverErrs.Clear ();
-			Message.clear ();
+			Message.Clear ();
 			EntityDef.clear ();
 			Entity.clear();
 			Dbg.DEBUG_MSG("KBEngine::resetMessages()");
@@ -236,7 +225,7 @@
         
 		public virtual void reset()
 		{
-			KBEngine.Event.clearFiredEvents();
+			Net.Event.clearFiredEvents();
 			
 			clearEntities(true);
 			
@@ -262,7 +251,7 @@
 			isLoadedGeometry = false;
 			
 			if (_networkInterface != null)
-				_networkInterface.reset();
+				_networkInterface.Reset();
 
 			_networkInterface = new NetworkInterface();
 			
@@ -282,10 +271,10 @@
 		{
 			// 处理网络
 			if (_networkInterface != null)
-				_networkInterface.process();
+				_networkInterface.Process();
 			
 			// 处理外层抛入的事件
-			Event.processInEvents();
+			Event.ProcessInEvents();
 			
 			// 向服务端发送心跳以及同步角色信息到服务端
 			sendTick();
@@ -305,7 +294,7 @@
 
 		public void _closeNetwork(NetworkInterface networkInterface)
 		{
-			networkInterface.close();
+			networkInterface.Close();
 		}
 		
 		/*
@@ -333,7 +322,7 @@
 				if(span.Seconds < 0)
 				{
 					Dbg.ERROR_MSG("sendTick: Receive appTick timeout!");
-					_networkInterface.close();
+					_networkInterface.Close();
 					return;
 				}
 
@@ -347,7 +336,7 @@
 				{
 					if(Loginapp_onClientActiveTickMsg != null)
 					{
-						Bundle bundle = Bundle.createObject();
+						Bundle bundle = Bundle.CreateObject();
 						bundle.newMessage(Message.messages["Loginapp_onClientActiveTick"]);
 						bundle.send(_networkInterface);
 					}
@@ -356,7 +345,7 @@
 				{
 					if(Baseapp_onClientActiveTickMsg != null)
 					{
-						Bundle bundle = Bundle.createObject();
+						Bundle bundle = Bundle.CreateObject();
 						bundle.newMessage(Message.messages["Baseapp_onClientActiveTick"]);
 						bundle.send(_networkInterface);
 					}
@@ -379,7 +368,7 @@
 		*/
 		public void hello()
 		{
-			Bundle bundle = Bundle.createObject();
+			Bundle bundle = Bundle.CreateObject();
 			if(currserver == "loginapp")
 				bundle.newMessage(Message.messages["Loginapp_hello"]);
 			else
@@ -426,7 +415,7 @@
 			serverVersion = stream.readString();
 			
 			Dbg.ERROR_MSG("Client_onVersionNotMatch: verInfo=" + clientVersion + "(server: " + serverVersion + ")");
-			Event.fireAll("onVersionNotMatch", new object[]{clientVersion, serverVersion});
+			Event.FireAll("onVersionNotMatch", new object[]{clientVersion, serverVersion});
 			
 			if(_persistentInfos != null)
 				_persistentInfos.onVersionNotMatch(clientVersion, serverVersion);
@@ -440,7 +429,7 @@
 			serverScriptVersion = stream.readString();
 			
 			Dbg.ERROR_MSG("Client_onScriptVersionNotMatch: verInfo=" + clientScriptVersion + "(server: " + serverScriptVersion + ")");
-			Event.fireAll("onScriptVersionNotMatch", new object[]{clientScriptVersion, serverScriptVersion});
+			Event.FireAll("onScriptVersionNotMatch", new object[]{clientScriptVersion, serverScriptVersion});
 			
 			if(_persistentInfos != null)
 				_persistentInfos.onScriptVersionNotMatch(clientScriptVersion, serverScriptVersion);
@@ -452,7 +441,7 @@
 		public void Client_onKicked(UInt16 failedcode)
 		{
 			Dbg.DEBUG_MSG("Client_onKicked: failedcode=" + failedcode);
-			Event.fireAll("onKicked", new object[]{failedcode});
+			Event.FireAll("onKicked", new object[]{failedcode});
 		}
 		
 		/*
@@ -495,11 +484,11 @@
 		*/
 		public void login(string username, string password, byte[] datas)
 		{
-			KBEngineApp.app.username = username;
-			KBEngineApp.app.password = password;
-			KBEngineApp.app._clientdatas = datas;
+			NetApp.app.username = username;
+			NetApp.app.password = password;
+			NetApp.app._clientdatas = datas;
 			
-			KBEngineApp.app.login_loginapp(true);
+			NetApp.app.login_loginapp(true);
 		}
 		
 		/*
@@ -510,15 +499,15 @@
 			if(noconnect)
 			{
 				reset();
-				_networkInterface.connectTo(_args.ip, _args.port, onConnectTo_loginapp_callback, null);
+				_networkInterface.ConnectTo(_args.ip, _args.port, onConnectTo_loginapp_callback, null);
 			}
 			else
 			{
 				Dbg.DEBUG_MSG("KBEngine::login_loginapp(): send login! username=" + username);
-				Bundle bundle = Bundle.createObject();
+				Bundle bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Loginapp_login"]);
 				bundle.writeInt8((sbyte)_args.clientType);
-				bundle.writeBlob(KBEngineApp.app._clientdatas);
+				bundle.writeBlob(NetApp.app._clientdatas);
 				bundle.writeString(username);
 				bundle.writeString(password);
 				bundle.send(_networkInterface);
@@ -549,11 +538,11 @@
 			
 			if(!loginappMessageImported_)
 			{
-				var bundle = Bundle.createObject();
+				var bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Loginapp_importClientMessages"]);
 				bundle.send(_networkInterface);
 				Dbg.DEBUG_MSG("KBEngine::onLogin_loginapp: send importClientMessages ...");
-				Event.fireOut("Loginapp_importClientMessages", new object[]{});
+				Event.FireOut("Loginapp_importClientMessages", new object[]{});
 			}
 			else
 			{
@@ -568,15 +557,15 @@
 		{  
 			if(noconnect)
 			{
-				Event.fireOut("onLoginBaseapp", new object[]{});
+				Event.FireOut("onLoginBaseapp", new object[]{});
 				
-				_networkInterface.reset();
+				_networkInterface.Reset();
 				_networkInterface = new NetworkInterface();
-				_networkInterface.connectTo(baseappIP, baseappPort, onConnectTo_baseapp_callback, null);
+				_networkInterface.ConnectTo(baseappIP, baseappPort, onConnectTo_baseapp_callback, null);
 			}
 			else
 			{
-				Bundle bundle = Bundle.createObject();
+				Bundle bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Baseapp_loginBaseapp"]);
 				bundle.writeString(username);
 				bundle.writeString(password);
@@ -608,11 +597,11 @@
 			
 			if(!baseappMessageImported_)
 			{
-				var bundle = Bundle.createObject();
+				var bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Baseapp_importClientMessages"]);
 				bundle.send(_networkInterface);
 				Dbg.DEBUG_MSG("KBEngine::onLogin_baseapp: send importClientMessages ...");
-				Event.fireOut("Baseapp_importClientMessages", new object[]{});
+				Event.FireOut("Baseapp_importClientMessages", new object[]{});
 			}
 			else
 			{
@@ -626,11 +615,11 @@
 		*/
 		public void reloginBaseapp()
 		{  
-			if(_networkInterface.valid())
+			if(_networkInterface.Valid())
 				return;
 
-			Event.fireAll("onReloginBaseapp", new object[]{});
-			_networkInterface.connectTo(baseappIP, baseappPort, onReConnectTo_baseapp_callback, null);
+			Event.FireAll("onReloginBaseapp", new object[]{});
+			_networkInterface.ConnectTo(baseappIP, baseappPort, onReConnectTo_baseapp_callback, null);
 		}
 
 		private void onReConnectTo_baseapp_callback(string ip, int port, bool success, object userData)
@@ -644,7 +633,7 @@
 			
 			Dbg.DEBUG_MSG(string.Format("KBEngine::relogin_baseapp(): connect {0}:{1} is successfully!", ip, port));
 
-			Bundle bundle = Bundle.createObject();
+			Bundle bundle = Bundle.CreateObject();
 			bundle.newMessage(Message.messages["Baseapp_reloginBaseapp"]);
 			bundle.writeString(username);
 			bundle.writeString(password);
@@ -663,25 +652,25 @@
 			resetMessages();
 			
 			loadingLocalMessages_ = true;
-			MemoryStream stream = MemoryStream.createObject();
+			MemoryStream stream = MemoryStream.CreateObject();
 			stream.append(loginapp_clientMessages, (UInt32)0, (UInt32)loginapp_clientMessages.Length);
 			currserver = "loginapp";
 			onImportClientMessages(stream);
 			stream.reclaimObject();
 
-			stream = MemoryStream.createObject();
+			stream = MemoryStream.CreateObject();
 			stream.append(baseapp_clientMessages, (UInt32)0, (UInt32)baseapp_clientMessages.Length);
 			currserver = "baseapp";
 			onImportClientMessages(stream);
 			currserver = "loginapp";
 			stream.reclaimObject();
 
-			stream = MemoryStream.createObject();
+			stream = MemoryStream.CreateObject();
 			stream.append(serverErrorsDescr, (UInt32)0, (UInt32)serverErrorsDescr.Length);
 			onImportServerErrorsDescr(stream);
 			stream.reclaimObject();
 
-			stream = MemoryStream.createObject();
+			stream = MemoryStream.CreateObject();
 			stream.append(entitydefMessages, (UInt32)0, (UInt32)entitydefMessages.Length);
 			onImportClientEntityDef(stream);
 			stream.reclaimObject();
@@ -711,7 +700,7 @@
 				{
 					Dbg.DEBUG_MSG("KBEngine::onImportClientMessagesCompleted(): send importServerErrorsDescr!");
 					isImportServerErrorsDescr_ = true;
-					Bundle bundle = Bundle.createObject();
+					Bundle bundle = Bundle.CreateObject();
 					bundle.newMessage(Message.messages["Loginapp_importServerErrorsDescr"]);
 					bundle.send(_networkInterface);
 				}
@@ -743,10 +732,10 @@
 				if(!entitydefImported_ && !loadingLocalMessages_)
 				{
 					Dbg.DEBUG_MSG("KBEngine::onImportClientMessagesCompleted: send importEntityDef(" + entitydefImported_ + ") ...");
-					Bundle bundle = Bundle.createObject();
+					Bundle bundle = Bundle.CreateObject();
 					bundle.newMessage(Message.messages["Baseapp_importClientEntityDef"]);
 					bundle.send(_networkInterface);
-					Event.fireOut("Baseapp_importClientEntityDef", new object[]{});
+					Event.FireOut("Baseapp_importClientEntityDef", new object[]{});
 				}
 				else
 				{
@@ -1111,7 +1100,7 @@
 				
 				if(isClientMethod)
 				{
-					handler = typeof(KBEngineApp).GetMethod(msgname);
+					handler = typeof(NetApp).GetMethod(msgname);
 					if(handler == null)
 					{
 						Dbg.WARNING_MSG(string.Format("KBEngine::onImportClientMessages[{0}]: interface({1}/{2}/{3}) no implement!", 
@@ -1173,7 +1162,7 @@
 
 			if(!loginappMessageImported_)
 			{
-				Bundle bundle = Bundle.createObject();
+				Bundle bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Loginapp_importClientMessages"]);
 				bundle.send(_networkInterface);
 				Dbg.DEBUG_MSG("KBEngine::onOpenLoginapp_resetpassword: send importClientMessages ...");
@@ -1189,7 +1178,7 @@
 		*/
 		public void resetPassword(string username)
 		{
-			KBEngineApp.app.username = username;
+			NetApp.app.username = username;
 			resetpassword_loginapp(true);
 		}
 		
@@ -1201,11 +1190,11 @@
 			if(noconnect)
 			{
 				reset();
-				_networkInterface.connectTo(_args.ip, _args.port, onConnectTo_resetpassword_callback, null);
+				_networkInterface.ConnectTo(_args.ip, _args.port, onConnectTo_resetpassword_callback, null);
 			}
 			else
 			{
-				Bundle bundle = Bundle.createObject();
+				Bundle bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Loginapp_reqAccountResetPassword"]);
 				bundle.writeString(username);
 				bundle.send(_networkInterface);
@@ -1242,7 +1231,7 @@
 		*/
 		public void bindAccountEmail(string emailAddress)
 		{
-			Bundle bundle = Bundle.createObject();
+			Bundle bundle = Bundle.CreateObject();
 			bundle.newMessage(Message.messages["Baseapp_reqAccountBindEmail"]);
 			bundle.writeInt32(entity_id);
 			bundle.writeString(password);
@@ -1266,7 +1255,7 @@
 		*/
 		public void newPassword(string old_password, string new_password)
 		{
-			Bundle bundle = Bundle.createObject();
+			Bundle bundle = Bundle.CreateObject();
 			bundle.newMessage(Message.messages["Baseapp_reqAccountNewPassword"]);
 			bundle.writeInt32(entity_id);
 			bundle.writeString(old_password);
@@ -1287,11 +1276,11 @@
 
 		public void createAccount(string username, string password, byte[] datas)
 		{
-			KBEngineApp.app.username = username;
-			KBEngineApp.app.password = password;
-			KBEngineApp.app._clientdatas = datas;
+			NetApp.app.username = username;
+			NetApp.app.password = password;
+			NetApp.app._clientdatas = datas;
 			
-			KBEngineApp.app.createAccount_loginapp(true);
+			NetApp.app.createAccount_loginapp(true);
 		}
 
 		/*
@@ -1302,15 +1291,15 @@
 			if(noconnect)
 			{
 				reset();
-				_networkInterface.connectTo(_args.ip, _args.port, onConnectTo_createAccount_callback, null);
+				_networkInterface.ConnectTo(_args.ip, _args.port, onConnectTo_createAccount_callback, null);
 			}
 			else
 			{
-				Bundle bundle = Bundle.createObject();
+				Bundle bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Loginapp_reqCreateAccount"]);
 				bundle.writeString(username);
 				bundle.writeString(password);
-				bundle.writeBlob(KBEngineApp.app._clientdatas);
+				bundle.writeBlob(NetApp.app._clientdatas);
 				bundle.send(_networkInterface);
 			}
 		}
@@ -1324,7 +1313,7 @@
 			
 			if(!loginappMessageImported_)
 			{
-				Bundle bundle = Bundle.createObject();
+				Bundle bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Loginapp_importClientMessages"]);
 				bundle.send(_networkInterface);
 				Dbg.DEBUG_MSG("KBEngine::onOpenLoginapp_createAccount: send importClientMessages ...");
@@ -1366,7 +1355,7 @@
 			UInt16 failedcode = stream.readUint16();
 			_serverdatas = stream.readBlob();
 			Dbg.ERROR_MSG("KBEngine::Client_onLoginFailed: failedcode(" + failedcode + "), datas(" + _serverdatas.Length + ")!");
-			Event.fireAll("onLoginFailed", new object[]{failedcode});
+			Event.FireAll("onLoginFailed", new object[]{failedcode});
 		}
 		
 		/*
@@ -1392,7 +1381,7 @@
 		public void Client_onLoginBaseappFailed(UInt16 failedcode)
 		{
 			Dbg.ERROR_MSG("KBEngine::Client_onLoginBaseappFailed: failedcode(" + failedcode + ")!");
-			Event.fireAll("onLoginBaseappFailed", new object[]{failedcode});
+			Event.FireAll("onLoginBaseappFailed", new object[]{failedcode});
 		}
 
 		/*
@@ -1401,7 +1390,7 @@
 		public void Client_onReloginBaseappFailed(UInt16 failedcode)
 		{
 			Dbg.ERROR_MSG("KBEngine::Client_onReloginBaseappFailed: failedcode(" + failedcode + ")!");
-			Event.fireAll("onReloginBaseappFailed", new object[]{failedcode});
+			Event.FireAll("onReloginBaseappFailed", new object[]{failedcode});
 		}
 		
 		/*
@@ -1411,7 +1400,7 @@
 		{
 			entity_uuid = stream.readUint64();
 			Dbg.DEBUG_MSG("KBEngine::Client_onReloginBaseappSuccessfully: name(" + username + ")!");
-			Event.fireAll("onReloginBaseappSuccessfully", new object[]{});
+			Event.FireAll("onReloginBaseappSuccessfully", new object[]{});
 		}
 
 		/*
@@ -1551,7 +1540,7 @@
 					return;
 				}
 
-				MemoryStream stream1 = MemoryStream.createObject();
+				MemoryStream stream1 = MemoryStream.CreateObject();
 				stream1.wpos = stream.wpos;
 				stream1.rpos = stream.rpos - 4;
 				Array.Copy(stream.data(), stream1.data(), stream.data().Length);
@@ -1772,7 +1761,7 @@
 		public void Client_onEntityLeaveWorldOptimized(MemoryStream stream)
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
-			KBEngineApp.app.Client_onEntityLeaveWorld(eid);
+			NetApp.app.Client_onEntityLeaveWorld(eid);
 		}
 
 		/*
@@ -1799,7 +1788,7 @@
 			else
 			{
 				if(_controlledEntities.Remove(entity))
-					Event.fireOut("onLoseControlledEntity", new object[]{entity});
+					Event.FireOut("onLoseControlledEntity", new object[]{entity});
 
 				entities.Remove(eid);
 				entity.onDestroy();
@@ -1858,7 +1847,7 @@
 			UInt16 retcode = stream.readUint16();
 			byte[] datas = stream.readBlob();
 			
-			Event.fireOut("onCreateAccountResult", new object[]{retcode, datas});
+			Event.FireOut("onCreateAccountResult", new object[]{retcode, datas});
 			
 			if(retcode != 0)
 			{
@@ -1902,7 +1891,7 @@
 			try
 			{
 				entity.onControlled(isCont);
-				Event.fireOut("onControlled", new object[]{entity, isCont});
+				Event.FireOut("onControlled", new object[]{entity, isCont});
 			}
 			catch (Exception e)
 			{
@@ -1943,7 +1932,7 @@
 				playerEntity._entityLastLocalPos = position;
 				playerEntity._entityLastLocalDir = direction;
 
-				Bundle bundle = Bundle.createObject();
+				Bundle bundle = Bundle.CreateObject();
 				bundle.newMessage(Message.messages["Baseapp_onUpdateDataFromClient"]);
 				bundle.writeFloat(position.x);
 				bundle.writeFloat(position.y);
@@ -1987,7 +1976,7 @@
 					entity._entityLastLocalPos = position;
 					entity._entityLastLocalDir = direction;
 
-					Bundle bundle = Bundle.createObject();
+					Bundle bundle = Bundle.CreateObject();
 					bundle.newMessage(Message.messages["Baseapp_onUpdateDataFromClientForControlledEntity"]);
 					bundle.writeInt32(entity.id);
 					bundle.writeFloat(position.x);
@@ -2030,7 +2019,7 @@
 			isLoadedGeometry = true;
 			spaceID = uspaceID;
 			spaceResPath = respath;
-			Event.fireOut("addSpaceGeometryMapping", new object[]{spaceResPath});
+			Event.FireOut("addSpaceGeometryMapping", new object[]{spaceResPath});
 		}
 
 		public void clearSpace(bool isall)
@@ -2107,7 +2096,7 @@
 			if(key == "_mapping")
 				addSpaceGeometryMapping(spaceID, value);
 			
-			Event.fireOut("onSetSpaceData", new object[]{spaceID, key, value});
+			Event.FireOut("onSetSpaceData", new object[]{spaceID, key, value});
 		}
 
 		/*
@@ -2117,7 +2106,7 @@
 		{
 			Dbg.DEBUG_MSG("KBEngine::Client_delSpaceData: spaceID(" + spaceID + "), key(" + key + ")");
 			_spacedatas.Remove(key);
-			Event.fireOut("onDelSpaceData", new object[]{spaceID, key});
+			Event.FireOut("onDelSpaceData", new object[]{spaceID, key});
 		}
 		
 		public string getSpaceData(string key)
@@ -2156,7 +2145,7 @@
 			}
 
 			if(_controlledEntities.Remove(entity))
-				Event.fireOut("onLoseControlledEntity", new object[]{entity});
+				Event.FireOut("onLoseControlledEntity", new object[]{entity});
 
 			entities.Remove(eid);
 			entity.onDestroy();
@@ -2175,7 +2164,7 @@
 			if (entity != null && entity.isControlled)
 			{
 				entity.position.Set(_entityServerPos.x, _entityServerPos.y, _entityServerPos.z);
-				Event.fireOut("updatePosition", new object[]{entity});
+				Event.FireOut("updatePosition", new object[]{entity});
 				entity.onUpdateVolatileData();
 			}
 		}
@@ -2190,7 +2179,7 @@
 			{
 				entity.position.x = _entityServerPos.x;
 				entity.position.z = _entityServerPos.z;
-				Event.fireOut("updatePosition", new object[]{entity});
+				Event.FireOut("updatePosition", new object[]{entity});
 				entity.onUpdateVolatileData();
 			}
 		}
@@ -2206,7 +2195,7 @@
 			if (entity != null && entity.isControlled)
 			{
 				entity.direction.Set(roll, pitch, yaw);
-				Event.fireOut("set_direction", new object[]{entity});
+				Event.FireOut("set_direction", new object[]{entity});
 				entity.onUpdateVolatileData();
 			}
 		}
@@ -2565,7 +2554,7 @@
 			bool done = false;
 			if(changeDirection == true)
 			{
-				Event.fireOut("set_direction", new object[]{entity});
+				Event.FireOut("set_direction", new object[]{entity});
 				done = true;
 			}
 			
@@ -2580,7 +2569,7 @@
 				
 				entity.position = pos;
 				done = true;
-				Event.fireOut("updatePosition", new object[]{entity});
+				Event.FireOut("updatePosition", new object[]{entity});
 			}
 			
 			if(done)
@@ -2593,24 +2582,24 @@
 		*/
 		public void Client_onStreamDataStarted(Int16 id, UInt32 datasize, string descr)
 		{
-			Event.fireOut("onStreamDataStarted", new object[]{id, datasize, descr});
+			Event.FireOut("onStreamDataStarted", new object[]{id, datasize, descr});
 		}
 		
 		public void Client_onStreamDataRecv(MemoryStream stream)
 		{
 			Int16 resID = stream.readInt16();
 			byte[] datas = stream.readBlob();
-			Event.fireOut("onStreamDataRecv", new object[]{resID, datas});
+			Event.FireOut("onStreamDataRecv", new object[]{resID, datas});
 		}
 		
 		public void Client_onStreamDataCompleted(Int16 id)
 		{
-			Event.fireOut("onStreamDataCompleted", new object[]{id});
+			Event.FireOut("onStreamDataCompleted", new object[]{id});
 		}
 	}
 	
 
-	public class KBEngineAppThread : KBEngineApp
+	public class KBEngineAppThread : NetApp
 	{
 		/*
 			KBEngine处理线程
@@ -2618,10 +2607,10 @@
 	    public class KBEThread
 	    {
 
-	        KBEngineApp app_;
+	        NetApp app_;
 			public bool over = false;
 			
-	        public KBEThread(KBEngineApp app)
+	        public KBEThread(NetApp app)
 	        {
 	            this.app_ = app;
 	        }

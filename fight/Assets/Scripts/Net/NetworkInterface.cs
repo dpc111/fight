@@ -1,4 +1,4 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
 	using UnityEngine;
 	using System;
@@ -11,28 +11,23 @@
 	using System.Threading;
 	using System.Runtime.Remoting.Messaging;
 
-	using MessageID = System.UInt16;
-	using MessageLength = System.UInt16;
+	using MsgID = System.UInt16;
+	using MsgLength = System.UInt16;
 
-	/// <summary>
-	/// 网络模块
-	/// 处理连接、收发数据
-	/// </summary>
+	//网络模块
+	//处理连接、收发数据
 	public class NetworkInterface
 	{
 		public delegate void AsyncConnectMethod(ConnectState state);
-		public const int TCP_PACKET_MAX = 1460;
 		public delegate void ConnectCallback(string ip, int port, bool success, object userData);
-
-		protected Socket _socket = null;
-		PacketReceiver _packetReceiver = null;
-		PacketSender _packetSender = null;
-
+        public const int tcpPacketMax = 1460;
+        protected Socket socket = null;
+		PacketReceiver packetReceiver = null;
+		PacketSender packetSender = null;
 		public bool connected = false;
 		
 		public class ConnectState
 		{
-			// for connect
 			public string connectIP = "";
 			public int connectPort = 0;
 			public ConnectCallback connectCB = null;
@@ -44,191 +39,161 @@
 		
 		public NetworkInterface()
 		{
-			reset();
+			Reset();
 		}
 
 		~NetworkInterface()
 		{
-			Dbg.DEBUG_MSG("NetworkInterface::~NetworkInterface(), destructed!!!");
-			reset();
+			Dbg.DEBUG_MSG("NetworkInterface destructed");
+			Reset();
 		}
 
-		public virtual Socket sock()
+		public virtual Socket Sock()
 		{
-			return _socket;
+			return socket;
 		}
 		
-		public void reset()
+		public void Reset()
 		{
-			if(valid())
+			if(Valid())
 			{
-				Dbg.DEBUG_MSG(string.Format("NetworkInterface::reset(), close socket from '{0}'", _socket.RemoteEndPoint.ToString()));
-         	   _socket.Close(0);
+			    Dbg.DEBUG_MSG(string.Format("NetworkInterface::reset(), close socket from {0}", socket.RemoteEndPoint.ToString()));
+         	    socket.Close(0);
 			}
-			_socket = null;
-			_packetReceiver = null;
-			_packetSender = null;
+			socket = null;
+			packetReceiver = null;
+			packetSender = null;
 			connected = false;
 		}
 		
-
-        public void close()
+        public void Close()
         {
-           if(_socket != null)
+           if(socket != null)
 			{
-				_socket.Close(0);
-				_socket = null;
-				Event.fireAll("onDisconnected", new object[]{});
+				socket.Close(0);
+				socket = null;
+				Event.FireAll("onDisconnected", new object[]{});
             }
-
-            _socket = null;
+            socket = null;
             connected = false;
         }
 
-		public virtual PacketReceiver packetReceiver()
+		public virtual PacketReceiver PacketReceiver()
 		{
-			return _packetReceiver;
+			return packetReceiver;
 		}
 		
-		public virtual bool valid()
+		public virtual bool Valid()
 		{
-			return ((_socket != null) && (_socket.Connected == true));
+			return ((socket != null) && (socket.Connected == true));
 		}
 		
-		public void _onConnectionState(ConnectState state)
+        //当前线程触发
+		public void OnConnectionState(ConnectState state)
 		{
-			KBEngine.Event.deregisterIn(this);
-
-			bool success = (state.error == "" && valid());
+			Net.Event.DeregisterIn(this);
+			bool success = (state.error == "" && Valid());
 			if (success)
 			{
-				Dbg.DEBUG_MSG(string.Format("NetworkInterface::_onConnectionState(), connect to {0} is success!", state.socket.RemoteEndPoint.ToString()));
-				_packetReceiver = new PacketReceiver(this);
-				_packetReceiver.startRecv();
+                Dbg.DEBUG_MSG(string.Format("connect to {0} is success!", state.socket.RemoteEndPoint.ToString()));
+				packetReceiver = new PacketReceiver(this);
+				packetReceiver.StartRecv();
 				connected = true;
 			}
 			else
 			{
-				reset();
-				Dbg.ERROR_MSG(string.Format("NetworkInterface::_onConnectionState(), connect error! ip: {0}:{1}, err: {2}", state.connectIP, state.connectPort, state.error));
+				Reset();
+                Dbg.ERROR_MSG(string.Format("connect error! ip: {0}:{1}, err: {2}", state.connectIP, state.connectPort, state.error));
 			}
-
-			Event.fireAll("onConnectionState", new object[] { success });
-
+			Event.FireAll("OnConnectionState", new object[] { success });
 			if (state.connectCB != null)
 				state.connectCB(state.connectIP, state.connectPort, success, state.userData);
 		}
 
-		private static void connectCB(IAsyncResult ar)
+		private static void ConnectCB(IAsyncResult ar)
 		{
 			ConnectState state = null;
-			
 			try 
 			{
-				// Retrieve the socket from the state object.
+				//Retrieve the socket from the state object.
 				state = (ConnectState) ar.AsyncState;
-
-				// Complete the connection.
+				//Complete the connection.
 				state.socket.EndConnect(ar);
-
-				Event.fireIn("_onConnectionState", new object[] { state });
+                Event.FireIn("OnConnectionState", new object[] { state });
 			} 
 			catch (Exception e) 
 			{
 				state.error = e.ToString();
-				Event.fireIn("_onConnectionState", new object[] { state });
+                Event.FireIn("OnConnectionState", new object[] { state });
 			}
 		}
 
-		/// <summary>
-		/// 在非主线程执行：连接服务器
-		/// </summary>
-		private void _asyncConnect(ConnectState state)
+		//在非主线程执行：连接服务器
+		private void AsyncConnect(ConnectState state)
 		{
-			Dbg.DEBUG_MSG(string.Format("NetWorkInterface::_asyncConnect(), will connect to '{0}:{1}' ...", state.connectIP, state.connectPort));
+			Dbg.DEBUG_MSG(string.Format("will connect to '{0}:{1}' ...", state.connectIP, state.connectPort));
 			try
 			{
 				state.socket.Connect(state.connectIP, state.connectPort);
 			}
 			catch (Exception e)
 			{
-				Dbg.ERROR_MSG(string.Format("NetWorkInterface::_asyncConnect(), connect to '{0}:{1}' fault! error = '{2}'", state.connectIP, state.connectPort, e));
+				Dbg.ERROR_MSG(string.Format("connect to '{0}:{1}' fault! error = '{2}'", state.connectIP, state.connectPort, e));
 				state.error = e.ToString();
 			}
 		}
 
-		/// <summary>
-		/// 在非主线程执行：连接服务器结果回调
-		/// </summary>
-		private void _asyncConnectCB(IAsyncResult ar)
+		//在非主线程执行：连接服务器结果回调
+		private void AsyncConnectCB(IAsyncResult ar)
 		{
 			ConnectState state = (ConnectState)ar.AsyncState;
 			AsyncResult result = (AsyncResult)ar;
 			AsyncConnectMethod caller = (AsyncConnectMethod)result.AsyncDelegate;
-
-			Dbg.DEBUG_MSG(string.Format("NetWorkInterface::_asyncConnectCB(), connect to '{0}:{1}' finish. error = '{2}'", state.connectIP, state.connectPort, state.error));
-
-			// Call EndInvoke to retrieve the results.
+			Dbg.DEBUG_MSG(string.Format("connect to '{0}:{1}' finish. error = '{2}'", state.connectIP, state.connectPort, state.error));
+			//Call EndInvoke to retrieve the results.
 			caller.EndInvoke(ar);
-			Event.fireIn("_onConnectionState", new object[] { state });
+            Event.FireIn("OnConnectionState", new object[] { state });
 		}
 
-		public void connectTo(string ip, int port, ConnectCallback callback, object userData)
+		public void ConnectTo(string ip, int port, ConnectCallback callback, object userData)
 		{
-			if (valid())
+			if (Valid())
 				throw new InvalidOperationException("Have already connected!");
-
-			if (!(new Regex(@"((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))")).IsMatch(ip))
-			{
-				IPHostEntry ipHost = Dns.GetHostEntry(ip);
-				ip = ipHost.AddressList[0].ToString();
-			}
-
-			// Security.PrefetchSocketPolicy(ip, 843);
-			_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			_socket.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, KBEngineApp.app.getInitArgs().getRecvBufferSize() * 2);
-			_socket.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, SocketOptionName.SendBuffer, KBEngineApp.app.getInitArgs().getSendBufferSize() * 2);
-			_socket.NoDelay = true;
-			//_socket.Blocking = false;
-
+			socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			socket.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, NetApp.app.getInitArgs().getRecvBufferSize() * 2);
+			socket.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, SocketOptionName.SendBuffer, NetApp.app.getInitArgs().getSendBufferSize() * 2);
+			socket.NoDelay = true;
 			ConnectState state = new ConnectState();
 			state.connectIP = ip;
 			state.connectPort = port;
 			state.connectCB = callback;
 			state.userData = userData;
-			state.socket = _socket;
+			state.socket = socket;
 			state.networkInterface = this;
-
 			Dbg.DEBUG_MSG("connect to " + ip + ":" + port + " ...");
 			connected = false;
-			
-			// 先注册一个事件回调，该事件在当前线程触发
-			Event.registerIn("_onConnectionState", this, "_onConnectionState");
-
-			var v = new AsyncConnectMethod(this._asyncConnect);
-			v.BeginInvoke(state, new AsyncCallback(this._asyncConnectCB), state);
+			//先注册一个事件回调，该事件在当前线程触发
+            Event.RegisterIn("OnConnectionState", this, "OnConnectionState");
+			var v = new AsyncConnectMethod(this.AsyncConnect);
+			v.BeginInvoke(state, new AsyncCallback(this.AsyncConnectCB), state);
 		}
 
-		public bool send(MemoryStream stream)
+		public bool Send(MemoryStream stream)
 		{
-			if (!valid())
-			{
+			if (!Valid())
 				throw new ArgumentException("invalid socket!");
-			}
-
-			if (_packetSender == null)
-				_packetSender = new PacketSender(this);
-
-			return _packetSender.send(stream);
+			if (packetSender == null)
+				packetSender = new PacketSender(this);
+			return packetSender.Send(stream);
 		}
 
-		public void process()
+		public void Process()
 		{
-			if (!valid())
+			if (!Valid())
 				return;
 
-			if (_packetReceiver != null)
-				_packetReceiver.process();
+			if (packetReceiver != null)
+				packetReceiver.Process();
 		}
 	}
 }

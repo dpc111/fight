@@ -1,29 +1,25 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using KBEngine;
+using Net;
 
-/*
-	可以理解为插件的入口模块
-	在这个入口中安装了需要监听的事件(installEvents)，同时初始化KBEngine(initKBEngine)
-*/
-	
-public class KBEMain : MonoBehaviour 
+//可以理解为插件的入口模块
+//在这个入口中安装了需要监听的事件(installEvents)，同时初始化KBEngine(initKBEngine)
+public class NetMain : MonoBehaviour 
 {
-	public KBEngineApp gameapp = null;
-	
+	public NetApp gameapp = null;
 	// 在unity3d界面中可见选项
 	public DEBUGLEVEL debugLevel = DEBUGLEVEL.DEBUG;
 	public bool isMultiThreads = true;
 	public string ip = "127.0.0.1";
 	public int port = 20013;
-	public KBEngineApp.CLIENT_TYPE clientType = KBEngineApp.CLIENT_TYPE.CLIENT_TYPE_MINI;
+	public NetApp.CLIENT_TYPE clientType = NetApp.CLIENT_TYPE.CLIENT_TYPE_MINI;
 	public string persistentDataPath = "Application.persistentDataPath";
 	public bool syncPlayer = true;
 	public int threadUpdateHZ = 10;
 	public int serverHeartbeatTick = 15;
-	public int SEND_BUFFER_MAX = (int)KBEngine.NetworkInterface.TCP_PACKET_MAX;
-	public int RECV_BUFFER_MAX = (int)KBEngine.NetworkInterface.TCP_PACKET_MAX;
+	public int SEND_BUFFER_MAX = (int)Net.NetworkInterface.tcpPacketMax;
+	public int RECV_BUFFER_MAX = (int)Net.NetworkInterface.tcpPacketMax;
 	public bool useAliasEntityID = true;
 	public bool isOnInitCallPropertysSetMethods = true;
 
@@ -75,16 +71,16 @@ public class KBEMain : MonoBehaviour
 		if(isMultiThreads)
 			gameapp = new KBEngineAppThread(args);
 		else
-			gameapp = new KBEngineApp(args);
+			gameapp = new NetApp(args);
 	}
 	
 	protected virtual void OnDestroy()
 	{
 		MonoBehaviour.print("clientapp::OnDestroy(): begin");
-        if (KBEngineApp.app != null)
+        if (NetApp.app != null)
         {
-            KBEngineApp.app.destroy();
-            KBEngineApp.app = null;
+            NetApp.app.destroy();
+            NetApp.app = null;
         }
 		MonoBehaviour.print("clientapp::OnDestroy(): end");
 	}
@@ -100,6 +96,6 @@ public class KBEMain : MonoBehaviour
 		if(!isMultiThreads)
 			gameapp.process();
 		
-		KBEngine.Event.processOutEvents();
+		Net.Event.ProcessOutEvents();
 	}
 }

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using KBEngine;
+using Net;
 using System; 
 using System.IO;  
 using System.Text;
 using System.Collections;
 
-namespace KBEngine
+namespace Net
 {
 	/*
 		持久化引擎协议，在检测到协议版本发生改变时会清理协议
@@ -34,8 +34,8 @@ namespace KBEngine
 
 		string _getSuffixBase()
 		{
-			return KBEngineApp.app.clientVersion + "." + KBEngineApp.app.clientScriptVersion + "." + 
-							KBEngineApp.app.getInitArgs().ip + "." + KBEngineApp.app.getInitArgs().port;
+			return NetApp.app.clientVersion + "." + NetApp.app.clientScriptVersion + "." + 
+							NetApp.app.getInitArgs().ip + "." + NetApp.app.getInitArgs().port;
 		}
 		
 		string _getSuffix()
@@ -67,7 +67,7 @@ namespace KBEngine
 			{
 				try
 				{
-					if(!KBEngineApp.app.importMessagesFromMemoryStream (loginapp_onImportClientMessages, 
+					if(!NetApp.app.importMessagesFromMemoryStream (loginapp_onImportClientMessages, 
 							baseapp_onImportClientMessages, onImportClientEntityDef, onImportServerErrorsDescr))
 						
 						clearMessageFiles();
@@ -144,7 +144,7 @@ namespace KBEngine
 			deleteFile(_persistentDataPath, "baseapp_clientMessages." + _getSuffix());
 			deleteFile(_persistentDataPath, "serverErrorsDescr." + _getSuffix());
 			deleteFile(_persistentDataPath, "clientEntityDef." + _getSuffix());
-			KBEngineApp.app.resetMessages();
+			NetApp.app.resetMessages();
 		}
 		
 		public void createFile(string path, string name, byte[] datas)  

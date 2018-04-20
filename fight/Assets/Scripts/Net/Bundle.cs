@@ -1,15 +1,13 @@
-﻿namespace KBEngine
+﻿namespace Net
 {
   	using UnityEngine; 
 	using System; 
 	using System.Collections;
 	using System.Collections.Generic;
 	
-	/*
-		这个模块将多个数据包打捆在一起
-		由于每个数据包都有最大上限， 向Bundle中写入大量数据将会在内部产生多个MemoryStream
-		在send时会全部发送出去
-	*/
+    //这个模块将多个数据包打捆在一起
+    //由于每个数据包都有最大上限， 向Bundle中写入大量数据将会在内部产生多个MemoryStream
+    //在send时会全部发送出去
 	public class Bundle : ObjectPool<Bundle>
     {
 		public MemoryStream stream = new MemoryStream();
@@ -25,7 +23,7 @@
 
 		public void clear()
 		{
-			stream = MemoryStream.createObject();
+			stream = MemoryStream.CreateObject();
 			streamList = new List<MemoryStream>();
 			numMessage = 0;
 			messageLength = 0;
@@ -39,7 +37,7 @@
 		public void reclaimObject()
 		{
 			clear();
-			reclaimObject(this);
+			ReclaimObject(this);
 		}
 		
 		public void newMessage(Message mt)
@@ -81,7 +79,7 @@
 				writeMsgLength();
 
 				streamList.Add(stream);
-				stream = MemoryStream.createObject();
+				stream = MemoryStream.CreateObject();
 			}
 			
 			if(issend)
@@ -97,12 +95,12 @@
 		{
 			fini(true);
 			
-			if(networkInterface.valid())
+			if(networkInterface.Valid())
 			{
 				for(int i=0; i<streamList.Count; i++)
 				{
 					MemoryStream tempStream = streamList[i];
-					networkInterface.send(tempStream);
+					networkInterface.Send(tempStream);
 				}
 			}
 			else
@@ -124,7 +122,7 @@
 			// 如果需要继续使用，应该重新Bundle.createObject()，
 			// 如果外面不重新createObject()而直接使用，就可能会出现莫名的问题，
 			// 仅以此备注，警示使用者。
-			Bundle.reclaimObject(this);
+			Bundle.ReclaimObject(this);
 		}
 		
 		public void checkStream(int v)
@@ -132,7 +130,7 @@
 			if(v > stream.space())
 			{
 				streamList.Add(stream);
-				stream = MemoryStream.createObject();
+				stream = MemoryStream.CreateObject();
 				++ _curMsgStreamIndex;
 			}
 	
