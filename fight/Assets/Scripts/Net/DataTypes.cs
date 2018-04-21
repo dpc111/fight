@@ -55,7 +55,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readInt8();
+			return stream.ReadInt8();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -84,7 +84,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readInt16();
+			return stream.ReadInt16();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -113,7 +113,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readInt32();
+			return stream.ReadInt32();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -142,7 +142,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readInt64();
+			return stream.ReadInt64();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -171,7 +171,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readUint8();
+			return stream.ReadUint8();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -200,7 +200,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readUint16();
+			return stream.ReadUint16();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -229,7 +229,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readUint32();
+			return stream.ReadUint32();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -258,7 +258,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readUint64();
+			return stream.ReadUint64();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -287,7 +287,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readFloat();
+			return stream.ReadFloat();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -317,7 +317,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readDouble();
+			return stream.ReadDouble();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -347,7 +347,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readString();
+			return stream.ReadString();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -370,7 +370,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return new Vector2(stream.readFloat(), stream.readFloat());
+			return new Vector2(stream.ReadFloat(), stream.ReadFloat());
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -394,7 +394,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return new Vector3(stream.readFloat(), stream.readFloat(), stream.readFloat());
+			return new Vector3(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -419,7 +419,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return new Vector4(stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readFloat());
+			return new Vector4(stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat(), stream.ReadFloat());
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -445,7 +445,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readBlob();
+			return stream.ReadBlob();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -468,7 +468,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return System.Text.Encoding.UTF8.GetString(stream.readBlob());
+			return System.Text.Encoding.UTF8.GetString(stream.ReadBlob());
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -491,7 +491,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readBlob();
+			return stream.ReadBlob();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -514,7 +514,7 @@
 	{
 		public override object createFromStream(MemoryStream stream)
 		{
-			return stream.readBlob();
+			return stream.ReadBlob();
 		}
 		
 		public override void addToStream(Bundle stream, object v)
@@ -548,7 +548,7 @@
 		
 		public override object createFromStream(MemoryStream stream)
 		{
-			UInt32 size = stream.readUint32();
+			UInt32 size = stream.ReadUint32();
 			List<object> datas = new List<object>();
 			
 			while(size > 0)

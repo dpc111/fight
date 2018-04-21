@@ -385,11 +385,11 @@
 		*/
 		public void Client_onHelloCB(MemoryStream stream)
 		{
-			serverVersion = stream.readString();
-			serverScriptVersion = stream.readString();
-			serverProtocolMD5 = stream.readString();
-			serverEntitydefMD5 = stream.readString();
-			Int32 ctype = stream.readInt32();
+			serverVersion = stream.ReadString();
+			serverScriptVersion = stream.ReadString();
+			serverProtocolMD5 = stream.ReadString();
+			serverEntitydefMD5 = stream.ReadString();
+			Int32 ctype = stream.ReadInt32();
 			
 			Dbg.DEBUG_MSG("KBEngine::Client_onHelloCB: verInfo(" + serverVersion 
 				+ "), scriptVersion("+ serverScriptVersion + "), srvProtocolMD5("+ serverProtocolMD5 
@@ -412,7 +412,7 @@
 		*/
 		public void Client_onVersionNotMatch(MemoryStream stream)
 		{
-			serverVersion = stream.readString();
+			serverVersion = stream.ReadString();
 			
 			Dbg.ERROR_MSG("Client_onVersionNotMatch: verInfo=" + clientVersion + "(server: " + serverVersion + ")");
 			Event.FireAll("onVersionNotMatch", new object[]{clientVersion, serverVersion});
@@ -426,7 +426,7 @@
 		*/
 		public void Client_onScriptVersionNotMatch(MemoryStream stream)
 		{
-			serverScriptVersion = stream.readString();
+			serverScriptVersion = stream.ReadString();
 			
 			Dbg.ERROR_MSG("Client_onScriptVersionNotMatch: verInfo=" + clientScriptVersion + "(server: " + serverScriptVersion + ")");
 			Event.FireAll("onScriptVersionNotMatch", new object[]{clientScriptVersion, serverScriptVersion});
@@ -450,7 +450,7 @@
 		public void Client_onImportServerErrorsDescr(MemoryStream stream)
 		{
 			byte[] datas = new byte[stream.wpos - stream.rpos];
-			Array.Copy(stream.data(), stream.rpos, datas, 0, stream.wpos - stream.rpos);
+			Array.Copy(stream.Data(), stream.rpos, datas, 0, stream.wpos - stream.rpos);
 			
 			onImportServerErrorsDescr (stream);
 			
@@ -463,15 +463,15 @@
 		*/
 		public void onImportServerErrorsDescr(MemoryStream stream)
 		{
-			UInt16 size = stream.readUint16();
+			UInt16 size = stream.ReadUint16();
 			while(size > 0)
 			{
 				size -= 1;
 				
 				ServerErr e;
-				e.id = stream.readUint16();
-				e.name = System.Text.Encoding.UTF8.GetString(stream.readBlob());
-				e.descr = System.Text.Encoding.UTF8.GetString(stream.readBlob());
+				e.id = stream.ReadUint16();
+				e.name = System.Text.Encoding.UTF8.GetString(stream.ReadBlob());
+				e.descr = System.Text.Encoding.UTF8.GetString(stream.ReadBlob());
 				
 				serverErrs.Add(e.id, e);
 					
@@ -653,27 +653,27 @@
 			
 			loadingLocalMessages_ = true;
 			MemoryStream stream = MemoryStream.CreateObject();
-			stream.append(loginapp_clientMessages, (UInt32)0, (UInt32)loginapp_clientMessages.Length);
+			stream.Append(loginapp_clientMessages, (UInt32)0, (UInt32)loginapp_clientMessages.Length);
 			currserver = "loginapp";
 			onImportClientMessages(stream);
-			stream.reclaimObject();
+			stream.ReclaimObject();
 
 			stream = MemoryStream.CreateObject();
-			stream.append(baseapp_clientMessages, (UInt32)0, (UInt32)baseapp_clientMessages.Length);
+			stream.Append(baseapp_clientMessages, (UInt32)0, (UInt32)baseapp_clientMessages.Length);
 			currserver = "baseapp";
 			onImportClientMessages(stream);
 			currserver = "loginapp";
-			stream.reclaimObject();
+			stream.ReclaimObject();
 
 			stream = MemoryStream.CreateObject();
-			stream.append(serverErrorsDescr, (UInt32)0, (UInt32)serverErrorsDescr.Length);
+			stream.Append(serverErrorsDescr, (UInt32)0, (UInt32)serverErrorsDescr.Length);
 			onImportServerErrorsDescr(stream);
-			stream.reclaimObject();
+			stream.ReclaimObject();
 
 			stream = MemoryStream.CreateObject();
-			stream.append(entitydefMessages, (UInt32)0, (UInt32)entitydefMessages.Length);
+			stream.Append(entitydefMessages, (UInt32)0, (UInt32)entitydefMessages.Length);
 			onImportClientEntityDef(stream);
-			stream.reclaimObject();
+			stream.ReclaimObject();
 
 			loadingLocalMessages_ = false;
 			loginappMessageImported_ = true;
@@ -749,7 +749,7 @@
 		*/
 		public void createDataTypeFromStreams(MemoryStream stream, bool canprint)
 		{
-			UInt16 aliassize = stream.readUint16();
+			UInt16 aliassize = stream.ReadUint16();
 			Dbg.DEBUG_MSG("KBEngine::createDataTypeFromStreams: importAlias(size=" + aliassize + ")!");
 			
 			while(aliassize > 0)
@@ -769,9 +769,9 @@
 			
 		public void createDataTypeFromStream(MemoryStream stream, bool canprint)
 		{
-			UInt16 utype = stream.readUint16();
-			string name = stream.readString();
-			string valname = stream.readString();
+			UInt16 utype = stream.ReadUint16();
+			string name = stream.ReadString();
+			string valname = stream.ReadString();
 
 			/* 有一些匿名类型，我们需要提供一个唯一名称放到datatypes中
 				如：
@@ -788,15 +788,15 @@
 			if(name == "FIXED_DICT")
 			{
 				KBEDATATYPE_FIXED_DICT datatype = new KBEDATATYPE_FIXED_DICT();
-				Byte keysize = stream.readUint8();
-				datatype.implementedBy = stream.readString();
+				Byte keysize = stream.ReadUint8();
+				datatype.implementedBy = stream.ReadString();
 					
 				while(keysize > 0)
 				{
 					keysize--;
 					
-					string keyname = stream.readString();
-					UInt16 keyutype = stream.readUint16();
+					string keyname = stream.ReadString();
+					UInt16 keyutype = stream.ReadUint16();
 					datatype.dicttype[keyname] = keyutype;
 				};
 				
@@ -804,7 +804,7 @@
 			}
 			else if(name == "ARRAY")
 			{
-				UInt16 uitemtype = stream.readUint16();
+				UInt16 uitemtype = stream.ReadUint16();
 				KBEDATATYPE_ARRAY datatype = new KBEDATATYPE_ARRAY();
 				datatype.vtype = uitemtype;
 				EntityDef.datatypes[valname] = datatype;
@@ -825,7 +825,7 @@
 		public void Client_onImportClientEntityDef(MemoryStream stream)
 		{
 			byte[] datas = new byte[stream.wpos - stream.rpos];
-			Array.Copy (stream.data (), stream.rpos, datas, 0, stream.wpos - stream.rpos);
+			Array.Copy (stream.Data (), stream.rpos, datas, 0, stream.wpos - stream.rpos);
 
 			onImportClientEntityDef (stream);
 			
@@ -838,14 +838,14 @@
 			createDataTypeFromStreams(stream, true);
 
 			
-			while(stream.length() > 0)
+			while(stream.Length() > 0)
 			{
-				string scriptmodule_name = stream.readString();
-				UInt16 scriptUtype = stream.readUint16();
-				UInt16 propertysize = stream.readUint16();
-				UInt16 methodsize = stream.readUint16();
-				UInt16 base_methodsize = stream.readUint16();
-				UInt16 cell_methodsize = stream.readUint16();
+				string scriptmodule_name = stream.ReadString();
+				UInt16 scriptUtype = stream.ReadUint16();
+				UInt16 propertysize = stream.ReadUint16();
+				UInt16 methodsize = stream.ReadUint16();
+				UInt16 base_methodsize = stream.ReadUint16();
+				UInt16 cell_methodsize = stream.ReadUint16();
 				
 				Dbg.DEBUG_MSG("KBEngine::Client_onImportClientEntityDef: import(" + scriptmodule_name + "), propertys(" + propertysize + "), " +
 						"clientMethods(" + methodsize + "), baseMethods(" + base_methodsize + "), cellMethods(" + cell_methodsize + ")!");
@@ -861,12 +861,12 @@
 				{
 					propertysize--;
 					
-					UInt16 properUtype = stream.readUint16();
-					UInt32 properFlags = stream.readUint32();
-					Int16 ialiasID = stream.readInt16();
-					string name = stream.readString();
-					string defaultValStr = stream.readString();
-					KBEDATATYPE_BASE utype = EntityDef.id2datatypes[stream.readUint16()];
+					UInt16 properUtype = stream.ReadUint16();
+					UInt32 properFlags = stream.ReadUint32();
+					Int16 ialiasID = stream.ReadInt16();
+					string name = stream.ReadString();
+					string defaultValStr = stream.ReadString();
+					KBEDATATYPE_BASE utype = EntityDef.id2datatypes[stream.ReadUint16()];
 					
 					System.Reflection.MethodInfo setmethod = null;
 					
@@ -914,16 +914,16 @@
 				{
 					methodsize--;
 					
-					UInt16 methodUtype = stream.readUint16();
-					Int16 ialiasID = stream.readInt16();
-					string name = stream.readString();
-					Byte argssize = stream.readUint8();
+					UInt16 methodUtype = stream.ReadUint16();
+					Int16 ialiasID = stream.ReadInt16();
+					string name = stream.ReadString();
+					Byte argssize = stream.ReadUint8();
 					List<KBEDATATYPE_BASE> args = new List<KBEDATATYPE_BASE>();
 					
 					while(argssize > 0)
 					{
 						argssize--;
-						args.Add(EntityDef.id2datatypes[stream.readUint16()]);
+						args.Add(EntityDef.id2datatypes[stream.ReadUint16()]);
 					};
 					
 					Method savedata = new Method();
@@ -964,16 +964,16 @@
 				{
 					base_methodsize--;
 					
-					UInt16 methodUtype = stream.readUint16();
-					Int16 ialiasID = stream.readInt16();
-					string name = stream.readString();
-					Byte argssize = stream.readUint8();
+					UInt16 methodUtype = stream.ReadUint16();
+					Int16 ialiasID = stream.ReadInt16();
+					string name = stream.ReadString();
+					Byte argssize = stream.ReadUint8();
 					List<KBEDATATYPE_BASE> args = new List<KBEDATATYPE_BASE>();
 					
 					while(argssize > 0)
 					{
 						argssize--;
-						args.Add(EntityDef.id2datatypes[stream.readUint16()]);
+						args.Add(EntityDef.id2datatypes[stream.ReadUint16()]);
 					};
 					
 					Method savedata = new Method();
@@ -992,16 +992,16 @@
 				{
 					cell_methodsize--;
 					
-					UInt16 methodUtype = stream.readUint16();
-					Int16 ialiasID = stream.readInt16();
-					string name = stream.readString();
-					Byte argssize = stream.readUint8();
+					UInt16 methodUtype = stream.ReadUint16();
+					Int16 ialiasID = stream.ReadInt16();
+					string name = stream.ReadString();
+					Byte argssize = stream.ReadUint8();
 					List<KBEDATATYPE_BASE> args = new List<KBEDATATYPE_BASE>();
 					
 					while(argssize > 0)
 					{
 						argssize--;
-						args.Add(EntityDef.id2datatypes[stream.readUint16()]);
+						args.Add(EntityDef.id2datatypes[stream.ReadUint16()]);
 					};
 					
 					Method savedata = new Method();
@@ -1064,7 +1064,7 @@
 		public void Client_onImportClientMessages(MemoryStream stream)
 		{
 			byte[] datas = new byte[stream.wpos - stream.rpos];
-			Array.Copy (stream.data (), stream.rpos, datas, 0, stream.wpos - stream.rpos);
+			Array.Copy (stream.Data (), stream.rpos, datas, 0, stream.wpos - stream.rpos);
 
 			onImportClientMessages (stream);
 			
@@ -1074,7 +1074,7 @@
 
 		public void onImportClientMessages(MemoryStream stream)
 		{
-			UInt16 msgcount = stream.readUint16();
+			UInt16 msgcount = stream.ReadUint16();
 			
 			Dbg.DEBUG_MSG(string.Format("KBEngine::Client_onImportClientMessages: start currserver=" + currserver + "(msgsize={0})...", msgcount));
 			
@@ -1082,17 +1082,17 @@
 			{
 				msgcount--;
 				
-				MessageID msgid = stream.readUint16();
-				Int16 msglen = stream.readInt16();
+				MessageID msgid = stream.ReadUint16();
+				Int16 msglen = stream.ReadInt16();
 				
-				string msgname = stream.readString();
-				sbyte argstype = stream.readInt8();
-				Byte argsize = stream.readUint8();
+				string msgname = stream.ReadString();
+				sbyte argstype = stream.ReadInt8();
+				Byte argsize = stream.ReadUint8();
 				List<Byte> argstypes = new List<Byte>();
 				
 				for(Byte i=0; i<argsize; i++)
 				{
-					argstypes.Add(stream.readUint8());
+					argstypes.Add(stream.ReadUint8());
 				}
 				
 				System.Reflection.MethodInfo handler = null;
@@ -1352,8 +1352,8 @@
 		*/
 		public void Client_onLoginFailed(MemoryStream stream)
 		{
-			UInt16 failedcode = stream.readUint16();
-			_serverdatas = stream.readBlob();
+			UInt16 failedcode = stream.ReadUint16();
+			_serverdatas = stream.ReadBlob();
 			Dbg.ERROR_MSG("KBEngine::Client_onLoginFailed: failedcode(" + failedcode + "), datas(" + _serverdatas.Length + ")!");
 			Event.FireAll("onLoginFailed", new object[]{failedcode});
 		}
@@ -1363,15 +1363,15 @@
 		*/
 		public void Client_onLoginSuccessfully(MemoryStream stream)
 		{
-			var accountName = stream.readString();
+			var accountName = stream.ReadString();
 			username = accountName;
-			baseappIP = stream.readString();
-			baseappPort = stream.readUint16();
+			baseappIP = stream.ReadString();
+			baseappPort = stream.ReadUint16();
 			
 			Dbg.DEBUG_MSG("KBEngine::Client_onLoginSuccessfully: accountName(" + accountName + "), addr(" + 
 					baseappIP + ":" + baseappPort + "), datas(" + _serverdatas.Length + ")!");
 			
-			_serverdatas = stream.readBlob();
+			_serverdatas = stream.ReadBlob();
 			login_baseapp(true);
 		}
 		
@@ -1398,7 +1398,7 @@
 		*/
 		public void Client_onReloginBaseappSuccessfully(MemoryStream stream)
 		{
-			entity_uuid = stream.readUint64();
+			entity_uuid = stream.ReadUint64();
 			Dbg.DEBUG_MSG("KBEngine::Client_onReloginBaseappSuccessfully: name(" + username + ")!");
 			Event.FireAll("onReloginBaseappSuccessfully", new object[]{});
 		}
@@ -1445,7 +1445,7 @@
 				{
 					Client_onUpdatePropertys(entityMessage);
 					_bufferedCreateEntityMessage.Remove(eid);
-					entityMessage.reclaimObject();
+					entityMessage.ReclaimObject();
 				}
 				
 				entity.__init__();
@@ -1463,7 +1463,7 @@
 				{
 					Client_onUpdatePropertys(entityMessage);
 					_bufferedCreateEntityMessage.Remove(eid);
-					entityMessage.reclaimObject();
+					entityMessage.ReclaimObject();
 				}
 			}
 		}
@@ -1486,16 +1486,16 @@
 		public Int32 getViewEntityIDFromStream(MemoryStream stream)
 		{
 			if (!_args.useAliasEntityID)
-				return stream.readInt32();
+				return stream.ReadInt32();
 
 			Int32 id = 0;
 			if(_entityIDAliasIDList.Count > 255)
 			{
-				id = stream.readInt32();
+				id = stream.ReadInt32();
 			}
 			else
 			{
-				byte aliasID = stream.readUint8();
+				byte aliasID = stream.ReadUint8();
 				
 				// 如果为0且客户端上一步是重登陆或者重连操作并且服务端entity在断线期间一直处于在线状态
 				// 则可以忽略这个错误, 因为cellapp可能一直在向baseapp发送同步消息， 当客户端重连上时未等
@@ -1523,7 +1523,7 @@
 		*/
 		public void Client_onUpdatePropertys(MemoryStream stream)
 		{
-			Int32 eid = stream.readInt32();
+			Int32 eid = stream.ReadInt32();
 			onUpdatePropertys_(eid, stream);
 		}
 		
@@ -1543,7 +1543,7 @@
 				MemoryStream stream1 = MemoryStream.CreateObject();
 				stream1.wpos = stream.wpos;
 				stream1.rpos = stream.rpos - 4;
-				Array.Copy(stream.data(), stream1.data(), stream.data().Length);
+				Array.Copy(stream.Data(), stream1.Data(), stream.Data().Length);
 				_bufferedCreateEntityMessage[eid] = stream1;
 				return;
 			}
@@ -1551,17 +1551,17 @@
 			ScriptModule sm = EntityDef.moduledefs[entity.className];
 			Dictionary<UInt16, Property> pdatas = sm.idpropertys;
 
-			while(stream.length() > 0)
+			while(stream.Length() > 0)
 			{
 				UInt16 utype = 0;
 				
 				if(sm.usePropertyDescrAlias)
 				{
-					utype = stream.readUint8();
+					utype = stream.ReadUint8();
 				}
 				else
 				{
-					utype = stream.readUint16();
+					utype = stream.ReadUint16();
 				}
 			
 				Property propertydata = pdatas[utype];
@@ -1605,7 +1605,7 @@
 		*/
 		public void Client_onRemoteMethodCall(MemoryStream stream)
 		{
-			Int32 eid = stream.readInt32();
+			Int32 eid = stream.ReadInt32();
 			onRemoteMethodCall_(eid, stream);
 		}
 	
@@ -1622,9 +1622,9 @@
 			UInt16 methodUtype = 0;
 
 			if(EntityDef.moduledefs[entity.className].useMethodDescrAlias)
-				methodUtype = stream.readUint8();
+				methodUtype = stream.ReadUint8();
 			else
-				methodUtype = stream.readUint16();
+				methodUtype = stream.ReadUint16();
 			
 			Method methoddata = EntityDef.moduledefs[entity.className].idmethods[methodUtype];
 			
@@ -1659,20 +1659,20 @@
 		*/
 		public void Client_onEntityEnterWorld(MemoryStream stream)
 		{
-			Int32 eid = stream.readInt32();
+			Int32 eid = stream.ReadInt32();
 			if(entity_id > 0 && entity_id != eid)
 				_entityIDAliasIDList.Add(eid);
 			
 			UInt16 uentityType;
 			if(EntityDef.idmoduledefs.Count > 255)
-				uentityType = stream.readUint16();
+				uentityType = stream.ReadUint16();
 			else
-				uentityType = stream.readUint8();
+				uentityType = stream.ReadUint8();
 			
 			sbyte isOnGround = 1;
 			
-			if(stream.length() > 0)
-				isOnGround = stream.readInt8();
+			if(stream.Length() > 0)
+				isOnGround = stream.ReadInt8();
 			
 			string entityType = EntityDef.idmoduledefs[uentityType].name;
 			// Dbg.DEBUG_MSG("KBEngine::Client_onEntityEnterWorld: " + entityType + "(" + eid + "), spaceID(" + KBEngineApp.app.spaceID + ")!");
@@ -1711,7 +1711,7 @@
 				
 				Client_onUpdatePropertys(entityMessage);
 				_bufferedCreateEntityMessage.Remove(eid);
-				entityMessage.reclaimObject();
+				entityMessage.ReclaimObject();
 				
 				entity.isOnGround = isOnGround > 0;
 				entity.set_direction(entity.getDefinedProperty("direction"));
@@ -1801,13 +1801,13 @@
 		*/
 		public void Client_onEntityEnterSpace(MemoryStream stream)
 		{
-			Int32 eid = stream.readInt32();
-			spaceID = stream.readUint32();
+			Int32 eid = stream.ReadInt32();
+			spaceID = stream.ReadUint32();
 			
 			sbyte isOnGround = 1;
 			
-			if(stream.length() > 0)
-				isOnGround = stream.readInt8();
+			if(stream.Length() > 0)
+				isOnGround = stream.ReadInt8();
 			
 			Entity entity = null;
 			
@@ -1844,8 +1844,8 @@
 		*/
 		public void Client_onCreateAccountResult(MemoryStream stream)
 		{
-			UInt16 retcode = stream.readUint16();
-			byte[] datas = stream.readBlob();
+			UInt16 retcode = stream.ReadUint16();
+			byte[] datas = stream.ReadBlob();
 			
 			Event.FireOut("onCreateAccountResult", new object[]{retcode, datas});
 			
@@ -2073,12 +2073,12 @@
 		public void Client_initSpaceData(MemoryStream stream)
 		{
 			clearSpace(false);
-			spaceID = stream.readUint32();
+			spaceID = stream.ReadUint32();
 			
-			while(stream.length() > 0)
+			while(stream.Length() > 0)
 			{
-				string key = stream.readString();
-				string val = stream.readString();
+				string key = stream.ReadString();
+				string val = stream.ReadString();
 				Client_setSpaceData(spaceID, key, val);
 			}
 			
@@ -2187,9 +2187,9 @@
 		public void Client_onUpdateBaseDir(MemoryStream stream)
 		{
 			float yaw, pitch, roll;
-			yaw = stream.readFloat() * 360 / ((float)System.Math.PI * 2);
-			pitch = stream.readFloat() * 360 / ((float)System.Math.PI * 2);
-			roll = stream.readFloat() * 360 / ((float)System.Math.PI * 2);
+			yaw = stream.ReadFloat() * 360 / ((float)System.Math.PI * 2);
+			pitch = stream.ReadFloat() * 360 / ((float)System.Math.PI * 2);
+			roll = stream.ReadFloat() * 360 / ((float)System.Math.PI * 2);
 
 			var entity = player();
 			if (entity != null && entity.isControlled)
@@ -2218,7 +2218,7 @@
 		*/
 		public void Client_onSetEntityPosAndDir(MemoryStream stream)
 		{
-			Int32 eid = stream.readInt32();
+			Int32 eid = stream.ReadInt32();
 			Entity entity = null;
 			
 			if(!entities.TryGetValue(eid, out entity))
@@ -2227,13 +2227,13 @@
 				return;
 			}
 			
-			entity.position.x = stream.readFloat();
-			entity.position.y = stream.readFloat();
-			entity.position.z = stream.readFloat();
+			entity.position.x = stream.ReadFloat();
+			entity.position.y = stream.ReadFloat();
+			entity.position.z = stream.ReadFloat();
 			
-			entity.direction.x = stream.readFloat();
-			entity.direction.y = stream.readFloat();
-			entity.direction.z = stream.readFloat();
+			entity.direction.x = stream.ReadFloat();
+			entity.direction.y = stream.ReadFloat();
+			entity.direction.z = stream.ReadFloat();
 			
 			Vector3 position = (Vector3)entity.getDefinedProperty("position");
 			Vector3 direction = (Vector3)entity.getDefinedProperty("direction");
@@ -2262,9 +2262,9 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			SByte y = stream.readInt8();
-			SByte p = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte y = stream.ReadInt8();
+			SByte p = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, y, p, r, -1);
 		}
@@ -2273,8 +2273,8 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			SByte y = stream.readInt8();
-			SByte p = stream.readInt8();
+			SByte y = stream.ReadInt8();
+			SByte p = stream.ReadInt8();
 			
 			_updateVolatileData(eid, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, y, p, KBEDATATYPE_BASE.KBE_FLT_MAX, -1);
 		}
@@ -2283,8 +2283,8 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			SByte y = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte y = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, y, KBEDATATYPE_BASE.KBE_FLT_MAX, r, -1);
 		}
@@ -2293,8 +2293,8 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			SByte p = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte p = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, p, r, -1);
 		}
@@ -2303,7 +2303,7 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			SByte y = stream.readInt8();
+			SByte y = stream.ReadInt8();
 			
 			_updateVolatileData(eid, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, y, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, -1);
 		}
@@ -2312,7 +2312,7 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			SByte p = stream.readInt8();
+			SByte p = stream.ReadInt8();
 			
 			_updateVolatileData(eid, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, p, KBEDATATYPE_BASE.KBE_FLT_MAX, -1);
 		}
@@ -2321,7 +2321,7 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			SByte r = stream.readInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, r, -1);
 		}
@@ -2330,7 +2330,7 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
+			Vector2 xz = stream.ReadPackXZ();
 			
 			_updateVolatileData(eid, xz[0], KBEDATATYPE_BASE.KBE_FLT_MAX, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, 1);
 		}
@@ -2339,11 +2339,11 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
+			Vector2 xz = stream.ReadPackXZ();
 	
-			SByte y = stream.readInt8();
-			SByte p = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte y = stream.ReadInt8();
+			SByte p = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], KBEDATATYPE_BASE.KBE_FLT_MAX, xz[1], y, p, r, 1);
 		}
@@ -2352,10 +2352,10 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
+			Vector2 xz = stream.ReadPackXZ();
 	
-			SByte y = stream.readInt8();
-			SByte p = stream.readInt8();
+			SByte y = stream.ReadInt8();
+			SByte p = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], KBEDATATYPE_BASE.KBE_FLT_MAX, xz[1], y, p, KBEDATATYPE_BASE.KBE_FLT_MAX, 1);
 		}
@@ -2364,10 +2364,10 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
+			Vector2 xz = stream.ReadPackXZ();
 	
-			SByte y = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte y = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], KBEDATATYPE_BASE.KBE_FLT_MAX, xz[1], y, KBEDATATYPE_BASE.KBE_FLT_MAX, r, 1);
 		}
@@ -2376,10 +2376,10 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
+			Vector2 xz = stream.ReadPackXZ();
 	
-			SByte p = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte p = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], KBEDATATYPE_BASE.KBE_FLT_MAX, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, p, r, 1);
 		}
@@ -2387,8 +2387,8 @@
 		public void Client_onUpdateData_xz_y(MemoryStream stream)
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
-			Vector2 xz = stream.readPackXZ();
-			SByte yaw = stream.readInt8();
+			Vector2 xz = stream.ReadPackXZ();
+			SByte yaw = stream.ReadInt8();
 			_updateVolatileData(eid, xz[0], KBEDATATYPE_BASE.KBE_FLT_MAX, xz[1], yaw, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, 1);
 		}
 		
@@ -2396,9 +2396,9 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
+			Vector2 xz = stream.ReadPackXZ();
 	
-			SByte p = stream.readInt8();
+			SByte p = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], KBEDATATYPE_BASE.KBE_FLT_MAX, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, p, KBEDATATYPE_BASE.KBE_FLT_MAX, 1);
 		}
@@ -2407,9 +2407,9 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
+			Vector2 xz = stream.ReadPackXZ();
 	
-			SByte r = stream.readInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], KBEDATATYPE_BASE.KBE_FLT_MAX, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, r, 1);
 		}
@@ -2418,8 +2418,8 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
-			float y = stream.readPackY();
+			Vector2 xz = stream.ReadPackXZ();
+			float y = stream.ReadPackY();
 			
 			_updateVolatileData(eid, xz[0], y, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, 0);
 		}
@@ -2428,12 +2428,12 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
-			float y = stream.readPackY();
+			Vector2 xz = stream.ReadPackXZ();
+			float y = stream.ReadPackY();
 			
-			SByte yaw = stream.readInt8();
-			SByte p = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte yaw = stream.ReadInt8();
+			SByte p = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], y, xz[1], yaw, p, r, 0);
 		}
@@ -2442,11 +2442,11 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
-			float y = stream.readPackY();
+			Vector2 xz = stream.ReadPackXZ();
+			float y = stream.ReadPackY();
 			
-			SByte yaw = stream.readInt8();
-			SByte p = stream.readInt8();
+			SByte yaw = stream.ReadInt8();
+			SByte p = stream.ReadInt8();
 
 			_updateVolatileData(eid, xz[0], y, xz[1], yaw, p, KBEDATATYPE_BASE.KBE_FLT_MAX, 0);
 		}
@@ -2455,11 +2455,11 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
-			float y = stream.readPackY();
+			Vector2 xz = stream.ReadPackXZ();
+			float y = stream.ReadPackY();
 			
-			SByte yaw = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte yaw = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], y, xz[1], yaw, KBEDATATYPE_BASE.KBE_FLT_MAX, r, 0);
 		}
@@ -2468,11 +2468,11 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
-			float y = stream.readPackY();
+			Vector2 xz = stream.ReadPackXZ();
+			float y = stream.ReadPackY();
 			
-			SByte p = stream.readInt8();
-			SByte r = stream.readInt8();
+			SByte p = stream.ReadInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], y, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, p, r, 0);
 		}
@@ -2481,10 +2481,10 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
-			float y = stream.readPackY();
+			Vector2 xz = stream.ReadPackXZ();
+			float y = stream.ReadPackY();
 			
-			SByte yaw = stream.readInt8();
+			SByte yaw = stream.ReadInt8();
 			_updateVolatileData(eid, xz[0], y, xz[1], yaw, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, 0);
 		}
 		
@@ -2492,10 +2492,10 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
-			float y = stream.readPackY();
+			Vector2 xz = stream.ReadPackXZ();
+			float y = stream.ReadPackY();
 			
-			SByte p = stream.readInt8();
+			SByte p = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], y, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, p, KBEDATATYPE_BASE.KBE_FLT_MAX, 0);
 		}
@@ -2504,10 +2504,10 @@
 		{
 			Int32 eid = getViewEntityIDFromStream(stream);
 			
-			Vector2 xz = stream.readPackXZ();
-			float y = stream.readPackY();
+			Vector2 xz = stream.ReadPackXZ();
+			float y = stream.ReadPackY();
 			
-			SByte r = stream.readInt8();
+			SByte r = stream.ReadInt8();
 			
 			_updateVolatileData(eid, xz[0], y, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, r, 0);
 		}
@@ -2587,8 +2587,8 @@
 		
 		public void Client_onStreamDataRecv(MemoryStream stream)
 		{
-			Int16 resID = stream.readInt16();
-			byte[] datas = stream.readBlob();
+			Int16 resID = stream.ReadInt16();
+			byte[] datas = stream.ReadBlob();
 			Event.FireOut("onStreamDataRecv", new object[]{resID, datas});
 		}
 		

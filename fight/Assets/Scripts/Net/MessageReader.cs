@@ -43,12 +43,12 @@
 				{
 					if(length >= expectSize)
 					{
-						Array.Copy(datas, totallen, stream.data(), stream.wpos, expectSize);
+						Array.Copy(datas, totallen, stream.Data(), stream.wpos, expectSize);
 						totallen += expectSize;
 						stream.wpos += (int)expectSize;
 						length -= expectSize;
-						msgid = stream.readUint16();
-						stream.clear();
+						msgid = stream.ReadUint16();
+						stream.Clear();
 
 						Message msg = Message.clientMessages[msgid];
 
@@ -81,7 +81,7 @@
 					}
 					else
 					{
-						Array.Copy(datas, totallen, stream.data(), stream.wpos, length);
+						Array.Copy(datas, totallen, stream.Data(), stream.wpos, length);
 						stream.wpos += (int)length;
 						expectSize -= length;
 						break;
@@ -91,13 +91,13 @@
 				{
 					if(length >= expectSize)
 					{
-						Array.Copy(datas, totallen, stream.data(), stream.wpos, expectSize);
+						Array.Copy(datas, totallen, stream.Data(), stream.wpos, expectSize);
 						totallen += expectSize;
 						stream.wpos += (int)expectSize;
 						length -= expectSize;
 						
-						msglen = stream.readUint16();
-						stream.clear();
+						msglen = stream.ReadUint16();
+						stream.Clear();
 						
 						// 长度扩展
 						if(msglen >= 65535)
@@ -113,7 +113,7 @@
 					}
 					else
 					{
-						Array.Copy(datas, totallen, stream.data(), stream.wpos, length);
+						Array.Copy(datas, totallen, stream.Data(), stream.wpos, length);
 						stream.wpos += (int)length;
 						expectSize -= length;
 						break;
@@ -123,19 +123,19 @@
 				{
 					if(length >= expectSize)
 					{
-						Array.Copy(datas, totallen, stream.data(), stream.wpos, expectSize);
+						Array.Copy(datas, totallen, stream.Data(), stream.wpos, expectSize);
 						totallen += expectSize;
 						stream.wpos += (int)expectSize;
 						length -= expectSize;
 						
-						expectSize = stream.readUint32();
-						stream.clear();
+						expectSize = stream.ReadUint32();
+						stream.Clear();
 						
 						state = READ_STATE.READ_STATE_BODY;
 					}
 					else
 					{
-						Array.Copy(datas, totallen, stream.data(), stream.wpos, length);
+						Array.Copy(datas, totallen, stream.Data(), stream.wpos, length);
 						stream.wpos += (int)length;
 						expectSize -= length;
 						break;
@@ -145,7 +145,7 @@
 				{
 					if(length >= expectSize)
 					{
-						stream.append (datas, totallen, expectSize);
+						stream.Append (datas, totallen, expectSize);
 						totallen += expectSize;
 						length -= expectSize;
 
@@ -160,14 +160,14 @@
 						Dbg.profileEnd(msg.name);
 #endif
 						
-						stream.clear();
+						stream.Clear();
 						
 						state = READ_STATE.READ_STATE_MSGID;
 						expectSize = 2;
 					}
 					else
 					{
-						stream.append (datas, totallen, length);
+						stream.Append (datas, totallen, length);
 						expectSize -= length;
 						break;
 					}

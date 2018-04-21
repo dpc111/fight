@@ -9,132 +9,122 @@
     using System.Threading; 
 	using System.Runtime.InteropServices;
 	
-	/*
-		二进制数据流模块
-		能够将一些基本类型序列化(writeXXX)成二进制流同时也提供了反序列化(readXXX)等操作
-	*/
+    //二进制数据流模块
+    //能够将一些基本类型序列化(writeXXX)成二进制流同时也提供了反序列化(readXXX)等操作
 	public class MemoryStream : ObjectPool<MemoryStream>
     {
-    	public const int BUFFER_MAX = 1460 * 4;
-    	
+    	public const int bufferMax = 1460 * 4;
     	public int rpos = 0;
     	public int wpos = 0;
-    	private byte[] datas_ = new byte[BUFFER_MAX]; 
-    	
-    	private static System.Text.ASCIIEncoding _converter = new System.Text.ASCIIEncoding();
+    	private byte[] datas = new byte[bufferMax]; 
+    	private static System.Text.ASCIIEncoding converter = new System.Text.ASCIIEncoding();
     	
 		[StructLayout(LayoutKind.Explicit, Size = 4)]
 		struct PackFloatXType
 		{
 		    [FieldOffset(0)]
 		    public float fv;
-
 		    [FieldOffset(0)]
 		    public UInt32 uv;
-
 		    [FieldOffset(0)]
 		    public Int32 iv;
 		}
 
-		/// <summary>
-		/// 把自己放回缓冲池
-		/// </summary>
-		public void reclaimObject()
+		//把自己放回缓冲池
+		public void ReclaimObject()
 		{
-			clear();
+			Clear();
 			ReclaimObject(this);
 		}
 		
-		public byte[] data()
+		public byte[] Data()
     	{
-    		return datas_;
+    		return datas;
     	}
 		
-		public void setData(byte[] data)
+		public void SetData(byte[] data)
 		{
-			datas_ = data;
+			datas = data;
 		}
 		
 		//---------------------------------------------------------------------------------
-		public SByte readInt8()
+		public SByte ReadInt8()
 		{
-			return (SByte)datas_[rpos++];
+			return (SByte)datas[rpos++];
 		}
 	
-		public Int16 readInt16()
+		public Int16 ReadInt16()
 		{
 			rpos += 2;
-			return BitConverter.ToInt16(datas_, rpos - 2);
+			return BitConverter.ToInt16(datas, rpos - 2);
 		}
 			
-		public Int32 readInt32()
+		public Int32 ReadInt32()
 		{
 			rpos += 4;
-			return BitConverter.ToInt32(datas_, rpos - 4);
+			return BitConverter.ToInt32(datas, rpos - 4);
 		}
 	
-		public Int64 readInt64()
+		public Int64 ReadInt64()
 		{
 			rpos += 8;
-			return BitConverter.ToInt64(datas_, rpos - 8);
+			return BitConverter.ToInt64(datas, rpos - 8);
 		}
 		
-		public Byte readUint8()
+		public Byte ReadUint8()
 		{
-			return datas_[rpos++];
+			return datas[rpos++];
 		}
 	
-		public UInt16 readUint16()
+		public UInt16 ReadUint16()
 		{
 			rpos += 2;
-			return BitConverter.ToUInt16(datas_, rpos - 2);
+			return BitConverter.ToUInt16(datas, rpos - 2);
 		}
 
-		public UInt32 readUint32()
+		public UInt32 ReadUint32()
 		{
 			rpos += 4;
-			return BitConverter.ToUInt32(datas_, rpos - 4);
+			return BitConverter.ToUInt32(datas, rpos - 4);
 		}
 		
-		public UInt64 readUint64()
+		public UInt64 ReadUint64()
 		{
 			rpos += 8;
-			return BitConverter.ToUInt64(datas_, rpos - 8);
+			return BitConverter.ToUInt64(datas, rpos - 8);
 		}
 		
-		public float readFloat()
+		public float ReadFloat()
 		{
 			rpos += 4;
-			return BitConverter.ToSingle(datas_, rpos - 4);
+			return BitConverter.ToSingle(datas, rpos - 4);
 		}
 
-		public double readDouble()
+		public double ReadDouble()
 		{
 			rpos += 8;
-			return BitConverter.ToDouble(datas_, rpos - 8);
+			return BitConverter.ToDouble(datas, rpos - 8);
 		}
 		
-		public string readString()
+		public string ReadString()
 		{
 			int offset = rpos;
-			while(datas_[rpos++] != 0)
+			while(datas[rpos++] != 0)
 			{
 			}
-
-			return _converter.GetString(datas_, offset, rpos - offset - 1);
+			return converter.GetString(datas, offset, rpos - offset - 1);
 		}
 	
-		public byte[] readBlob()
+		public byte[] ReadBlob()
 		{
-			UInt32 size = readUint32();
+			UInt32 size = ReadUint32();
 			byte[] buf = new byte[size];
-			
-			Array.Copy(datas_, rpos, buf, 0, size);
+			Array.Copy(datas, rpos, buf, 0, size);
 			rpos += (int)size;
 			return buf;
 		}
 	
-		public Vector2 readPackXZ()
+		public Vector2 ReadPackXZ()
 		{
 			PackFloatXType xPackData;
 			PackFloatXType zPackData;
@@ -145,9 +135,9 @@
 			xPackData.uv = 0x40000000;
 			zPackData.uv = 0x40000000;
 		
-			Byte v1 = readUint8();
-			Byte v2 = readUint8();
-			Byte v3 = readUint8();
+			Byte v1 = ReadUint8();
+			Byte v2 = ReadUint8();
+			Byte v3 = ReadUint8();
 			
 			UInt32 data = 0;
 			data |= ((UInt32)v1 << 16);
@@ -167,13 +157,13 @@
 			return vec;
 		}
 	
-		public float readPackY()
+		public float ReadPackY()
 		{
 			PackFloatXType yPackData; 
 			yPackData.fv = 0f;
 			yPackData.uv = 0x40000000;
 
-			UInt16 data = readUint16();
+			UInt16 data = ReadUint16();
 
 			yPackData.uv |= ((UInt32)data & 0x7fff) << 12;
 			yPackData.fv -= 2f;
@@ -183,96 +173,96 @@
 		}
 		
 		//---------------------------------------------------------------------------------
-		public void writeInt8(SByte v)
+		public void WriteInt8(SByte v)
 		{
-			datas_[wpos++] = (Byte)v;
+			datas[wpos++] = (Byte)v;
 		}
 	
-		public void writeInt16(Int16 v)
+		public void WriteInt16(Int16 v)
 		{	
-			writeInt8((SByte)(v & 0xff));
-			writeInt8((SByte)(v >> 8 & 0xff));
+			WriteInt8((SByte)(v & 0xff));
+			WriteInt8((SByte)(v >> 8 & 0xff));
 		}
 			
-		public void writeInt32(Int32 v)
+		public void WriteInt32(Int32 v)
 		{
 			for(int i=0; i<4; i++)
-				writeInt8((SByte)(v >> i * 8 & 0xff));
+				WriteInt8((SByte)(v >> i * 8 & 0xff));
 		}
 	
-		public void writeInt64(Int64 v)
+		public void WriteInt64(Int64 v)
 		{
 			byte[] getdata = BitConverter.GetBytes(v);
 			for(int i=0; i<getdata.Length; i++)
 			{
-				datas_[wpos++] = getdata[i];
+				datas[wpos++] = getdata[i];
 			}
 		}
 		
-		public void writeUint8(Byte v)
+		public void WriteUint8(Byte v)
 		{
-			datas_[wpos++] = v;
+			datas[wpos++] = v;
 		}
 	
-		public void writeUint16(UInt16 v)
+		public void WriteUint16(UInt16 v)
 		{
-			writeUint8((Byte)(v & 0xff));
-			writeUint8((Byte)(v >> 8 & 0xff));
+			WriteUint8((Byte)(v & 0xff));
+			WriteUint8((Byte)(v >> 8 & 0xff));
 		}
 			
-		public void writeUint32(UInt32 v)
+		public void WriteUint32(UInt32 v)
 		{
 			for(int i=0; i<4; i++)
-				writeUint8((Byte)(v >> i * 8 & 0xff));
+				WriteUint8((Byte)(v >> i * 8 & 0xff));
 		}
 	
-		public void writeUint64(UInt64 v)
+		public void WriteUint64(UInt64 v)
 		{
 			byte[] getdata = BitConverter.GetBytes(v);
 			for(int i=0; i<getdata.Length; i++)
 			{
-				datas_[wpos++] = getdata[i];
+				datas[wpos++] = getdata[i];
 			}
 		}
 		
-		public void writeFloat(float v)
+		public void WriteFloat(float v)
 		{
 			byte[] getdata = BitConverter.GetBytes(v);
 			for(int i=0; i<getdata.Length; i++)
 			{
-				datas_[wpos++] = getdata[i];
+				datas[wpos++] = getdata[i];
 			}
 		}
 	
-		public void writeDouble(double v)
+		public void WriteDouble(double v)
 		{
 			byte[] getdata = BitConverter.GetBytes(v);
 			for(int i=0; i<getdata.Length; i++)
 			{
-				datas_[wpos++] = getdata[i];
+				datas[wpos++] = getdata[i];
 			}
 		}
 	
-		public void writeBlob(byte[] v)
+		public void WriteBlob(byte[] v)
 		{
 			UInt32 size = (UInt32)v.Length;
-			if(size + 4 > space())
+			if(size + 4 > Space())
 			{
 				Dbg.ERROR_MSG("memorystream::writeBlob: no free!");
 				return;
 			}
 			
-			writeUint32(size);
+			WriteUint32(size);
 		
 			for(UInt32 i=0; i<size; i++)
 			{
-				datas_[wpos++] = v[i];
+				datas[wpos++] = v[i];
 			}
 		}
 		
-		public void writeString(string v)
+		public void WriteString(string v)
 		{
-			if(v.Length > space())
+			if(v.Length > Space())
 			{
 				Dbg.ERROR_MSG("memorystream::writeString: no free!");
 				return;
@@ -281,70 +271,69 @@
 			byte[] getdata = System.Text.Encoding.ASCII.GetBytes(v);
 			for(int i=0; i<getdata.Length; i++)
 			{
-				datas_[wpos++] = getdata[i];
+				datas[wpos++] = getdata[i];
 			}
 			
-			datas_[wpos++] = 0;
+			datas[wpos++] = 0;
 		}
 
 		//---------------------------------------------------------------------------------
-		public void append(byte[] datas, UInt32 offset, UInt32 size)
+		public void Append(byte[] datas, UInt32 offset, UInt32 size)
 		{
-			UInt32 free = space();
+			UInt32 free = Space();
 			if (free < size) {
-				byte[] newdatas = new byte[datas_.Length + size * 2]; 
-				Array.Copy(datas_, 0, newdatas, 0, wpos);
-				datas_ = newdatas;
+				byte[] newdatas = new byte[datas.Length + size * 2]; 
+				Array.Copy(datas, 0, newdatas, 0, wpos);
+				datas = newdatas;
 			}
 
-			Array.Copy(datas, offset, datas_, wpos, size);
+			Array.Copy(datas, offset, datas, wpos, size);
 			wpos += (int)size;
 		}
 
 		//---------------------------------------------------------------------------------
-		public void readSkip(UInt32 v)
+		public void ReadSkip(UInt32 v)
 		{
 			rpos += (int)v;
 		}
 		
 		//---------------------------------------------------------------------------------
-		public UInt32 space()
+		public UInt32 Space()
 		{
-			return (UInt32)(data().Length - wpos);
+			return (UInt32)(Data().Length - wpos);
 		}
 	
 		//---------------------------------------------------------------------------------
-		public UInt32 length()
+		public UInt32 Length()
 		{
 			return (UInt32)(wpos - rpos);
 		}
 	
 		//---------------------------------------------------------------------------------
-		public bool readEOF()
+		public bool ReadEOF()
 		{
-			return (BUFFER_MAX - rpos) <= 0;
+			return (bufferMax - rpos) <= 0;
 		}
 
 		//---------------------------------------------------------------------------------
-		public void done()
+		public void Done()
 		{
 			rpos = wpos;
 		}
 		
 		//---------------------------------------------------------------------------------
-		public void clear()
+		public void Clear()
 		{
 			rpos = wpos = 0;
-
-			if(datas_.Length > BUFFER_MAX)
-			   datas_ = new byte[BUFFER_MAX]; 
+			if(datas.Length > bufferMax)
+			   datas = new byte[bufferMax]; 
 		}
 		
 		//---------------------------------------------------------------------------------
-		public byte[] getbuffer()
+		public byte[] Getbuffer()
 		{
-			byte[] buf = new byte[length()];
-			Array.Copy(data(), rpos, buf, 0, length());
+			byte[] buf = new byte[Length()];
+			Array.Copy(Data(), rpos, buf, 0, Length());
 			return buf;
 		}
 		
@@ -353,7 +342,7 @@
 		{
 			string s = "";
 			int ii = 0;
-			byte[] buf = getbuffer();
+			byte[] buf = Getbuffer();
 			
 			for(int i=0; i<buf.Length; i++)
 			{
