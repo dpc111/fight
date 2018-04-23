@@ -44,7 +44,7 @@
 
 		~NetworkInterface()
 		{
-			Dbg.DEBUG_MSG("NetworkInterface destructed");
+			Dbg.DebugMsg("NetworkInterface destructed");
 			Reset();
 		}
 
@@ -57,7 +57,7 @@
 		{
 			if(Valid())
 			{
-			    Dbg.DEBUG_MSG(string.Format("NetworkInterface::reset(), close socket from {0}", socket.RemoteEndPoint.ToString()));
+			    Dbg.DebugMsg(string.Format("NetworkInterface::reset(), close socket from {0}", socket.RemoteEndPoint.ToString()));
          	    socket.Close(0);
 			}
 			socket = null;
@@ -95,7 +95,7 @@
 			bool success = (state.error == "" && Valid());
 			if (success)
 			{
-                Dbg.DEBUG_MSG(string.Format("connect to {0} is success!", state.socket.RemoteEndPoint.ToString()));
+                Dbg.DebugMsg(string.Format("connect to {0} is success!", state.socket.RemoteEndPoint.ToString()));
 				packetReceiver = new PacketReceiver(this);
 				packetReceiver.StartRecv();
 				connected = true;
@@ -103,7 +103,7 @@
 			else
 			{
 				Reset();
-                Dbg.ERROR_MSG(string.Format("connect error! ip: {0}:{1}, err: {2}", state.connectIP, state.connectPort, state.error));
+                Dbg.ErrorMsg(string.Format("connect error! ip: {0}:{1}, err: {2}", state.connectIP, state.connectPort, state.error));
 			}
 			Event.FireAll("OnConnectionState", new object[] { success });
 			if (state.connectCB != null)
@@ -131,14 +131,14 @@
 		//在非主线程执行：连接服务器
 		private void AsyncConnect(ConnectState state)
 		{
-			Dbg.DEBUG_MSG(string.Format("will connect to '{0}:{1}' ...", state.connectIP, state.connectPort));
+			Dbg.DebugMsg(string.Format("will connect to '{0}:{1}' ...", state.connectIP, state.connectPort));
 			try
 			{
 				state.socket.Connect(state.connectIP, state.connectPort);
 			}
 			catch (Exception e)
 			{
-				Dbg.ERROR_MSG(string.Format("connect to '{0}:{1}' fault! error = '{2}'", state.connectIP, state.connectPort, e));
+				Dbg.ErrorMsg(string.Format("connect to '{0}:{1}' fault! error = '{2}'", state.connectIP, state.connectPort, e));
 				state.error = e.ToString();
 			}
 		}
@@ -149,7 +149,7 @@
 			ConnectState state = (ConnectState)ar.AsyncState;
 			AsyncResult result = (AsyncResult)ar;
 			AsyncConnectMethod caller = (AsyncConnectMethod)result.AsyncDelegate;
-			Dbg.DEBUG_MSG(string.Format("connect to '{0}:{1}' finish. error = '{2}'", state.connectIP, state.connectPort, state.error));
+			Dbg.DebugMsg(string.Format("connect to '{0}:{1}' finish. error = '{2}'", state.connectIP, state.connectPort, state.error));
 			//Call EndInvoke to retrieve the results.
 			caller.EndInvoke(ar);
             Event.FireIn("OnConnectionState", new object[] { state });
@@ -160,8 +160,8 @@
 			if (Valid())
 				throw new InvalidOperationException("Have already connected!");
 			socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			socket.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, NetApp.app.getInitArgs().getRecvBufferSize() * 2);
-			socket.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, SocketOptionName.SendBuffer, NetApp.app.getInitArgs().getSendBufferSize() * 2);
+			socket.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, SocketOptionName.ReceiveBuffer, NetApp.app.GetInitArgs().getRecvBufferSize() * 2);
+			socket.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, SocketOptionName.SendBuffer, NetApp.app.GetInitArgs().getSendBufferSize() * 2);
 			socket.NoDelay = true;
 			ConnectState state = new ConnectState();
 			state.connectIP = ip;
@@ -170,7 +170,7 @@
 			state.userData = userData;
 			state.socket = socket;
 			state.networkInterface = this;
-			Dbg.DEBUG_MSG("connect to " + ip + ":" + port + " ...");
+			Dbg.DebugMsg("connect to " + ip + ":" + port + " ...");
 			connected = false;
 			//先注册一个事件回调，该事件在当前线程触发
             Event.RegisterIn("OnConnectionState", this, "OnConnectionState");

@@ -7,10 +7,8 @@
 	
 	using MessageID = System.UInt16;
 	
-	/*
-		entitydef所支持的基本数据类型
-		改模块中的类抽象出了所有的支持类型并提供了这些类型的数据序列化成二进制数据与反序列化操作（主要用于网络通讯的打包与解包）
-	*/
+    //entitydef所支持的基本数据类型
+    //改模块中的类抽象出了所有的支持类型并提供了这些类型的数据序列化成二进制数据与反序列化操作（主要用于网络通讯的打包与解包）
 	public class KBEDATATYPE_BASE
 	{
 		public static bool isNumeric(object v)
@@ -60,7 +58,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeInt8(Convert.ToSByte(v));
+			stream.WriteInt8(Convert.ToSByte(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -89,7 +87,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeInt16(Convert.ToInt16(v));
+			stream.WriteInt16(Convert.ToInt16(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -118,7 +116,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeInt32(Convert.ToInt32(v));
+			stream.WriteInt32(Convert.ToInt32(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -147,7 +145,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeInt64(Convert.ToInt64(v));
+			stream.WriteInt64(Convert.ToInt64(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -176,7 +174,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeUint8(Convert.ToByte(v));
+			stream.WriteUint8(Convert.ToByte(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -205,7 +203,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeUint16(Convert.ToUInt16(v));
+			stream.WriteUint16(Convert.ToUInt16(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -234,7 +232,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeUint32(Convert.ToUInt32(v));
+			stream.WriteUint32(Convert.ToUInt32(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -263,7 +261,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeUint64(Convert.ToUInt64(v));
+			stream.WriteUint64(Convert.ToUInt64(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -292,7 +290,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeFloat((float)Convert.ToDouble(v));
+			stream.WriteFloat((float)Convert.ToDouble(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -322,7 +320,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeDouble(Convert.ToDouble(v));
+			stream.WriteDouble(Convert.ToDouble(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -352,7 +350,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeString(Convert.ToString(v));
+			stream.WriteString(Convert.ToString(v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -375,8 +373,8 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeFloat(((Vector2)v).x);
-			stream.writeFloat(((Vector2)v).y);
+			stream.WriteFloat(((Vector2)v).x);
+			stream.WriteFloat(((Vector2)v).y);
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -399,9 +397,9 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeFloat(((Vector3)v).x);
-			stream.writeFloat(((Vector3)v).y);
-			stream.writeFloat(((Vector3)v).z);
+			stream.WriteFloat(((Vector3)v).x);
+			stream.WriteFloat(((Vector3)v).y);
+			stream.WriteFloat(((Vector3)v).z);
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -424,10 +422,10 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeFloat(((Vector4)v).x);
-			stream.writeFloat(((Vector4)v).y);
-			stream.writeFloat(((Vector4)v).z);
-			stream.writeFloat(((Vector4)v).w);
+			stream.WriteFloat(((Vector4)v).x);
+			stream.WriteFloat(((Vector4)v).y);
+			stream.WriteFloat(((Vector4)v).z);
+			stream.WriteFloat(((Vector4)v).w);
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -450,7 +448,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeBlob((byte[])v);
+			stream.WriteBlob((byte[])v);
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -473,7 +471,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeBlob(System.Text.Encoding.UTF8.GetBytes((string)v));
+			stream.WriteBlob(System.Text.Encoding.UTF8.GetBytes((string)v));
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -496,7 +494,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeBlob((byte[])v);
+			stream.WriteBlob((byte[])v);
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -519,7 +517,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeBlob((byte[])v);
+			stream.WriteBlob((byte[])v);
 		}
 		
 		public override object parseDefaultValStr(string v)
@@ -562,7 +560,7 @@
 		
 		public override void addToStream(Bundle stream, object v)
 		{
-			stream.writeUint32((UInt32)((List<object>)v).Count);
+			stream.WriteUint32((UInt32)((List<object>)v).Count);
 			for(int i=0; i<((List<object>)v).Count; i++)
 			{
 				((KBEDATATYPE_BASE)vtype).addToStream(stream, ((List<object>)v)[i]);
@@ -578,7 +576,7 @@
 		{
 			if(vtype.GetType ().BaseType.ToString() != "KBEngine.KBEDATATYPE_BASE")
 			{
-				Dbg.ERROR_MSG(string.Format("KBEDATATYPE_ARRAY::isSameType: has not bind! baseType={0}", 
+				Dbg.ErrorMsg(string.Format("KBEDATATYPE_ARRAY::isSameType: has not bind! baseType={0}", 
 					vtype.GetType ().BaseType.ToString()));
 				return false;
 			}

@@ -248,7 +248,7 @@
 			UInt32 size = (UInt32)v.Length;
 			if(size + 4 > Space())
 			{
-				Dbg.ERROR_MSG("memorystream::writeBlob: no free!");
+				Dbg.ErrorMsg("memorystream::writeBlob: no free!");
 				return;
 			}
 			
@@ -264,7 +264,7 @@
 		{
 			if(v.Length > Space())
 			{
-				Dbg.ERROR_MSG("memorystream::writeString: no free!");
+				Dbg.ErrorMsg("memorystream::writeString: no free!");
 				return;
 			}
 

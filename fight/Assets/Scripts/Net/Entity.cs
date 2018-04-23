@@ -168,21 +168,21 @@
 		{			
 			if(NetApp.app.currserver == "loginapp")
 			{
-				Dbg.ERROR_MSG(className + "::baseCall(" + methodname + "), currserver=!" + NetApp.app.currserver);  
+				Dbg.ErrorMsg(className + "::baseCall(" + methodname + "), currserver=!" + NetApp.app.currserver);  
 				return;
 			}
 
 			ScriptModule module = null;
 			if(!EntityDef.moduledefs.TryGetValue(className, out module))
 			{
-				Dbg.ERROR_MSG("entity::baseCall:  entity-module(" + className + ") error, can not find from EntityDef.moduledefs");
+				Dbg.ErrorMsg("entity::baseCall:  entity-module(" + className + ") error, can not find from EntityDef.moduledefs");
 				return;
 			}
 				
 			Method method = null;
 			if(!module.base_methods.TryGetValue(methodname, out method))
 			{
-				Dbg.ERROR_MSG(className + "::baseCall(" + methodname + "), not found method!");  
+				Dbg.ErrorMsg(className + "::baseCall(" + methodname + "), not found method!");  
 				return;
 			}
 			
@@ -190,12 +190,12 @@
 			
 			if(arguments.Length != method.args.Count)
 			{
-				Dbg.ERROR_MSG(className + "::baseCall(" + methodname + "): args(" + (arguments.Length) + "!= " + method.args.Count + ") size is error!");  
+				Dbg.ErrorMsg(className + "::baseCall(" + methodname + "): args(" + (arguments.Length) + "!= " + method.args.Count + ") size is error!");  
 				return;
 			}
 			
 			baseEntityCall.newCall();
-			baseEntityCall.bundle.writeUint16(methodID);
+			baseEntityCall.bundle.WriteUint16(methodID);
 			
 			try
 			{
@@ -213,7 +213,7 @@
 			}
 			catch(Exception e)
 			{
-				Dbg.ERROR_MSG(className + "::baseCall(method=" + methodname + "): args is error(" + e.Message + ")!");  
+				Dbg.ErrorMsg(className + "::baseCall(method=" + methodname + "): args is error(" + e.Message + ")!");  
 				baseEntityCall.bundle = null;
 				return;
 			}
@@ -225,21 +225,21 @@
 		{
 			if(NetApp.app.currserver == "loginapp")
 			{
-				Dbg.ERROR_MSG(className + "::cellCall(" + methodname + "), currserver=!" + NetApp.app.currserver);  
+				Dbg.ErrorMsg(className + "::cellCall(" + methodname + "), currserver=!" + NetApp.app.currserver);  
 				return;
 			}
 			
 			ScriptModule module = null;
 			if(!EntityDef.moduledefs.TryGetValue(className, out module))
 			{
-				Dbg.ERROR_MSG("entity::cellCall:  entity-module(" + className + ") error, can not find from EntityDef.moduledefs!");
+				Dbg.ErrorMsg("entity::cellCall:  entity-module(" + className + ") error, can not find from EntityDef.moduledefs!");
 				return;
 			}
 			
 			Method method = null;
 			if(!module.cell_methods.TryGetValue(methodname, out method))
 			{
-				Dbg.ERROR_MSG(className + "::cellCall(" + methodname + "), not found method!");  
+				Dbg.ErrorMsg(className + "::cellCall(" + methodname + "), not found method!");  
 				return;
 			}
 			
@@ -247,18 +247,18 @@
 			
 			if(arguments.Length != method.args.Count)
 			{
-				Dbg.ERROR_MSG(className + "::cellCall(" + methodname + "): args(" + (arguments.Length) + "!= " + method.args.Count + ") size is error!");  
+				Dbg.ErrorMsg(className + "::cellCall(" + methodname + "): args(" + (arguments.Length) + "!= " + method.args.Count + ") size is error!");  
 				return;
 			}
 			
 			if(cellEntityCall == null)
 			{
-				Dbg.ERROR_MSG(className + "::cellCall(" + methodname + "): no cell!");  
+				Dbg.ErrorMsg(className + "::cellCall(" + methodname + "): no cell!");  
 				return;
 			}
 			
 			cellEntityCall.newCall();
-			cellEntityCall.bundle.writeUint16(methodID);
+			cellEntityCall.bundle.WriteUint16(methodID);
 				
 			try
 			{
@@ -276,7 +276,7 @@
 			}
 			catch(Exception e)
 			{
-				Dbg.ERROR_MSG(className + "::cellCall(" + methodname + "): args is error(" + e.Message + ")!");  
+				Dbg.ErrorMsg(className + "::cellCall(" + methodname + "): args is error(" + e.Message + ")!");  
 				cellEntityCall.bundle = null;
 				return;
 			}
@@ -294,7 +294,7 @@
 			}
 			catch (Exception e)
 			{
-				Dbg.ERROR_MSG(className + "::onEnterWorld: error=" + e.ToString());
+				Dbg.ErrorMsg(className + "::onEnterWorld: error=" + e.ToString());
 			}
 
 			Event.FireOut("onEnterWorld", new object[]{this});
@@ -314,7 +314,7 @@
 			}
 			catch (Exception e)
 			{
-				Dbg.ERROR_MSG(className + "::onLeaveWorld: error=" + e.ToString());
+				Dbg.ErrorMsg(className + "::onLeaveWorld: error=" + e.ToString());
 			}
 
 			Event.FireOut("onLeaveWorld", new object[]{this});
@@ -334,7 +334,7 @@
 			}
 			catch (Exception e)
 			{
-				Dbg.ERROR_MSG(className + "::onEnterSpace: error=" + e.ToString());
+				Dbg.ErrorMsg(className + "::onEnterSpace: error=" + e.ToString());
 			}
 			
 			Event.FireOut("onEnterSpace", new object[]{this});
@@ -358,7 +358,7 @@
 			}
 			catch (Exception e)
 			{
-				Dbg.ERROR_MSG(className + "::onLeaveSpace: error=" + e.ToString());
+				Dbg.ErrorMsg(className + "::onLeaveSpace: error=" + e.ToString());
 			}
 			
 			Event.FireOut("onLeaveSpace", new object[]{this});
@@ -375,7 +375,7 @@
 			//Dbg.DEBUG_MSG(className + "::set_position: " + old + " => " + v); 
 			
 			if(isPlayer())
-				NetApp.app.entityServerPos(position);
+				NetApp.app.EntityServerPos(position);
 			
 			if(inWorld)
 				Event.FireOut("set_position", new object[]{this});

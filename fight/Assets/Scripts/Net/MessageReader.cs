@@ -34,7 +34,7 @@
 		{
 		}
 		
-		public void process(byte[] datas, MsgLengthEx offset, MsgLengthEx length)
+		public void Process(byte[] datas, MsgLengthEx offset, MsgLengthEx length)
 		{
 			MsgLengthEx totallen = offset;
 			while(length > 0 && expectSize > 0)
@@ -61,13 +61,13 @@
 						{
 							// 如果是0个参数的消息，那么没有后续内容可读了，处理本条消息并且直接跳到下一条消息
 							#if UNITY_EDITOR
-							Dbg.profileStart(msg.name);
+							Dbg.ProfileStart(msg.name);
 							#endif
 
 							msg.HandleMessage(stream);
 
 							#if UNITY_EDITOR
-							Dbg.profileEnd(msg.name);
+							Dbg.ProfileEnd(msg.name);
 							#endif
 
 							state = READ_STATE.READ_STATE_MSGID;
@@ -152,12 +152,12 @@
 						Message msg = Message.clientMessages[msgid];
 						
 #if UNITY_EDITOR
-						Dbg.profileStart(msg.name);
+						Dbg.ProfileStart(msg.name);
 #endif
 
 						msg.HandleMessage(stream);
 #if UNITY_EDITOR
-						Dbg.profileEnd(msg.name);
+						Dbg.ProfileEnd(msg.name);
 #endif
 						
 						stream.Clear();

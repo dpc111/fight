@@ -33,13 +33,13 @@
 
 		~PacketReceiver()
 		{
-			Dbg.DEBUG_MSG("PacketReceiver::~PacketReceiver(), destroyed!");
+			Dbg.DebugMsg("PacketReceiver::~PacketReceiver(), destroyed!");
 		}
 
 		void Init(NetworkInterface network)
 		{
             networkInterface = network;
-			buffer = new byte[NetApp.app.getInitArgs().RECV_BUFFER_MAX];
+			buffer = new byte[NetApp.app.GetInitArgs().recvBufferMax];
 			messageReader = new MessageReader();
 		}
 
@@ -53,13 +53,13 @@
 			int twpos = Interlocked.Add(ref wpos, 0);
 			if (rpos < twpos)
 			{
-				messageReader.process(buffer, (UInt32)rpos, (UInt32)(twpos - rpos));
+				messageReader.Process(buffer, (UInt32)rpos, (UInt32)(twpos - rpos));
 				Interlocked.Exchange(ref rpos, twpos);
 			}
 			else if (twpos < rpos)
 			{
-				messageReader.process(buffer, (UInt32)rpos, (UInt32)(buffer.Length - rpos));
-				messageReader.process(buffer, (UInt32)0, (UInt32)twpos);
+				messageReader.Process(buffer, (UInt32)rpos, (UInt32)(buffer.Length - rpos));
+				messageReader.Process(buffer, (UInt32)0, (UInt32)twpos);
 				Interlocked.Exchange(ref rpos, twpos);
 			}
 			else
@@ -96,7 +96,7 @@
 		{
 			if (networkInterface == null || !networkInterface.Valid())
 			{
-				Dbg.WARNING_MSG("network interface invalid!");
+				Dbg.WarningMsg("network interface invalid!");
 				return;
 			}
 
@@ -113,11 +113,11 @@
 					{
 						if (first > 1000)
 						{
-							Dbg.ERROR_MSG("no space!");
+							Dbg.ErrorMsg("no space!");
 							Event.FireIn("_closeNetwork", new object[] { networkInterface });
 							return;
 						}
-						Dbg.WARNING_MSG("waiting for space");
+						Dbg.WarningMsg("waiting for space");
 						System.Threading.Thread.Sleep(5);
 					}
 					first += 1;
@@ -130,7 +130,7 @@
 				}
 				catch (SocketException se)
 				{
-					Dbg.ERROR_MSG(string.Format("receive error, disconnect from '{0}'! error = '{1}'", socket.RemoteEndPoint, se));
+					Dbg.ErrorMsg(string.Format("receive error, disconnect from '{0}'! error = '{1}'", socket.RemoteEndPoint, se));
 					Event.FireIn("_closeNetwork", new object[] { networkInterface });
 					return;
 				}
@@ -141,7 +141,7 @@
 				}
 				else
 				{
-					Dbg.WARNING_MSG(string.Format("PacketReceiver::_asyncReceive(): receive 0 bytes, disconnect from '{0}'!", socket.RemoteEndPoint));
+					Dbg.WarningMsg(string.Format("PacketReceiver::_asyncReceive(): receive 0 bytes, disconnect from '{0}'!", socket.RemoteEndPoint));
 					Event.FireIn("_closeNetwork", new object[] { networkInterface });
 					return;
 				}

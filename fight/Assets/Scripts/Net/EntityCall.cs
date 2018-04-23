@@ -29,7 +29,7 @@
 		
 		public EntityCall()
 		{
-			networkInterface_ = NetApp.app.networkInterface();
+			networkInterface_ = NetApp.app.NetworkInterface();
 		}
 		
 		public virtual void __init__()
@@ -55,11 +55,11 @@
 				bundle = Bundle.CreateObject();
 			
 			if(type == EntityCall.ENTITYCALL_TYPE.ENTITYCALL_TYPE_CELL)
-				bundle.newMessage(Message.messages["Baseapp_onRemoteCallCellMethodFromClient"]);
+				bundle.NewMessage(Message.messages["Baseapp_onRemoteCallCellMethodFromClient"]);
 			else
-				bundle.newMessage(Message.messages["Entity_onRemoteMethodCall"]);
+				bundle.NewMessage(Message.messages["Entity_onRemoteMethodCall"]);
 	
-			bundle.writeInt32(this.id);
+			bundle.WriteInt32(this.id);
 			
 			return bundle;
 		}

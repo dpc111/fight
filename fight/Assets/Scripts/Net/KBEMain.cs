@@ -7,19 +7,19 @@ using Net;
 //在这个入口中安装了需要监听的事件(installEvents)，同时初始化KBEngine(initKBEngine)
 public class NetMain : MonoBehaviour 
 {
-	public NetApp gameapp = null;
-	// 在unity3d界面中可见选项
-	public DEBUGLEVEL debugLevel = DEBUGLEVEL.DEBUG;
+	public NetApp gamApp = null;
+	//在unity3d界面中可见选项
+	public DebugLevel debugLevel = DebugLevel.debug;
 	public bool isMultiThreads = true;
 	public string ip = "127.0.0.1";
 	public int port = 20013;
-	public NetApp.CLIENT_TYPE clientType = NetApp.CLIENT_TYPE.CLIENT_TYPE_MINI;
+	public NetApp.ClientType clientType = NetApp.ClientType.ClientTypeMini;
 	public string persistentDataPath = "Application.persistentDataPath";
 	public bool syncPlayer = true;
 	public int threadUpdateHZ = 10;
 	public int serverHeartbeatTick = 15;
-	public int SEND_BUFFER_MAX = (int)Net.NetworkInterface.tcpPacketMax;
-	public int RECV_BUFFER_MAX = (int)Net.NetworkInterface.tcpPacketMax;
+	public int sendBufferMax = (int)Net.NetworkInterface.tcpPacketMax;
+	public int recvBufferMax = (int)Net.NetworkInterface.tcpPacketMax;
 	public bool useAliasEntityID = true;
 	public bool isOnInitCallPropertysSetMethods = true;
 
@@ -28,25 +28,21 @@ public class NetMain : MonoBehaviour
 		DontDestroyOnLoad(transform.gameObject);
 	 }
  
-	// Use this for initialization
 	protected virtual void Start () 
 	{
 		MonoBehaviour.print("clientapp::start()");
-		installEvents();
-		initKBEngine();
+		InstallEvents();
+		InitNet();
 	}
 	
-	public virtual void installEvents()
+	public virtual void InstallEvents()
 	{
 	}
 	
-	public virtual void initKBEngine()
+	public virtual void InitNet()
 	{
-		// 如果此处发生错误，请查看 Assets\Scripts\kbe_scripts\if_Entity_error_use______git_submodule_update_____kbengine_plugins_______open_this_file_and_I_will_tell_you.cs
-
 		Dbg.debugLevel = debugLevel;
-
-		KBEngineArgs args = new KBEngineArgs();
+		NetArgs args = new NetArgs();
 		
 		args.ip = ip;
 		args.port = port;
@@ -63,15 +59,15 @@ public class NetMain : MonoBehaviour
 		args.useAliasEntityID = useAliasEntityID;
 		args.isOnInitCallPropertysSetMethods = isOnInitCallPropertysSetMethods;
 
-		args.SEND_BUFFER_MAX = (UInt32)SEND_BUFFER_MAX;
-		args.RECV_BUFFER_MAX = (UInt32)RECV_BUFFER_MAX;
+		args.sendBufferMax = (UInt32)sendBufferMax;
+		args.recvBufferMax = (UInt32)recvBufferMax;
 		
 		args.isMultiThreads = isMultiThreads;
 		
 		if(isMultiThreads)
-			gameapp = new KBEngineAppThread(args);
+			gamApp = new KBEngineAppThread(args);
 		else
-			gameapp = new NetApp(args);
+			gamApp = new NetApp(args);
 	}
 	
 	protected virtual void OnDestroy()
@@ -79,7 +75,7 @@ public class NetMain : MonoBehaviour
 		MonoBehaviour.print("clientapp::OnDestroy(): begin");
         if (NetApp.app != null)
         {
-            NetApp.app.destroy();
+            NetApp.app.Destroy();
             NetApp.app = null;
         }
 		MonoBehaviour.print("clientapp::OnDestroy(): end");
@@ -94,7 +90,7 @@ public class NetMain : MonoBehaviour
 	{
 		// 单线程模式必须自己调用
 		if(!isMultiThreads)
-			gameapp.process();
+			gamApp.Process();
 		
 		Net.Event.ProcessOutEvents();
 	}

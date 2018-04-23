@@ -37,14 +37,14 @@
 		{
 		}
 		
-		public static void clear()
+		public static void Clear()
 		{
 			eventsOut.Clear();
 			eventsIn.Clear();
-			clearFiredEvents();
+			ClearFiredEvents();
 		}
 
-		public static void clearFiredEvents()
+		public static void ClearFiredEvents()
 		{
 			MonitorEnter(eventsOut);
 			firedEventsOut.Clear();
@@ -80,7 +80,6 @@
 		{
 			if(NetApp.app == null)
 				return;
-			
 			Monitor.Enter(obj);
 		}
 
@@ -88,7 +87,6 @@
 		{
 			if(NetApp.app == null)
 				return;
-			
 			Monitor.Exit(obj);
 		}
 		
@@ -97,7 +95,7 @@
 			return HasRegister(eventsOut, eventName);
 		}
 
-		public static bool hasRegisterIn(string eventName)
+		public static bool HasRegisterIn(string eventName)
 		{
 			return HasRegister(eventsIn, eventName);
 		}
@@ -137,7 +135,7 @@
 			pair.method = obj.GetType().GetMethod(funcName);
 			if(pair.method == null)
 			{
-				Dbg.ERROR_MSG("Event::register/" + obj + "/not found method/" + funcName);
+				Dbg.ErrorMsg("Event::register/" + obj + "/not found method/" + funcName);
 				return false;
 			}
 			
@@ -254,9 +252,9 @@
 			if(!events.TryGetValue(eventName, out lst))
 			{
 				if(events == eventsIn)
-					Dbg.WARNING_MSG("Event::fireIn: event/" + eventName + "/not found!");
+					Dbg.WarningMsg("Event::fireIn: event/" + eventName + "/not found!");
 				else
-					Dbg.WARNING_MSG("Event::fireOut: event/" + eventName + "/not found!");
+					Dbg.WarningMsg("Event::fireOut: event/" + eventName + "/not found!");
 				
 				MonitorExit(events);
 				return;
@@ -296,7 +294,7 @@
 				}
 	            catch (Exception e)
 	            {
-	            	Dbg.ERROR_MSG("Event::processOutEvents/" + eObj.info.funcName + "/" + e.ToString());
+	            	Dbg.ErrorMsg("Event::processOutEvents/" + eObj.info.funcName + "/" + e.ToString());
 	            }
 				if(doingEventsOut.Count > 0)
 					doingEventsOut.RemoveFirst();
@@ -327,7 +325,7 @@
 				}
 	            catch (Exception e)
 	            {
-	            	Dbg.ERROR_MSG("Event::processInEvents/" + eobj.info.funcName + "/" + e.ToString());
+	            	Dbg.ErrorMsg("Event::processInEvents/" + eobj.info.funcName + "/" + e.ToString());
 	            }
 				if(doingEventsIn.Count > 0)
 					doingEventsIn.RemoveFirst();

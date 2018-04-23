@@ -33,13 +33,13 @@
 
 		~PacketSender()
 		{
-			Dbg.DEBUG_MSG("PacketSender::~PacketSender(), destroyed!");
+			Dbg.DebugMsg("PacketSender::~PacketSender(), destroyed!");
 		}
 
 		void Init(NetworkInterface netInterface)
 		{
             networkInterface = netInterface;
-			buffer = new byte[NetApp.app.getInitArgs().SEND_BUFFER_MAX];
+			buffer = new byte[NetApp.app.GetInitArgs().sendBufferMax];
 			asyncSendMethod = new AsyncSendMethod(this.AsyncSend);
 			asyncCallback = new AsyncCallback(OnSent);
 			wpos = 0; 
@@ -79,7 +79,7 @@
 
 			if (dataLength > space)
 			{
-				Dbg.ERROR_MSG("");
+				Dbg.ErrorMsg("");
 				return false;
 			}
 
@@ -116,7 +116,7 @@
 		{
 			if (networkInterface == null || !networkInterface.Valid())
 			{
-				Dbg.WARNING_MSG("PacketSender::_asyncSend(): network interface invalid!");
+				Dbg.WarningMsg("PacketSender::_asyncSend(): network interface invalid!");
 				return;
 			}
 
@@ -139,7 +139,7 @@
 				}
 				catch (SocketException se)
 				{
-					Dbg.ERROR_MSG(string.Format("PacketSender::_asyncSend(): send data error, disconnect from '{0}'! error = '{1}'", socket.RemoteEndPoint, se));
+					Dbg.ErrorMsg(string.Format("PacketSender::_asyncSend(): send data error, disconnect from '{0}'! error = '{1}'", socket.RemoteEndPoint, se));
 					Event.FireIn("_closeNetwork", new object[] { networkInterface });
 					return;
 				}

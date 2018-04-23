@@ -35,7 +35,7 @@ namespace Net
 		string _getSuffixBase()
 		{
 			return NetApp.app.clientVersion + "." + NetApp.app.clientScriptVersion + "." + 
-							NetApp.app.getInitArgs().ip + "." + NetApp.app.getInitArgs().port;
+							NetApp.app.GetInitArgs().ip + "." + NetApp.app.GetInitArgs().port;
 		}
 		
 		string _getSuffix()
@@ -75,7 +75,7 @@ namespace Net
 				}
 				catch(Exception e)
 				{
-					Dbg.ERROR_MSG("PersistentInfos::loadAll(): is error(" + e.ToString() + ")!");  
+					Dbg.ErrorMsg("PersistentInfos::loadAll(): is error(" + e.ToString() + ")!");  
 					clearMessageFiles();
 					return false;
 				}
@@ -144,13 +144,13 @@ namespace Net
 			deleteFile(_persistentDataPath, "baseapp_clientMessages." + _getSuffix());
 			deleteFile(_persistentDataPath, "serverErrorsDescr." + _getSuffix());
 			deleteFile(_persistentDataPath, "clientEntityDef." + _getSuffix());
-			NetApp.app.resetMessages();
+			NetApp.app.ResetMessages();
 		}
 		
 		public void createFile(string path, string name, byte[] datas)  
 		{  
 			deleteFile(path, name);
-			Dbg.DEBUG_MSG("createFile: " + path + "/" + name);
+			Dbg.DebugMsg("createFile: " + path + "/" + name);
 			FileStream fs = new FileStream (path + "/" + name, FileMode.OpenOrCreate, FileAccess.Write);
 			fs.Write (datas, 0, datas.Length);
 			fs.Close ();
@@ -168,8 +168,8 @@ namespace Net
 			{
 				if(printerr)
 				{
-					Dbg.ERROR_MSG("loadFile: " + path + "/" + name);
-					Dbg.ERROR_MSG(e.ToString());
+					Dbg.ErrorMsg("loadFile: " + path + "/" + name);
+					Dbg.ErrorMsg(e.ToString());
 				}
 				
 				return new byte[0];
@@ -180,7 +180,7 @@ namespace Net
 			fs.Close ();
 			fs.Dispose ();
 
-			Dbg.DEBUG_MSG("loadFile: " + path + "/" + name + ", datasize=" + datas.Length);
+			Dbg.DebugMsg("loadFile: " + path + "/" + name + ", datasize=" + datas.Length);
 			return datas;
 	   }  
 	   

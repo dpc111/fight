@@ -15,83 +15,75 @@
 		public int numMessage = 0;
 		public int messageLength = 0;
 		public Message msgtype = null;
-		private int _curMsgStreamIndex = 0;
+		private int curMsgStreamIndex = 0;
 		
 		public Bundle()
 		{
 		}
 
-		public void clear()
+		public void Clear()
 		{
 			stream = MemoryStream.CreateObject();
 			streamList = new List<MemoryStream>();
 			numMessage = 0;
 			messageLength = 0;
 			msgtype = null;
-			_curMsgStreamIndex = 0;
+			curMsgStreamIndex = 0;
 		}
 
 		//把自己放回缓冲池
-		public void reclaimObject()
+		public void ReclaimObject()
 		{
-			clear();
+			Clear();
 			ReclaimObject(this);
 		}
 		
-		public void newMessage(Message mt)
+		public void NewMessage(Message mt)
 		{
-			fini(false);
-			
+			Fini(false);
 			msgtype = mt;
 			numMessage += 1;
-
-			writeUint16(msgtype.id);
-
+			WriteUint16(msgtype.id);
 			if(msgtype.msglen == -1)
 			{
-				writeUint16(0);
+				WriteUint16(0);
 				messageLength = 0;
 			}
-
-			_curMsgStreamIndex = 0;
+			curMsgStreamIndex = 0;
 		}
 		
-		public void writeMsgLength()
+		public void WriteMsgLength()
 		{
 			if(msgtype.msglen != -1)
 				return;
-
 			MemoryStream stream = this.stream;
-			if(_curMsgStreamIndex > 0)
+			if(curMsgStreamIndex > 0)
 			{
-				stream = streamList[streamList.Count - _curMsgStreamIndex];
+				stream = streamList[streamList.Count - curMsgStreamIndex];
 			}
 			stream.Data()[2] = (Byte)(messageLength & 0xff);
 			stream.Data()[3] = (Byte)(messageLength >> 8 & 0xff);
 		}
 		
-		public void fini(bool issend)
+		public void Fini(bool issend)
 		{
 			if(numMessage > 0)
 			{
-				writeMsgLength();
-
+				WriteMsgLength();
 				streamList.Add(stream);
 				stream = MemoryStream.CreateObject();
 			}
-			
 			if(issend)
 			{
 				numMessage = 0;
 				msgtype = null;
 			}
-
-			_curMsgStreamIndex = 0;
+			curMsgStreamIndex = 0;
 		}
 		
 		public void send(NetworkInterface networkInterface)
 		{
-			fini(true);
+			Fini(true);
 			
 			if(networkInterface.Valid())
 			{
@@ -103,7 +95,7 @@
 			}
 			else
 			{
-				Dbg.ERROR_MSG("Bundle::send: networkInterface invalid!");  
+				Dbg.ErrorMsg("Bundle::send: networkInterface invalid!");  
 			}
 
 			// 把不用的MemoryStream放回缓冲池，以减少垃圾回收的消耗
@@ -129,80 +121,80 @@
 			{
 				streamList.Add(stream);
 				stream = MemoryStream.CreateObject();
-				++ _curMsgStreamIndex;
+				++ curMsgStreamIndex;
 			}
 	
 			messageLength += v;
 		}
 		
 		//---------------------------------------------------------------------------------
-		public void writeInt8(SByte v)
+		public void WriteInt8(SByte v)
 		{
 			checkStream(1);
 			stream.WriteInt8(v);
 		}
 	
-		public void writeInt16(Int16 v)
+		public void WriteInt16(Int16 v)
 		{
 			checkStream(2);
 			stream.WriteInt16(v);
 		}
 			
-		public void writeInt32(Int32 v)
+		public void WriteInt32(Int32 v)
 		{
 			checkStream(4);
 			stream.WriteInt32(v);
 		}
 	
-		public void writeInt64(Int64 v)
+		public void WriteInt64(Int64 v)
 		{
 			checkStream(8);
 			stream.WriteInt64(v);
 		}
 		
-		public void writeUint8(Byte v)
+		public void WriteUint8(Byte v)
 		{
 			checkStream(1);
 			stream.WriteUint8(v);
 		}
 	
-		public void writeUint16(UInt16 v)
+		public void WriteUint16(UInt16 v)
 		{
 			checkStream(2);
 			stream.WriteUint16(v);
 		}
 			
-		public void writeUint32(UInt32 v)
+		public void WriteUint32(UInt32 v)
 		{
 			checkStream(4);
 			stream.WriteUint32(v);
 		}
 	
-		public void writeUint64(UInt64 v)
+		public void WriteUint64(UInt64 v)
 		{
 			checkStream(8);
 			stream.WriteUint64(v);
 		}
 		
-		public void writeFloat(float v)
+		public void WriteFloat(float v)
 		{
 			checkStream(4);
 			stream.WriteFloat(v);
 		}
 	
-		public void writeDouble(double v)
+		public void WriteDouble(double v)
 		{
 			checkStream(8);
 			stream.WriteDouble(v);
 		}
 		
-		public void writeString(string v)
+		public void WriteString(string v)
 		{
 			checkStream(v.Length + 1);
 			stream.WriteString(v);
 		}
 		
-		public void writeBlob(byte[] v)
+		public void WriteBlob(byte[] v)
 		{
 			checkStream(v.Length + 4);
 			stream.WriteBlob(v);

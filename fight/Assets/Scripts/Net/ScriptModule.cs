@@ -49,7 +49,7 @@
 			useMethodDescrAlias = false;
 
 			if(script == null)
-				Dbg.ERROR_MSG("can't load(KBEngine." + modulename + ")!");
+				Dbg.ErrorMsg("can't load(KBEngine." + modulename + ")!");
 		}
     }
 

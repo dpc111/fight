@@ -37,7 +37,7 @@
             {
                 if (!EntityDef.id2datatypes.TryGetValue(msgargtypes[i], out argtypes[i]))
                 {
-                    Dbg.ERROR_MSG("Message::Message(): argtype(" + msgargtypes[i] + ") is not found!");
+                    Dbg.ErrorMsg("Message::Message(): argtype(" + msgargtypes[i] + ") is not found!");
                 }
             }
         }

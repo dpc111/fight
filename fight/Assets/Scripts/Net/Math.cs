@@ -7,7 +7,7 @@ namespace Net
 {
 
     //数学相关模块
-    public class KBEMath 
+    public class NetMath 
     {
 	    public static float int82angle(SByte angle, bool half)
 	    {
