@@ -225,6 +225,9 @@
      <Compile Include="Assets\Scripts\Net\Property.cs" />
      <Compile Include="Assets\Scripts\Net\ScriptModule.cs" />
      <Compile Include="Assets\Scripts\NetModel\Event.cs" />
+     <Compile Include="Assets\Scripts\NetModel\MemoryStream.cs" />
+     <Compile Include="Assets\Scripts\NetModel\Message.cs" />
+     <Compile Include="Assets\Scripts\NetModel\ObjectPool.cs" />
      <Compile Include="Assets\Scripts\Test\Test1.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\ReadMe - 3.11.4.txt" />

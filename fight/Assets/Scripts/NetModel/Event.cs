@@ -62,6 +62,16 @@
             doingEventsIn.Clear();
         }
 
+        public static bool HasRegisterOut(string eventName)
+        {
+            return HasRegister(eventsOut, eventName);
+        }
+
+        public static bool HasRegisterIn(string eventName)
+        {
+            return HasRegister(eventsIn, eventName);
+        }
+
         public static bool RegisterOut(string eventName, object obj, string funcName)
         {
             return Register(eventsOut, eventName, obj, funcName);
@@ -116,9 +126,67 @@
                 var iter = firedEventsOut.GetEnumerator();
                 while (iter.MoveNext())
                 {
-                    //doingEventsOut.
+                    doingEventsOut.AddLast(iter.Current);
+                }
+                firedEventsOut.Clear();
+            }
+            MonitorExit(eventsOut);
+            while (doingEventsOut.Count > 0)
+            {
+                EventObj eObj = doingEventsOut.First.Value;
+                try
+                {
+                    eObj.info.method.Invoke(eObj.info.obj, eObj.args);
+                }
+                catch (Exception e)
+                {
+                    // error
+                }
+                if (doingEventsOut.Count > 0)
+                {
+                    doingEventsOut.RemoveFirst();
                 }
             }
+        }
+
+        public static void ProcessInEvent()
+        {
+            MonitorEnter(eventsIn);
+            if (firedEventsIn.Count > 0)
+            {
+                var iter = firedEventsIn.GetEnumerator();
+                while (iter.MoveNext())
+                {
+                    doingEventsIn.AddLast(iter.Current);
+                }
+                firedEventsIn.Clear();
+            }
+            MonitorExit(eventsIn);
+            while (doingEventsIn.Count > 0)
+            {
+                EventObj eObj = doingEventsIn.First.Value;
+                try
+                {
+                    eObj.info.method.Invoke(eObj.info.obj, eObj.args);
+                }
+                catch (Exception e)
+                {
+                    // error
+                }
+                if (doingEventsIn.Count > 0)
+                {
+                    doingEventsIn.RemoveFirst();
+                }
+            }
+        }
+
+        private static bool HasRegister(Dictionary<string, List<EventInfo>> events, string eventName)
+        {
+            bool has = false;
+            MonitorEnter(events);
+            has = events.ContainsKey(eventName);
+            MonitorExit(events);
+            return has;
         }
 
         private static bool Register(Dictionary<string, List<EventInfo>> events, string eventName, object obj, string funcName)
