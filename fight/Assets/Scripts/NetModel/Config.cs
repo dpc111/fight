@@ -11,6 +11,6 @@
 
     public class Config
     {
-        public static int tcpPacketMax = 1024;
+        public static int tcpPacketMax = 10240;
     }
 }

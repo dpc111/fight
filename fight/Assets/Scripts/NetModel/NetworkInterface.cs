@@ -133,5 +133,10 @@
                 state.connCb(state.ip, state.port, success, state.userData);
             }
         }
+
+        public void Send<T>(T tmsg)
+        {
+            packetSender.Send<T>(tmsg);
+        }
     }
 }

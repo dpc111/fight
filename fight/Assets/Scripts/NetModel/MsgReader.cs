@@ -3,8 +3,8 @@
     using System;
 
     struct MsgType {
-        public static const int pb = 1;
-        public static const int script = 2;
+        public const int pb = 1;
+        public const int script = 2;
     }
 
     enum MsgIndex
@@ -50,7 +50,7 @@
 
         public void MsgParse()
         {
-
+            
         }
 
         public int ReadInt()
