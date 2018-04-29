@@ -12,5 +12,7 @@
     public class Config
     {
         public static int tcpPacketMax = 10240;
+        public static string ip = "192.168.0.1";
+        public static int port = 1001;
     }
 }

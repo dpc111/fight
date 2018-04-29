@@ -43,27 +43,55 @@
             {
                 ProtoBuf.Serializer.Serialize<T>(ms, tmsg);
                 int msgLen = (int)ms.Position;
-                if (buffer.Length - wLen < msgLen)
+                if (buffer.Length - wLen < msgLen + 10)
                 {
-                    // error
                     return;
                 }
+
+                string msgName = ProtoBuf.Serializer.GetProto<T>();
+                Array.Copy(BitConverter.GetBytes(msgName.Length), 0, buffer, wpos, 4);
+                wpos = wpos + 4;
+                wLen = wLen + 4;
+
+                Array.Copy(BitConverter.GetBytes(msgLen), 0, buffer, wpos, 4);
+                wpos = wpos + 4;
+                wLen = wLen + 4;
+
+                Array.Copy(BitConverter.GetBytes(MsgType.pb), 0, buffer, wpos, 4);
+                wpos = wpos + 4;
+                wLen = wLen + 4;
+
+                int sid = 1;
+                Array.Copy(BitConverter.GetBytes(sid), 0, buffer, wpos, 4);
+                wpos = wpos + 4;
+                wLen = wLen + 4;
+
+                int tid = 1;
+                Array.Copy(BitConverter.GetBytes(tid), 0, buffer, wpos, 4);
+                wpos = wpos + 4;
+                wLen = wLen + 4;
+
+                Array.Copy(System.Text.Encoding.ASCII.GetBytes(msgName), 0, buffer, wpos, msgName.Length);
+                wpos = wpos + msgName.Length;
+                wLen = wLen + msgName.Length;
+
                 var fullBytes = ms.GetBuffer();
+                int msgBegin = 11;
                 if (buffer.Length - wpos > msgLen)
                 {
-                    Array.Copy(fullBytes, 0, buffer, wpos, msgLen);
+                    Array.Copy(fullBytes, msgBegin, buffer, wpos, msgLen);
                     wpos = wpos + msgLen;
                     wLen = wLen + msgLen;
                 }
                 else if (buffer.Length - wpos == msgLen)
                 {
-                    Array.Copy(fullBytes, 0, buffer, wpos, msgLen);
+                    Array.Copy(fullBytes, msgBegin, buffer, wpos, msgLen);
                     wpos = 0;
                     wLen = wLen + msgLen;
                 }
                 else
                 {
-                    Array.Copy(fullBytes, 0, buffer, wpos, buffer.Length - wpos);
+                    Array.Copy(fullBytes, msgBegin, buffer, wpos, buffer.Length - wpos);
                     Array.Copy(fullBytes, msgLen - wpos, buffer, 0, msgLen - buffer.Length + wpos);
                     wpos = msgLen - buffer.Length + wpos;
                     wLen = wLen + msgLen;

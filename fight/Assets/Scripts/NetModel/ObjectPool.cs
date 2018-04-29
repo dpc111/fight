@@ -13,7 +13,7 @@
 
         public static T CreateObject()
         {
-            lock(objects)
+            lock (objects)
             {
                 if (objects.Count > 0)
                 {

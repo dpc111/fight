@@ -1,6 +1,8 @@
 ﻿namespace NetModel
 {
     using System;
+    using System.IO;
+    using ProtoBuf;
 
     struct MsgType {
         public const int pb = 1;
@@ -48,9 +50,19 @@
             curIndex = MsgIndex.NameLen;
         }
 
-        public void MsgParse()
+        public object MsgParse()
         {
-            
+            string name = System.Text.Encoding.Default.GetString(msgName, 0, nameLen);
+            Type type = Message.GetProtoType(name);
+            if (type == null)
+            {
+                return null;
+            }
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            ms.Write(msg, 0, len);
+            ms.Position = 0;
+            var m = ProtoBuf.Serializer.Deserialize(type, ms);
+            return m;
         }
 
         public int ReadInt()
@@ -105,6 +117,7 @@
                 receiver.rpos = strLen - len;
             }
             receiver.rlen = receiver.rlen - strLen;
+            data[strLen] = 0;
             return true;
         }
 
@@ -172,7 +185,8 @@
                         break;
                     }
                     curIndex = MsgIndex.NameLen;
-                    MsgParse();
+                    object m = MsgParse();
+                    Event.FireAll(System.Text.Encoding.Default.GetString(msgName), new object[]{ m });
                     Reset();
                 }
             }
