@@ -1,4 +1,4 @@
-﻿namespace NetModel
+﻿namespace Net
 {
     using UnityEngine;
     using System;
@@ -15,12 +15,15 @@
     {
         public static App app = null;
         public Network network = null;
+        public Thread netThread = null;
 
-        public App()
+        void Start()
         {
             app = this;
             network = new Network();
             network.Start();
+            netThread = new Thread(new ThreadStart(this.process));
+            netThread.Start();
         }
 
         public void process()

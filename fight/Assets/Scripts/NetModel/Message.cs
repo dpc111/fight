@@ -1,4 +1,4 @@
-﻿namespace NetModel
+﻿namespace Net
 {
     using UnityEngine;
     using System;

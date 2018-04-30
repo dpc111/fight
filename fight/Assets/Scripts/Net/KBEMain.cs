@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using Net;
+using Net_;
 
 //可以理解为插件的入口模块
 //在这个入口中安装了需要监听的事件(installEvents)，同时初始化KBEngine(initKBEngine)
@@ -18,8 +18,8 @@ public class NetMain : MonoBehaviour
 	public bool syncPlayer = true;
 	public int threadUpdateHZ = 10;
 	public int serverHeartbeatTick = 15;
-	public int sendBufferMax = (int)Net.NetworkInterface.tcpPacketMax;
-	public int recvBufferMax = (int)Net.NetworkInterface.tcpPacketMax;
+	public int sendBufferMax = (int)Net_.NetworkInterface.tcpPacketMax;
+	public int recvBufferMax = (int)Net_.NetworkInterface.tcpPacketMax;
 	public bool useAliasEntityID = true;
 	public bool isOnInitCallPropertysSetMethods = true;
 
@@ -92,6 +92,6 @@ public class NetMain : MonoBehaviour
 		if(!isMultiThreads)
 			gamApp.Process();
 		
-		Net.Event.ProcessOutEvents();
+		Net_.Event.ProcessOutEvents();
 	}
 }

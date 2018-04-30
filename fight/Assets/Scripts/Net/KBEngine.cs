@@ -1,4 +1,4 @@
-﻿namespace Net
+﻿namespace Net_
 {
   	using UnityEngine; 
 	using System; 
@@ -157,7 +157,7 @@
         {
         	Dbg.WarningMsg("KBEngine::destroy()");
         	Reset();
-        	Net.Event.DeregisterIn(this);
+        	Net_.Event.DeregisterIn(this);
         	ResetMessages();
         	NetApp.app = null;
         }
@@ -193,7 +193,7 @@
         
 		public virtual void Reset()
 		{
-			Net.Event.ClearFiredEvents();
+			Net_.Event.ClearFiredEvents();
 			clearEntities(true);
 			currserver = "";
 			currstate = "";

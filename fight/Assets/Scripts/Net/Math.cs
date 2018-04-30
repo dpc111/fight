@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using Net;
+using Net_;
 using System; 
 using System.Collections;
 
-namespace Net
+namespace Net_
 {
 
     //数学相关模块

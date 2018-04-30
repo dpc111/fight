@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace Net
+namespace Net_
 {
 	public class Profile 
 	{

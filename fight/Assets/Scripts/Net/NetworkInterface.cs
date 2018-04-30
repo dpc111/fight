@@ -1,4 +1,4 @@
-﻿namespace Net
+﻿namespace Net_
 {
 	using UnityEngine;
 	using System;
@@ -91,7 +91,7 @@
         //当前线程触发
 		public void OnConnectionState(ConnectState state)
 		{
-			Net.Event.DeregisterIn(this);
+			Net_.Event.DeregisterIn(this);
 			bool success = (state.error == "" && Valid());
 			if (success)
 			{

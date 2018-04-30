@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using Net;
+using Net_;
 using System; 
 using System.IO;  
 using System.Text;
 using System.Collections;
 
-namespace Net
+namespace Net_
 {
 	/*
 		持久化引擎协议，在检测到协议版本发生改变时会清理协议

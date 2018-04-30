@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Net
+namespace Net_
 {
 	//对象池
 	public class ObjectPool<T> where T : new()

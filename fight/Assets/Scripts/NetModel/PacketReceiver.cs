@@ -1,4 +1,4 @@
-﻿namespace NetModel
+﻿namespace Net
 {
     using System;
     using System.Net.Sockets;

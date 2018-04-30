@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using Net;
+using Net_;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Net
+namespace Net_
 {
 	public enum DebugLevel : int
 	{
