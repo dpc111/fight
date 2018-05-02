@@ -1,112 +1,76 @@
-﻿namespace Net_
+﻿namespace Net
 {
-  	using UnityEngine; 
-	using System; 
-	using System.Collections; 
-	using System.Collections.Generic;
-	
-	using MsgID = System.UInt16;
-	
-    //消息模块
-    //客户端与服务端交互基于消息通讯， 任何一个行为一条指令都是以一个消息包来描述
-    public class Message 
-    {
-    	public MsgID id = 0;
-		public string name;
-		public Int16 msglen = -1;
-		public System.Reflection.MethodInfo handler = null;
-		public KBEDATATYPE_BASE[] argtypes = null;
-		public sbyte argsType = 0;
-			
-		public static Dictionary<MsgID, Message> loginappMessages = new Dictionary<MsgID, Message>();
-		public static Dictionary<MsgID, Message> baseappMessages = new Dictionary<MsgID, Message>();
-		public static Dictionary<MsgID, Message> clientMessages = new Dictionary<MsgID, Message>();
-		public static Dictionary<string, Message> messages = new Dictionary<string, Message>();
+    using UnityEngine;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using ProtoBuf;
 
-        public Message(MsgID msgid, string msgname, Int16 length, sbyte argstype, List<Byte> msgargtypes, System.Reflection.MethodInfo msghandler)
+    public class Message
+    {
+        public int id = 0;
+        public string name;
+        public int len = -1;
+        public System.Reflection.MethodInfo handler = null;
+        public static Dictionary<string, Message> messages = new Dictionary<string, Message>();
+        public static Dictionary<string, Type> protoMap = new Dictionary<string, Type>();
+
+        public Message(int msgid, string msgname, int msglen, System.Reflection.MethodInfo msghandler)
         {
             id = msgid;
             name = msgname;
-            msglen = length;
+            len = msglen;
             handler = msghandler;
-            argsType = argstype;
-            //对该消息的所有参数绑定反序列化方法，该方法能够将二进制流转化为参数需要的值
-            //在服务端下发消息数据时会用到
-            argtypes = new KBEDATATYPE_BASE[msgargtypes.Count];
-            for (int i = 0; i < msgargtypes.Count; i++)
-            {
-                if (!EntityDef.id2datatypes.TryGetValue(msgargtypes[i], out argtypes[i]))
-                {
-                    Dbg.ErrorMsg("Message::Message(): argtype(" + msgargtypes[i] + ") is not found!");
-                }
-            }
+            Register();
         }
 
-		public static void Clear()
-		{
-			loginappMessages = new Dictionary<MsgID, Message>();
-			baseappMessages = new Dictionary<MsgID, Message>();
-			clientMessages = new Dictionary<MsgID, Message>();
-			messages = new Dictionary<string, Message>();
-			BindFixedMessage();
-		}
+        public static void Clear()
+        {
+            messages = new Dictionary<string, Message>();
+        }
 
-        //提前约定一些固定的协议
-        //这样可以在没有从服务端导入协议之前就能与服务端进行握手等交互。
-		public static void BindFixedMessage()
-		{
-			Message.messages["Loginapp_importClientMessages"] = new Message(5, "importClientMessages", 0, 0, new List<Byte>(), 
-                null);
-			Message.messages["Loginapp_hello"] = new Message(4, "hello", -1, -1, new List<Byte>(), 
-                null);
-			Message.messages["Baseapp_importClientMessages"] = new Message(207, "importClientMessages", 0, 0, new List<Byte>(), 
-                null);
-			Message.messages["Baseapp_importClientEntityDef"] = new Message(208, "importClientMessages", 0, 0, new List<Byte>(), 
-                null);
-			Message.messages["Baseapp_hello"] = new Message(200, "hello", -1, -1, new List<Byte>(), 
-                null);
-			Message.messages["Client_onHelloCB"] = new Message(521, "Client_onHelloCB", -1, -1, new List<Byte>(), 
-				NetApp.app.GetType().GetMethod("Client_onHelloCB"));
-			Message.clientMessages[Message.messages["Client_onHelloCB"].id] = Message.messages["Client_onHelloCB"];
-			Message.messages["Client_onScriptVersionNotMatch"] = new Message(522, "Client_onScriptVersionNotMatch", -1, -1, new List<Byte>(), 
-				NetApp.app.GetType().GetMethod("Client_onScriptVersionNotMatch"));
-			Message.clientMessages[Message.messages["Client_onScriptVersionNotMatch"].id] = Message.messages["Client_onScriptVersionNotMatch"];
-			Message.messages["Client_onVersionNotMatch"] = new Message(523, "Client_onVersionNotMatch", -1, -1, new List<Byte>(), 
-				NetApp.app.GetType().GetMethod("Client_onVersionNotMatch"));
-			Message.clientMessages[Message.messages["Client_onVersionNotMatch"].id] = Message.messages["Client_onVersionNotMatch"];
-			Message.messages["Client_onImportClientMessages"] = new Message(518, "Client_onImportClientMessages", -1, -1, new List<Byte>(), 
-				NetApp.app.GetType().GetMethod("Client_onImportClientMessages"));
-			Message.clientMessages[Message.messages["Client_onImportClientMessages"].id] = Message.messages["Client_onImportClientMessages"];
-		}
-		
-		
-        //从二进制数据流中创建该消息的参数数据
-		public object[] CreateFromStream(MemoryStream msgstream)
-		{
-			if(argtypes.Length <= 0)
-				return new object[]{msgstream};
-			object[] result = new object[argtypes.Length];
-			for(int i=0; i<argtypes.Length; i++)
-			{
-				result[i] = argtypes[i].createFromStream(msgstream);
-			}
-			return result;
-		}
-		
-        //将一个消息包反序列化后交给消息相关联的函数处理
-		public void HandleMessage(MemoryStream msgstream)
-		{
-			if(argtypes.Length <= 0)
-			{
-				if(argsType < 0)
-					handler.Invoke(NetApp.app, new object[]{msgstream});
-				else
-					handler.Invoke(NetApp.app, new object[]{});
-			}
-			else
-			{
-				handler.Invoke(NetApp.app, CreateFromStream(msgstream));
-			}
-		}
+        public static void BindFixedMessage()
+        {
+
+        }
+
+        public void HandleMessage()
+        {
+
+        }
+
+        //public static void Register(System.Reflection.Assembly assembly)
+        //{
+        //    if (protoMap.Count > 0)
+        //    {
+        //        // error
+        //        return;
+        //    }
+        //    foreach (Type type in assembly.GetTypes())
+        //    {
+        //        if (!type.IsAbstract && !type.IsInterface && type.GetCustomAttributes(typeof(ProtoBuf.ProtoContractAttribute), false).Length > 0)
+        //            protoMap[type.Name] = type;
+        //    }
+        //}
+
+        public static void Register(string name, Type type)
+        {
+
+        }
+
+        public static void Register()
+        {
+            
+        }
+
+        public static Type GetProtoType(string name)
+        {
+            Type type = protoMap[name]; 
+            if (type != null)
+            {
+                return type;
+            }
+            return null;
+        }
     }
-} 
+}
