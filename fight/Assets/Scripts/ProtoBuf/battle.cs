@@ -3,35 +3,30 @@
 // Input: battle.proto
 
 #pragma warning disable CS1591, CS0612, CS3021, IDE1006
-namespace Battle
+[global::ProtoBuf.ProtoContract(Name = @"c2s_join")]
+public partial class C2sJoin : global::ProtoBuf.IExtensible
 {
+    private global::ProtoBuf.IExtension __pbn__extensionData;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+        => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
 
-    [global::ProtoBuf.ProtoContract(Name = @"c2s_join")]
-    public partial class C2sJoin : global::ProtoBuf.IExtensible
-    {
-        private global::ProtoBuf.IExtension __pbn__extensionData;
-        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-            => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+}
 
-    }
+[global::ProtoBuf.ProtoContract(Name = @"s2c_join")]
+public partial class S2cJoin : global::ProtoBuf.IExtensible
+{
+    private global::ProtoBuf.IExtension __pbn__extensionData;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+        => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
 
-    [global::ProtoBuf.ProtoContract(Name = @"s2c_join")]
-    public partial class S2cJoin : global::ProtoBuf.IExtensible
-    {
-        private global::ProtoBuf.IExtension __pbn__extensionData;
-        global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-            => global::ProtoBuf.Extensible.GetExtensionObject(ref __pbn__extensionData, createIfMissing);
+    [global::ProtoBuf.ProtoMember(1, Name = @"uid", IsRequired = true)]
+    public int Uid { get; set; }
 
-        [global::ProtoBuf.ProtoMember(1, Name = @"uid", IsRequired = true)]
-        public int Uid { get; set; }
+    [global::ProtoBuf.ProtoMember(2, Name = @"name", IsRequired = true)]
+    public string Name { get; set; }
 
-        [global::ProtoBuf.ProtoMember(2, Name = @"name", IsRequired = true)]
-        public string Name { get; set; }
-
-        [global::ProtoBuf.ProtoMember(3, Name = @"icon", IsRequired = true)]
-        public string Icon { get; set; }
-
-    }
+    [global::ProtoBuf.ProtoMember(3, Name = @"icon", IsRequired = true)]
+    public string Icon { get; set; }
 
 }
 
