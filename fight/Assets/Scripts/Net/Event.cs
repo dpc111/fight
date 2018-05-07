@@ -260,6 +260,7 @@
 
         private static void Fire(Dictionary<string, List<EventInfo>> events, LinkedList<EventObj> fireEvents, string eventName, object[] args)
         {
+            Debug.Log("fire " + eventName);
             MonitorEnter(events);
             List<EventInfo> lst = null;
             if (!events.TryGetValue(eventName, out lst))

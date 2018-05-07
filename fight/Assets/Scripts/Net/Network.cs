@@ -34,7 +34,9 @@
 
         public Network()
         {
-            
+            packetReceiver = new PacketReceiver(this);
+            packetSender = new PacketSender(this);
+            Message.Register();
         }
 
         ~Network()
@@ -103,7 +105,7 @@
             }
             catch (Exception e)
             {
-                Debug.LogError("connect server failed");
+                Debug.LogError("connect server failed " + e.ToString());
             }
         }
 
@@ -139,6 +141,10 @@
             {
                 state.connCb(state.ip, state.port, success, state.userData);
             }
+
+            // test
+            battle.c2s_join msg = new battle.c2s_join();
+            Send<battle.c2s_join>(msg);
         }
 
         public void Send<T>(T tmsg)

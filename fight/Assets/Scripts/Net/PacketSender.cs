@@ -1,6 +1,7 @@
 ﻿namespace Net
 {
     using System;
+    using UnityEngine;
     using System.Net.Sockets;
     using System.Net;
     using System.Collections;
@@ -48,7 +49,9 @@
                     return;
                 }
 
-                string msgName = ProtoBuf.Serializer.GetProto<T>();
+                string msgName = tmsg.GetType().Name;
+                msgName = "battle." + msgName;
+                Debug.Log("send msg " + msgName);
                 Array.Copy(BitConverter.GetBytes(msgName.Length), 0, buffer, wpos, 4);
                 wpos = wpos + 4;
                 wLen = wLen + 4;
@@ -76,23 +79,22 @@
                 wLen = wLen + msgName.Length;
 
                 var fullBytes = ms.GetBuffer();
-                int msgBegin = 11;
                 if (buffer.Length - wpos > msgLen)
                 {
-                    Array.Copy(fullBytes, msgBegin, buffer, wpos, msgLen);
+                    Array.Copy(fullBytes, 0, buffer, wpos, msgLen);
                     wpos = wpos + msgLen;
                     wLen = wLen + msgLen;
                 }
                 else if (buffer.Length - wpos == msgLen)
                 {
-                    Array.Copy(fullBytes, msgBegin, buffer, wpos, msgLen);
+                    Array.Copy(fullBytes, 0, buffer, wpos, msgLen);
                     wpos = 0;
                     wLen = wLen + msgLen;
                 }
                 else
                 {
-                    Array.Copy(fullBytes, msgBegin, buffer, wpos, buffer.Length - wpos);
-                    Array.Copy(fullBytes, msgLen - wpos, buffer, 0, msgLen - buffer.Length + wpos);
+                    Array.Copy(fullBytes, 0, buffer, wpos, buffer.Length - wpos);
+                    Array.Copy(fullBytes, buffer.Length - wpos, buffer, 0, msgLen - buffer.Length + wpos);
                     wpos = msgLen - buffer.Length + wpos;
                     wLen = wLen + msgLen;
                 }
@@ -131,6 +133,7 @@
                 catch (Exception e)
                 {
                     // disconnect
+                    Debug.Log("AsyncSend:" + e.ToString());
                     return;
                 }
                 spos = spos + len;

@@ -1,6 +1,7 @@
 ﻿namespace Net
 {
     using System;
+    using UnityEngine;
     using System.IO;
     using ProtoBuf;
 
@@ -56,12 +57,13 @@
             Type type = Message.GetProtoType(name);
             if (type == null)
             {
+                Debug.Log(name);
                 return null;
             }
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             ms.Write(msg, 0, len);
             ms.Position = 0;
-            var m = ProtoBuf.Serializer.Deserialize(type, ms);
+            var m = ProtoBuf.Serializer.NonGeneric.Deserialize(type, ms);
             return m;
         }
 
@@ -132,6 +134,7 @@
                     {
                         break;
                     }
+                    Debug.Log(nameLen);
                     curIndex = MsgIndex.Len;
                 }
                 else if (curIndex == MsgIndex.Len)
@@ -141,6 +144,7 @@
                     {
                         break;
                     }
+                    Debug.Log(len);
                     curIndex = MsgIndex.MsgType;
                 }
                 else if (curIndex == MsgIndex.MsgType)
@@ -150,6 +154,7 @@
                     {
                         break;
                     }
+                    Debug.Log(msgType);
                     curIndex = MsgIndex.Sid;
                 }
                 else if (curIndex == MsgIndex.Sid)
@@ -159,6 +164,7 @@
                     {
                         break;
                     }
+                    Debug.Log(sid);
                     curIndex = MsgIndex.Tid;
                 }
                 else if (curIndex == MsgIndex.Tid)
@@ -168,6 +174,7 @@
                     {
                         break;
                     }
+                    Debug.Log(tid);
                     curIndex = MsgIndex.MsgName;
                 }
                 else if (curIndex == MsgIndex.MsgName)
@@ -184,10 +191,18 @@
                     {
                         break;
                     }
-                    curIndex = MsgIndex.NameLen;
-                    object m = MsgParse();
-                    Event.FireAll(System.Text.Encoding.Default.GetString(msgName), new object[]{ m });
-                    Reset();
+                    try
+                    {
+                        curIndex = MsgIndex.NameLen;
+                        object m = MsgParse();
+                        Debug.Log(System.Text.Encoding.Default.GetString(msgName));
+                        Event.FireAll(System.Text.Encoding.Default.GetString(msgName), new object[] { m });
+                        Reset();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e.ToString());
+                    }
                 }
             }
         }

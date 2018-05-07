@@ -1,6 +1,7 @@
 ﻿namespace Net
 {
     using System;
+    using UnityEngine;
     using System.Net.Sockets;
     using System.Net;
     using System.Collections;
@@ -64,6 +65,7 @@
         {
             var v = new AsyncReceiveMethod(this.AsyncReceive);
             v.BeginInvoke(new AsyncCallback(OnReceive), null);
+            //network.socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveMessage), client);
         }
 
         // 非主线程
@@ -76,7 +78,6 @@
             Socket socket = network.socket;
             while (true)
             {
-                // 必须有空间可写，否则我们阻塞在线程中直到有空间为止
                 int first = 0;
                 int space = Free();
                 while (space == 0)
@@ -85,8 +86,8 @@
                     {
                         if (first > 1000)
                         {
-                            // error
                             Event.FireIn("EventCloseNetwork", new object[] { network });
+                            Debug.Log("");
                             return;
                         }
                         System.Threading.Thread.Sleep(5);
@@ -97,16 +98,19 @@
                 int len = 0;
                 try
                 {
+                    Debug.Log("recv start");
                     len = socket.Receive(buffer, wpos, space, 0);
+                    Debug.Log("recv end " + len);
                 }
                 catch (SocketException e)
                 {
                     Event.FireIn("EventCloseNetwork", new object[] { network });
+                    Debug.Log("AsyncReceive:" + e.ToString());
+                    Debug.Log("");
                     return;
                 }
                 if (len > 0)
                 {
-                    //Interlocked.Add(ref wpos, len);
                     MonitorEnter();
                     wpos = wpos + len;
                     rlen = rlen + len;
@@ -115,7 +119,8 @@
                 else
                 {
                     Event.FireIn("EventCloseNetwork", new object[] { network });
-                    return;                    
+                    Debug.Log(len);
+                    return;
                 }
             }
         }

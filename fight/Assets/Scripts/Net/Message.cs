@@ -21,7 +21,6 @@
             name = msgname;
             len = msglen;
             handler = msghandler;
-            Register();
         }
 
         public static void Clear()
@@ -55,22 +54,32 @@
 
         public static void Register(string name, Type type)
         {
-
+            protoMap[name] = type;
         }
 
         public static void Register()
         {
-            
+            Register("battle.c2s_join", typeof(battle.c2s_join));
+            Register("battle.s2c_join", typeof(battle.s2c_join));
         }
 
         public static Type GetProtoType(string name)
         {
-            Type type = protoMap[name]; 
-            if (type != null)
-            {
-                return type;
-            }
-            return null;
+            //Debug.Log(protoMap.Count);
+            //Type type = null;
+            //if (!protoMap.TryGetValue(name, out type))
+            //{
+            //    Debug.Log(name);
+            //    return null;
+            //}
+            //return type;
+            //Type type = protoMap[name];
+            Debug.Log(name + "**");
+            Debug.Log(name.Length);
+            Debug.Log("battle.s2c_join" + "**");
+            Debug.Log("battle.s2c_join".Length);
+            Type type = protoMap["battle.s2c_join"];
+            return type;
         }
     }
 }
