@@ -53,7 +53,7 @@
 
         public object MsgParse()
         {
-            string name = System.Text.Encoding.Default.GetString(msgName, 0, nameLen);
+            string name = System.Text.Encoding.UTF8.GetString(msgName, 0, nameLen - 1);
             Type type = Message.GetProtoType(name);
             if (type == null)
             {
@@ -134,7 +134,6 @@
                     {
                         break;
                     }
-                    Debug.Log(nameLen);
                     curIndex = MsgIndex.Len;
                 }
                 else if (curIndex == MsgIndex.Len)
@@ -144,7 +143,6 @@
                     {
                         break;
                     }
-                    Debug.Log(len);
                     curIndex = MsgIndex.MsgType;
                 }
                 else if (curIndex == MsgIndex.MsgType)
@@ -154,7 +152,6 @@
                     {
                         break;
                     }
-                    Debug.Log(msgType);
                     curIndex = MsgIndex.Sid;
                 }
                 else if (curIndex == MsgIndex.Sid)
@@ -164,7 +161,6 @@
                     {
                         break;
                     }
-                    Debug.Log(sid);
                     curIndex = MsgIndex.Tid;
                 }
                 else if (curIndex == MsgIndex.Tid)
@@ -174,7 +170,6 @@
                     {
                         break;
                     }
-                    Debug.Log(tid);
                     curIndex = MsgIndex.MsgName;
                 }
                 else if (curIndex == MsgIndex.MsgName)
@@ -195,8 +190,9 @@
                     {
                         curIndex = MsgIndex.NameLen;
                         object m = MsgParse();
-                        Debug.Log(System.Text.Encoding.Default.GetString(msgName));
-                        Event.FireAll(System.Text.Encoding.Default.GetString(msgName), new object[] { m });
+                        string name = System.Text.Encoding.Default.GetString(msgName, 0, nameLen - 1);
+                        Debug.Log("recv msg: " + name + " sid: " + sid + " tid:" + tid);
+                        Event.FireAll(name, new object[] { m });
                         Reset();
                     }
                     catch (Exception e)

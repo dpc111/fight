@@ -65,7 +65,6 @@
         {
             var v = new AsyncReceiveMethod(this.AsyncReceive);
             v.BeginInvoke(new AsyncCallback(OnReceive), null);
-            //network.socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveMessage), client);
         }
 
         // 非主线程
@@ -86,7 +85,7 @@
                     {
                         if (first > 1000)
                         {
-                            Event.FireIn("EventCloseNetwork", new object[] { network });
+                            Event.FireIn("OnCloseNetwork", new object[] { network });
                             Debug.Log("");
                             return;
                         }
@@ -104,9 +103,8 @@
                 }
                 catch (SocketException e)
                 {
-                    Event.FireIn("EventCloseNetwork", new object[] { network });
+                    Event.FireIn("OnCloseNetwork", new object[] { network });
                     Debug.Log("AsyncReceive:" + e.ToString());
-                    Debug.Log("");
                     return;
                 }
                 if (len > 0)
@@ -118,7 +116,7 @@
                 }
                 else
                 {
-                    Event.FireIn("EventCloseNetwork", new object[] { network });
+                    Event.FireIn("OnCloseNetwork", new object[] { network });
                     Debug.Log(len);
                     return;
                 }
@@ -133,7 +131,7 @@
             caller.EndInvoke(ar);
         }
 
-        // 网络主线程
+        // 主线程
         public void Process()
         {
             MonitorEnter();

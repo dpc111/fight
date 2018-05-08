@@ -204,7 +204,6 @@
      <Compile Include="Assets\Scripts\Net\App.cs" />
      <Compile Include="Assets\Scripts\Net\Config.cs" />
      <Compile Include="Assets\Scripts\Net\Event.cs" />
-     <Compile Include="Assets\Scripts\Net\MemoryStream.cs" />
      <Compile Include="Assets\Scripts\Net\Message.cs" />
      <Compile Include="Assets\Scripts\Net\MsgReader.cs" />
      <Compile Include="Assets\Scripts\Net\Network.cs" />

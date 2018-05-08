@@ -10,7 +10,6 @@
     using System.Text.RegularExpressions;
     using System.Runtime.Remoting.Messaging;
     using System.IO;
-    using System.Text;
     using ProtoBuf;
 
     public class PacketSender
@@ -128,11 +127,10 @@
                     {
                         len = socket.Send(buffer, spos, buffer.Length - spos, 0);
                     }
-                 
                 }
                 catch (Exception e)
                 {
-                    // disconnect
+                    Event.FireIn("OnCloseNetwork", new object[] { network });
                     Debug.Log("AsyncSend:" + e.ToString());
                     return;
                 }

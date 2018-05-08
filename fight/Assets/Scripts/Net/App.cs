@@ -18,6 +18,11 @@ public class App : MonoBehaviour
         netThread.Start();
     }
 
+    public void FixedUpdate()
+    {
+        Net.Event.ProcessOutEvent();
+    }
+
     public void ProcessNet()
     {
         while (true)
@@ -39,14 +44,13 @@ public class App : MonoBehaviour
     private void InstallEvents()
     {
         Net.Event.RegisterIn("battle.s2c_join", this, "s2c_join");
-
     }
 
     public void s2c_join(battle.s2c_join msg)
     {
         Debug.Log(msg.uid);
         Debug.Log(msg.name);
-        Debug.Log(msg.uid);
+        Debug.Log(msg.icon);
     }
 }
 

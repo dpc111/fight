@@ -97,7 +97,7 @@
             v.BeginInvoke(state, new AsyncCallback(this.AsyncConnectCb), state);
         }
 
-		// 非主线程
+        // 子线程
         private void AsyncConnect(ConnectState state) {
             try 
             {
@@ -109,7 +109,7 @@
             }
         }
 
-        // 非主线程
+        // 子线程
         private void AsyncConnectCb(IAsyncResult ar)
         {
             Debug.Log("connect server success in AsyncConnectCb");
@@ -145,6 +145,17 @@
             // test
             battle.c2s_join msg = new battle.c2s_join();
             Send<battle.c2s_join>(msg);
+
+            Send<battle.c2s_join>(msg);
+
+            Send<battle.c2s_join>(msg);
+
+            Send<battle.c2s_join>(msg);
+        }
+
+        public void OnCloseNetwork()
+        {
+            Close();
         }
 
         public void Send<T>(T tmsg)

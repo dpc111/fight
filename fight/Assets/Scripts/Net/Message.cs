@@ -38,20 +38,6 @@
 
         }
 
-        //public static void Register(System.Reflection.Assembly assembly)
-        //{
-        //    if (protoMap.Count > 0)
-        //    {
-        //        // error
-        //        return;
-        //    }
-        //    foreach (Type type in assembly.GetTypes())
-        //    {
-        //        if (!type.IsAbstract && !type.IsInterface && type.GetCustomAttributes(typeof(ProtoBuf.ProtoContractAttribute), false).Length > 0)
-        //            protoMap[type.Name] = type;
-        //    }
-        //}
-
         public static void Register(string name, Type type)
         {
             protoMap[name] = type;
@@ -65,21 +51,27 @@
 
         public static Type GetProtoType(string name)
         {
-            //Debug.Log(protoMap.Count);
-            //Type type = null;
-            //if (!protoMap.TryGetValue(name, out type))
-            //{
-            //    Debug.Log(name);
-            //    return null;
-            //}
-            //return type;
-            //Type type = protoMap[name];
-            Debug.Log(name + "**");
-            Debug.Log(name.Length);
-            Debug.Log("battle.s2c_join" + "**");
-            Debug.Log("battle.s2c_join".Length);
-            Type type = protoMap["battle.s2c_join"];
+            Type type = null;
+            if (!protoMap.TryGetValue(name, out type))
+            {
+                Debug.Log(name);
+                return null;
+            }
             return type;
         }
+
+        //public static void Register(System.Reflection.Assembly assembly)
+        //{
+        //    if (protoMap.Count > 0)
+        //    {
+        //        // error
+        //        return;
+        //    }
+        //    foreach (Type type in assembly.GetTypes())
+        //    {
+        //        if (!type.IsAbstract && !type.IsInterface && type.GetCustomAttributes(typeof(ProtoBuf.ProtoContractAttribute), false).Length > 0)
+        //            protoMap[type.Name] = type;
+        //    }
+        //}
     }
 }
