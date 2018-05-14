@@ -192,6 +192,7 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
      <Compile Include="Assets\Prefabs\UI\Test.cs" />
+     <Compile Include="Assets\Scripts\Config\JsonMgr.cs" />
      <Compile Include="Assets\Scripts\Entity\Bullet.cs" />
      <Compile Include="Assets\Scripts\Entity\Entity.cs" />
      <Compile Include="Assets\Scripts\Entity\EntityMgr.cs" />
@@ -211,6 +212,7 @@
      <Compile Include="Assets\Scripts\Net\PacketReceiver.cs" />
      <Compile Include="Assets\Scripts\Net\PacketSender.cs" />
      <Compile Include="Assets\Scripts\ProtoBuf\battle.cs" />
+     <Compile Include="Assets\Scripts\Test\JsonTest.cs" />
      <Compile Include="Assets\Scripts\Test\Test1.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\ReadMe - 3.11.4.txt" />
@@ -321,6 +323,9 @@
  </Reference>
  <Reference Include="UnityEditor.WindowsStandalone.Extensions">
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="Newtonsoft.Json">
+ <HintPath>D:/self/fight/fight/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="protobuf-net">
  <HintPath>D:/self/fight/fight/Assets/Plugins/protobuf-net.dll</HintPath>
