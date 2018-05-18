@@ -45,8 +45,8 @@
 
         public static void Register()
         {
-            Register("battle.c2s_join", typeof(battle.c2s_join));
-            Register("battle.s2c_join", typeof(battle.s2c_join));
+            Register("battle_msg.c_login", typeof(battle_msg.c_login));
+            Register("battle_msg.s_login", typeof(battle_msg.s_login));
         }
 
         public static Type GetProtoType(string name)

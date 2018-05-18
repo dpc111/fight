@@ -143,14 +143,18 @@
             }
 
             // test
-            battle.c2s_join msg = new battle.c2s_join();
-            Send<battle.c2s_join>(msg);
+            //battle.c2s_join msg = new battle.c2s_join();
+            //Send<battle.c2s_join>(msg);
 
-            Send<battle.c2s_join>(msg);
+            //Send<battle.c2s_join>(msg);
 
-            Send<battle.c2s_join>(msg);
+            //Send<battle.c2s_join>(msg);
 
-            Send<battle.c2s_join>(msg);
+            //Send<battle.c2s_join>(msg);
+
+            battle_msg.c_login msg= new battle_msg.c_login();
+            msg.uid = 10001;
+            Send<battle_msg.c_login>(msg);
         }
 
         public void OnCloseNetwork()
