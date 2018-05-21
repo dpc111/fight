@@ -20,9 +20,6 @@ public class GUIImpl : MonoBehaviour {
         UIEventListener.Get(buttonAddEntity3).onClick = OnClickButtonAddEntity3;
 	}
 	
-	void Update () {
-    }
-
     public void OnClickButtonAddEntity1(GameObject button)
     {
         CreateEntity(0);
