@@ -201,6 +201,7 @@
      <Compile Include="Assets\Scripts\Grid\GridMgr.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIImpl.cs" />
      <Compile Include="Assets\Scripts\GUI\GUILogic.cs" />
+     <Compile Include="Assets\Scripts\Login\Game\LoginMgr.cs" />
      <Compile Include="Assets\Scripts\Login\GUI\GUIImplLogin.cs" />
      <Compile Include="Assets\Scripts\Login\Test\TestButton.cs" />
      <Compile Include="Assets\Scripts\Mgr\GameStatic.cs" />
@@ -209,6 +210,7 @@
      <Compile Include="Assets\Scripts\Net\Event.cs" />
      <Compile Include="Assets\Scripts\Net\Message.cs" />
      <Compile Include="Assets\Scripts\Net\MsgReader.cs" />
+     <Compile Include="Assets\Scripts\Net\NetObject.cs" />
      <Compile Include="Assets\Scripts\Net\Network.cs" />
      <Compile Include="Assets\Scripts\Net\ObjectPool.cs" />
      <Compile Include="Assets\Scripts\Net\PacketReceiver.cs" />

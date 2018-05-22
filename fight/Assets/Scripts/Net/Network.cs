@@ -46,7 +46,12 @@
 
         public void Start()
         {
-            ConnectTo(Config.ip, Config.port, null, null);
+            //ConnectTo(Config.ip, Config.port, null, null);
+        }
+
+        public void Reset()
+        {
+            Close();
         }
 
         public void Close()
@@ -142,19 +147,9 @@
                 state.connCb(state.ip, state.port, success, state.userData);
             }
 
-            // test
-            //battle.c2s_join msg = new battle.c2s_join();
-            //Send<battle.c2s_join>(msg);
-
-            //Send<battle.c2s_join>(msg);
-
-            //Send<battle.c2s_join>(msg);
-
-            //Send<battle.c2s_join>(msg);
-
-            battle_msg.c_login msg= new battle_msg.c_login();
-            msg.uid = 10001;
-            Send<battle_msg.c_login>(msg);
+            //battle_msg.c_login msg= new battle_msg.c_login();
+            //msg.uid = 10001;
+            //Send<battle_msg.c_login>(msg);
         }
 
         public void OnCloseNetwork()
