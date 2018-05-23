@@ -65,16 +65,16 @@
             Net.Event.RegisterIn("OnFightConnect", this, "OnFightConnect");
         }
 
-        public void Send<T>(T tmsg)
+        public void Send(object msg)
         {
-            Net.Event.FireIn("Send", tmsg);
+            Net.Event.FireIn("Send", msg);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
         // event
-        public void OnLoginConnect()
+        public void OnSend(object tmsg)
         {
-
+            App.Instance().network.Send(tmsg);
         }
 
         public void OnLoginConnect()
@@ -87,11 +87,6 @@
         {
             App.Instance().network.Reset();
             App.Instance().network.ConnectTo(Config.fightIp, Config.fightPort, null, null);
-        }
-
-        public void s2c_join(battle_msg.s_login msg)
-        {
-         
         }
     }
 }

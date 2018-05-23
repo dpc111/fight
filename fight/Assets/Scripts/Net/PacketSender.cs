@@ -37,11 +37,11 @@
             wLen = 0;
         }
 
-        public void Send<T>(T tmsg)
+        public void Send(object tmsg)
         {
             using (var ms = new System.IO.MemoryStream())
             {
-                ProtoBuf.Serializer.Serialize<T>(ms, tmsg);
+                ProtoBuf.Serializer.NonGeneric.Serialize(ms, tmsg);
                 int msgLen = (int)ms.Position;
                 if (buffer.Length - wLen < msgLen + 10)
                 {
@@ -49,7 +49,7 @@
                 }
 
                 string msgName = tmsg.GetType().Name;
-                msgName = "battle." + msgName;
+                msgName = "battle_msg." + msgName;
                 Debug.Log("send msg " + msgName);
                 Array.Copy(BitConverter.GetBytes(msgName.Length), 0, buffer, wpos, 4);
                 wpos = wpos + 4;
@@ -97,7 +97,7 @@
                     wpos = msgLen - buffer.Length + wpos;
                     wLen = wLen + msgLen;
                 }
-                
+
             }
             asyncSendMethod.BeginInvoke(OnSent, null);
         }

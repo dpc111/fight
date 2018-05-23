@@ -52,6 +52,9 @@
         public void Reset()
         {
             Close();
+            packetReceiver = new PacketReceiver(this);
+            packetSender = new PacketSender(this);
+            connected = false;
         }
 
         public void Close()
@@ -146,10 +149,6 @@
             {
                 state.connCb(state.ip, state.port, success, state.userData);
             }
-
-            //battle_msg.c_login msg= new battle_msg.c_login();
-            //msg.uid = 10001;
-            //Send<battle_msg.c_login>(msg);
         }
 
         public void OnCloseNetwork()
@@ -157,9 +156,10 @@
             Close();
         }
 
-        public void Send<T>(T tmsg)
+        public void Send(object tmsg)
         {
-            packetSender.Send<T>(tmsg);
+            Debug.Log(packetSender);
+            packetSender.Send(tmsg);
         }
 
         // 主线程
