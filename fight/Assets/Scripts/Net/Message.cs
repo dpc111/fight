@@ -45,6 +45,8 @@
 
         public static void Register()
         {
+            Register("battle_msg.c_login_hall", typeof(battle_msg.c_login_hall));
+            Register("battle_msg.s_login_hall", typeof(battle_msg.s_login_hall));
             Register("battle_msg.c_login", typeof(battle_msg.c_login));
             Register("battle_msg.s_login", typeof(battle_msg.s_login));
         }

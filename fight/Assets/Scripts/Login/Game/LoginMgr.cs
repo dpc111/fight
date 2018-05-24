@@ -17,6 +17,7 @@ public class LoginMgr : MonoBehaviour {
         gameScene = "Scenes/Fight";
         loginScript = GameObject.Find("GUI").GetComponent<GUIImplLogin>();
         Net.Event.RegisterOut("OnConnectState", this, "OnConnectState");
+        Net.Event.RegisterOut("battle_msg.s_login_hall", this, "s_login_hall");
         Net.Event.RegisterOut("battle_msg.s_login", this, "s_login");
 	}
 
@@ -32,18 +33,19 @@ public class LoginMgr : MonoBehaviour {
         string password = loginScript.inputPasswordLabel.GetComponent<UILabel>().text;
         if (success)
         {
-            if (connState == LoginState.Login)
+            if (LoginMgr.connState == LoginState.Login)
             {
-                battle_msg.c_login msg = new battle_msg.c_login();
+                battle_msg.c_login_hall msg = new battle_msg.c_login_hall();
                 msg.uid = Convert.ToInt32(account);
                 msg.password = password;
                 Net.App.Instance().Send(msg);
             }
-            else if (connState == LoginState.Fight)
+            else if (LoginMgr.connState == LoginState.Fight)
             {
-
+                battle_msg.c_login msg = new battle_msg.c_login();
+                msg.uid = Convert.ToInt32(account);
+                Net.App.Instance().Send(msg);
             }
-           
         }
         else
         {
@@ -51,18 +53,24 @@ public class LoginMgr : MonoBehaviour {
         }
     }
 
+    public void s_login_hall(battle_msg.s_login_hall msg)
+    {
+        LoginMgr.connState = LoginState.Fight;
+        Net.Event.FireIn("OnFightConnect");
+    }
+
     public void s_login(battle_msg.s_login msg)
     {
         Debug.Log(msg.uid);
         Debug.Log(msg.name);
         Debug.Log(msg.icon);
-        connState = LoginState.Fight;
+        LoginMgr.connState = LoginState.Fight;
         SceneManager.LoadScene(gameScene);
     }
 
-    enum LoginState
+    public enum LoginState
     {
         Login = 1,
-        Fight = 2,
+        Fight,
     };
 }
