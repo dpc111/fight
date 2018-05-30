@@ -201,6 +201,9 @@
      <Compile Include="Assets\Scripts\Fight\Grid\GridMgr.cs" />
      <Compile Include="Assets\Scripts\Fight\GUI\GUIImpl.cs" />
      <Compile Include="Assets\Scripts\Fight\GUI\GUILogic.cs" />
+     <Compile Include="Assets\Scripts\Fight\logic\Bullet.cs" />
+     <Compile Include="Assets\Scripts\Fight\logic\Entity.cs" />
+     <Compile Include="Assets\Scripts\Fight\logic\Mgr.cs" />
      <Compile Include="Assets\Scripts\Fight\Mgr\GameStatic.cs" />
      <Compile Include="Assets\Scripts\Login\Game\LoginMgr.cs" />
      <Compile Include="Assets\Scripts\Login\GUI\GUIImplLogin.cs" />

@@ -45,10 +45,12 @@
 
         public static void Register()
         {
-            Register("battle_msg.c_login_hall", typeof(battle_msg.c_login_hall));
             Register("battle_msg.s_login_hall", typeof(battle_msg.s_login_hall));
-            Register("battle_msg.c_login", typeof(battle_msg.c_login));
             Register("battle_msg.s_login", typeof(battle_msg.s_login));
+            Register("battle_msg.s_room_state", typeof(battle_msg.s_room_state));
+            Register("battle_msg.s_create_entity", typeof(battle_msg.s_create_entity));
+            Register("battle_msg.s_fire", typeof(battle_msg.s_fire));
+            Register("battle_msg.s_collision", typeof(battle_msg.s_collision));
         }
 
         public static Type GetProtoType(string name)
