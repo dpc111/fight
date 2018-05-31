@@ -4,6 +4,7 @@
     using System;
     using System.Collections;
     using System.Threading;
+    using Game;
 
     public class App
     {
@@ -31,6 +32,7 @@
             App.Instance().network.Start();
             App.Instance().netThread = new Thread(new ThreadStart(App.app.ProcessNet));
             App.Instance().netThread.Start();
+            Game.GameWord.Instance().Init();
         }
 
         public void Quit() 

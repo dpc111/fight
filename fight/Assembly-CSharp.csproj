@@ -197,13 +197,14 @@
      <Compile Include="Assets\Scripts\Fight\Entity\Entity.cs" />
      <Compile Include="Assets\Scripts\Fight\Entity\EntityMgr.cs" />
      <Compile Include="Assets\Scripts\Fight\Entity\Fire.cs" />
+     <Compile Include="Assets\Scripts\Fight\Game\Bullet.cs" />
+     <Compile Include="Assets\Scripts\Fight\Game\Entity.cs" />
+     <Compile Include="Assets\Scripts\Fight\Game\GameWord.cs" />
+     <Compile Include="Assets\Scripts\Fight\Game\GridMgr.cs" />
      <Compile Include="Assets\Scripts\Fight\Grid\GridInfo.cs" />
      <Compile Include="Assets\Scripts\Fight\Grid\GridMgr.cs" />
      <Compile Include="Assets\Scripts\Fight\GUI\GUIImpl.cs" />
      <Compile Include="Assets\Scripts\Fight\GUI\GUILogic.cs" />
-     <Compile Include="Assets\Scripts\Fight\logic\Bullet.cs" />
-     <Compile Include="Assets\Scripts\Fight\logic\Entity.cs" />
-     <Compile Include="Assets\Scripts\Fight\logic\Mgr.cs" />
      <Compile Include="Assets\Scripts\Fight\Mgr\GameStatic.cs" />
      <Compile Include="Assets\Scripts\Login\Game\LoginMgr.cs" />
      <Compile Include="Assets\Scripts\Login\GUI\GUIImplLogin.cs" />
