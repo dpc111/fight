@@ -43,6 +43,14 @@
             }
         }
 
+        public void update()
+        {
+            foreach (var item in entitys)
+            {
+                
+            }
+        }
+
         public void DeRegister()
         {
             Net.Event.DeregisterIn(this);
@@ -102,8 +110,9 @@
             entity.col = msg.einfo.col;
             entity.blood = msg.einfo.blood;
             entity.cd = msg.einfo.cd;
-            entitys[entity.id] = entity;
             entity.OnCreate();
+            GridMgr.CreateEntity(entity.row, entity.col, entity.id);
+            entitys[entity.id] = entity;
         }
 
         public void s_destroy_entity(battle_msg.s_destroy_entity msg)
@@ -114,6 +123,7 @@
                 return;
             }
             entity.OnDestroy();
+            GridMgr.DestroyEntity(msg.eid);
             entitys.Remove(msg.eid);
         }
 
@@ -128,8 +138,6 @@
             Bullet bullet = GetBullet(msg.binfo.id);
             if (bullet != null)
             {
-
-
                 Debug.Log("");
                 return;
             }
@@ -144,8 +152,8 @@
             bullet.speed.x = msg.binfo.pos.x;
             bullet.speed.y = msg.binfo.pos.y;
             bullet.speed.z = 0;
-            bullets[bullet.id] = bullet;
             bullet.OnCreate();
+            bullets[bullet.id] = bullet;
         }
 
         public void s_collision(battle_msg.s_collision msg)
@@ -172,7 +180,15 @@
 
         public void VOnCreateEntity(int typeId, int row, int col)
         {
-
+            if (GridMgr.ExistEntity(row, col))
+            {
+                return;
+            }
+            battle_msg.c_create_entity msg = new battle_msg.c_create_entity();
+            msg.type_id = typeId;
+            msg.row = row;
+            msg.col = col;
+            Net.App.Instance().Send(msg);
         }
     }
 }

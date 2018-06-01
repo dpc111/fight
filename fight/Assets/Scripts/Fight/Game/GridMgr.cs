@@ -8,7 +8,11 @@
     {
         public const int ROWNUM = 5;
         public const int COLNUM = 10;
-        public static int[,] grids = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+        public static int[,] grids = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
         public static void Init() 
         {
@@ -50,6 +54,23 @@
                 return;
             }
             grids[row, col] = entityId;
+        }
+
+        public static void DestroyEntity(int entityId)
+        {
+            for (int i = 0; i < ROWNUM; i++)
+            {
+                for (int j = 0; j < COLNUM; j++)
+                {
+                    int id = grids[i, j];
+                    if (id == entityId)
+                    {
+                        grids[i, j] = 0;
+                        return;
+                    }
+                }
+            }
+            
         }
     }
 }
