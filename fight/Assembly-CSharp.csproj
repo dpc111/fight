@@ -192,7 +192,8 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
      <Compile Include="Assets\Prefabs\UI\Test.cs" />
-     <Compile Include="Assets\Scripts\Common\Config\JsonMgr.cs" />
+     <Compile Include="Assets\Scripts\Common\Config\ConfigMgr.cs" />
+     <Compile Include="Assets\Scripts\Common\ProtoBuf\battle.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\Bullet.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\Entity.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\GameWord.cs" />
@@ -220,7 +221,6 @@
      <Compile Include="Assets\Scripts\Net\ObjectPool.cs" />
      <Compile Include="Assets\Scripts\Net\PacketReceiver.cs" />
      <Compile Include="Assets\Scripts\Net\PacketSender.cs" />
-     <Compile Include="Assets\Scripts\ProtoBuf\battle.cs" />
      <Compile Include="Assets\Scripts\Test\JsonTest.cs" />
      <Compile Include="Assets\Scripts\Test\Test1.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />

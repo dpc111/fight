@@ -65,7 +65,7 @@
             Net.Event.RegisterIn("battle_msg.s_fire", this, "s_fire");
             Net.Event.RegisterIn("battle_msg.s_collision", this, "s_collision");
 
-            Net.Event.RegisterOut("VOnCreateEntity", this, "VOnCreateEntity");
+            Net.Event.RegisterIn("VOnCreateEntity", this, "VOnCreateEntity");
 
         }
 
