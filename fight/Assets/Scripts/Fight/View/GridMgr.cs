@@ -15,9 +15,9 @@ public class GridMgr : MonoBehaviour {
 
     public int high = 20;
     public int width = 20;
-    public int rowNum = 10;
-    public int colNum = 5;
-    public int gridSize = 20;
+    public int rowNum = 10;             // x
+    public int colNum = 5;              // z
+    public int gridSize = 10;
     public bool isVisible = true;
 
 	void Start () {
@@ -88,12 +88,15 @@ public class GridMgr : MonoBehaviour {
 
     public void InitGrids()
     {
-        for (int i = 1; i <= rowNum; i++)
+        for (int i = 0; i < rowNum; i++)
         {
-            for (int j = 1; j <= colNum; j++)
+            for (int j = 0; j < colNum; j++)
             {
-                GameObject gridGO = (GameObject)Instantiate(gridPrefab, transform, false);
-                gridGO.transform.position = new Vector3((j - 1) * gridSize + gridSize / 2, 0, (i - 1) * gridSize + gridSize / 2);
+
+                //GameObject gridGO = (GameObject)Instantiate(gridPrefab, transform, false);
+                GameObject gridGO = (GameObject)Instantiate(gridPrefab);
+                gridGO.transform.position = new Vector3(i * gridSize + gridSize / 2f, 0, j * gridSize + gridSize / 2f);
+                //Debug.Log(gridGO.transform.position.x + "  " + gridGO.transform.position.z);
                 gridGO.transform.localScale = new Vector3(gridSize, 0.01f, gridSize);
                 gridGO.transform.parent = transform;
                 GridInfo info = gridGO.GetComponent<GridInfo>();

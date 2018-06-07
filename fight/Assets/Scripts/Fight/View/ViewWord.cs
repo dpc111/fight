@@ -38,6 +38,9 @@ public class ViewWord : MonoBehaviour {
         GameObject entObject = GameStatic.entityMgr.CreateEntity(entity.id, entity.typeId);
         entity.renderObj = entObject;
         entObject.transform.position = entity.pos;
+        Debug.Log(entity.pos.x);
+        Debug.Log(entity.pos.y);
+        Debug.Log(entity.pos.z);
         entObject.GetComponent<Entity>().id = entity.id;
         entObject.GetComponent<Entity>().camp = entity.camp;
         GameStatic.gridMgr.GetGridInfo(entity.row, entity.col).SetGridUsed();
