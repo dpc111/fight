@@ -26,6 +26,7 @@ public class GridMgr : MonoBehaviour {
 	}
 
     void Update()
+    //void LateUpdate()
     {
         if (isVisible && GUIImpl.curEntiyTypeId == 0)
         {
@@ -78,6 +79,8 @@ public class GridMgr : MonoBehaviour {
 
     public GridInfo GetGridInfo(int row, int col)
     {
+        Debug.Log(row);
+        Debug.Log(col);
         GridInfo info = null;
         if (grids.TryGetValue(GridId(row, col), out info))
         {
@@ -96,13 +99,13 @@ public class GridMgr : MonoBehaviour {
                 //GameObject gridGO = (GameObject)Instantiate(gridPrefab, transform, false);
                 GameObject gridGO = (GameObject)Instantiate(gridPrefab);
                 gridGO.transform.position = new Vector3(i * gridSize + gridSize / 2f, 0, j * gridSize + gridSize / 2f);
-                //Debug.Log(gridGO.transform.position.x + "  " + gridGO.transform.position.z);
                 gridGO.transform.localScale = new Vector3(gridSize, 0.01f, gridSize);
                 gridGO.transform.parent = transform;
                 GridInfo info = gridGO.GetComponent<GridInfo>();
                 info.center = gridGO.transform.position;
-                info.row = i;
-                info.col = j;
+                info.row = i + 1;
+                info.col = j + 1;
+                grids[GridId(info.row, info.col)] = info;
             }
         }
     }

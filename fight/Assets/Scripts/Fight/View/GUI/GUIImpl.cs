@@ -16,19 +16,24 @@ public class GUIImpl : MonoBehaviour {
         buttonAddEntity3 = GameObject.Find("UI Root/Camera/ButtonAddEntity3");
         UIEventListener.Get(buttonAddEntity3).onClick = OnClickButtonAddEntity3;
 	}
+
+    public static void SetCurEntityId(int id)
+    {
+        curEntiyTypeId = id;
+    }
 	
     public void OnClickButtonAddEntity1(GameObject button)
     {
-        curEntiyTypeId = 1;
+        SetCurEntityId(1);
     }
 
     public void OnClickButtonAddEntity2(GameObject button)
     {
-        curEntiyTypeId = 2;
+        SetCurEntityId(2);
     }
 
     public void OnClickButtonAddEntity3(GameObject button)
     {
-        curEntiyTypeId = 3;
+        SetCurEntityId(3);
     }
 }

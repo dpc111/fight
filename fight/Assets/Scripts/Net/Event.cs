@@ -140,7 +140,7 @@
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("ProcessOutEvent:" +  e.ToString());
+                    Debug.LogError("ProcessOutEvent:" + e.ToString());
                 }
                 if (doingEventsOut.Count > 0)
                 {
@@ -260,7 +260,7 @@
 
         private static void Fire(Dictionary<string, List<EventInfo>> events, LinkedList<EventObj> fireEvents, string eventName, object[] args)
         {
-            Debug.Log("fire: " + eventName);
+            //Debug.Log("fire: " + eventName);
             MonitorEnter(events);
             List<EventInfo> lst = null;
             if (!events.TryGetValue(eventName, out lst))

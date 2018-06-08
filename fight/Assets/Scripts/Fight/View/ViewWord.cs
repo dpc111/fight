@@ -7,7 +7,7 @@ public class ViewWord : MonoBehaviour {
 
     void Awake()
     {
-        DontDestroyOnLoad(transform.gameObject);
+        //DontDestroyOnLoad(transform.gameObject);
     }
 
 	void Start () {
@@ -59,6 +59,7 @@ public class ViewWord : MonoBehaviour {
         bulletObject.transform.position = bullet.pos;
         Rigidbody rig = bulletObject.GetComponent<Rigidbody>();
         rig.velocity = bullet.speed;
+        Debug.Log(bullet.speed.x + "/" +  bullet.speed.y + "/" + bullet.speed.z);
         bulletObject.GetComponent<Bullet>().camp = bullet.camp;
     }
 

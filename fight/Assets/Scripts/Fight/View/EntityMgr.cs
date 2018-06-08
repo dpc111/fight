@@ -21,6 +21,11 @@ public class EntityMgr : MonoBehaviour {
         {
             string strEntityRes = (string)ConfigMgr.GetArrayValue("entity", k, "entity_prefab");
             GameObject prefab = Resources.Load(strEntityRes) as GameObject;
+            if (prefab == null)
+            {
+                Debug.LogError(strEntityRes + " not exist");
+                break;
+            }
             int id = k + 1;
             entityPrefabs[id] = prefab;
         }

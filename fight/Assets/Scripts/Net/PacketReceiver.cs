@@ -97,9 +97,9 @@
                 int len = 0;
                 try
                 {
-                    Debug.Log("recv start");
+                    //Debug.Log("recv start");
                     len = socket.Receive(buffer, wpos, space, 0);
-                    Debug.Log("recv end " + len);
+                    //Debug.Log("recv end " + len);
                 }
                 catch (SocketException e)
                 {

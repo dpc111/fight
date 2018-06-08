@@ -19,8 +19,13 @@ public class BulletMgr : MonoBehaviour {
         int entityTypeCount = ConfigMgr.GetArrayCount("bullet");
         for (int k = 0; k < entityTypeCount; k++)
         {
-            string strEntityRes = (string)ConfigMgr.GetArrayValue("bullet", k, "bullet_prefab");
-            GameObject prefab = Resources.Load(strEntityRes) as GameObject;
+            string strBulletRes = (string)ConfigMgr.GetArrayValue("bullet", k, "bullet_prefab");
+            GameObject prefab = Resources.Load(strBulletRes) as GameObject;
+            if (prefab == null)
+            {
+                Debug.LogError(strBulletRes + " not exist");
+                break;
+            }
             int id = k + 1;
             bulletPrefabs[id] = prefab;
         }

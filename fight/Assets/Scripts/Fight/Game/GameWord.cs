@@ -102,6 +102,7 @@
                 Debug.Log("");
                 return;
             }
+            Debug.Log(msg.einfo.row + " " + msg.einfo.col);
             entity = new Entity();
             entity.id = msg.einfo.id;
             entity.typeId = msg.einfo.type_id;
@@ -110,6 +111,9 @@
             entity.col = msg.einfo.col;
             entity.blood = msg.einfo.blood;
             entity.cd = msg.einfo.cd;
+            entity.pos.x = msg.einfo.pos.x;
+            entity.pos.y = msg.einfo.pos.y;
+            entity.pos.z = msg.einfo.pos.z;
             entity.OnCreate();
             GridMgr.CreateEntity(entity.row, entity.col, entity.id);
             entitys[entity.id] = entity;
@@ -148,10 +152,13 @@
             bullet.damage = msg.binfo.damage;
             bullet.pos.x = msg.binfo.pos.x;
             bullet.pos.y = msg.binfo.pos.y;
-            bullet.pos.z = 0;
-            bullet.speed.x = msg.binfo.pos.x;
-            bullet.speed.y = msg.binfo.pos.y;
-            bullet.speed.z = 0;
+            bullet.pos.z = msg.binfo.pos.z;
+            Debug.Log(bullet.pos.x);
+            Debug.Log(bullet.pos.y);
+            Debug.Log(bullet.pos.z);
+            bullet.speed.x = msg.binfo.speed.x;
+            bullet.speed.y = msg.binfo.speed.y;
+            bullet.speed.z = msg.binfo.speed.z;
             bullet.OnCreate();
             bullets[bullet.id] = bullet;
         }
