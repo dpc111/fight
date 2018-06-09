@@ -153,9 +153,6 @@
             bullet.pos.x = msg.binfo.pos.x;
             bullet.pos.y = msg.binfo.pos.y;
             bullet.pos.z = msg.binfo.pos.z;
-            Debug.Log(bullet.pos.x);
-            Debug.Log(bullet.pos.y);
-            Debug.Log(bullet.pos.z);
             bullet.speed.x = msg.binfo.speed.x;
             bullet.speed.y = msg.binfo.speed.y;
             bullet.speed.z = msg.binfo.speed.z;
@@ -180,6 +177,7 @@
             entity.blood = msg.einfo.blood;
             if (msg.bullet_destroy)
             {
+                Debug.Log("");
                 bullet.OnDestroy();
                 bullets.Remove(bullet.id);
             }

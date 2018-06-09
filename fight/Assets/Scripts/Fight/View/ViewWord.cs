@@ -30,7 +30,7 @@ public class ViewWord : MonoBehaviour {
         Net.Event.RegisterOut("OnEntityCreate", this, "OnEntityCreate");
         Net.Event.RegisterOut("OnEntityDestroy", this, "OnEntityDestroy");
         Net.Event.RegisterOut("OnBulletCreate", this, "OnBulletCreate");
-        Net.Event.RegisterOut("OnBulletDestory", this, "OnBulletDestroy");
+        Net.Event.RegisterOut("OnBulletDestroy", this, "OnBulletDestroy");
     }
 
     public void OnEntityCreate(Game.Entity entity)
@@ -59,7 +59,6 @@ public class ViewWord : MonoBehaviour {
         bulletObject.transform.position = bullet.pos;
         Rigidbody rig = bulletObject.GetComponent<Rigidbody>();
         rig.velocity = bullet.speed;
-        Debug.Log(bullet.speed.x + "/" +  bullet.speed.y + "/" + bullet.speed.z);
         bulletObject.GetComponent<Bullet>().camp = bullet.camp;
     }
 

@@ -51,6 +51,7 @@
             Register("battle_msg.s_create_entity", typeof(battle_msg.s_create_entity));
             Register("battle_msg.s_fire", typeof(battle_msg.s_fire));
             Register("battle_msg.s_collision", typeof(battle_msg.s_collision));
+            Register("battle_msg.s_destroy_entity", typeof(battle_msg.s_destroy_entity));
         }
 
         public static Type GetProtoType(string name)

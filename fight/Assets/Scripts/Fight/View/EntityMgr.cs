@@ -52,8 +52,9 @@ public class EntityMgr : MonoBehaviour {
     public void DestroyEnity(int id)
     {
         GameObject entity = null;
-        if (entitys.TryGetValue(id, out entity))
+        if (!entitys.TryGetValue(id, out entity))
         {
+            Debug.Log("");
             return;
         }
         entitys.Remove(id);
