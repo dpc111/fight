@@ -104,7 +104,7 @@
                 catch (SocketException e)
                 {
                     Event.FireIn("OnCloseNetwork", new object[] { network });
-                    Debug.Log("AsyncReceive:" + e.ToString());
+                    Debug.LogError("AsyncReceive:" + e.ToString());
                     return;
                 }
                 if (len > 0)

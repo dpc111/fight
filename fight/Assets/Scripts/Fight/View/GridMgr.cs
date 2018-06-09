@@ -79,8 +79,6 @@ public class GridMgr : MonoBehaviour {
 
     public GridInfo GetGridInfo(int row, int col)
     {
-        Debug.Log(row);
-        Debug.Log(col);
         GridInfo info = null;
         if (grids.TryGetValue(GridId(row, col), out info))
         {

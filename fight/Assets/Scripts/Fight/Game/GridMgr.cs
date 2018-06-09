@@ -6,13 +6,20 @@
 
     public class GridMgr
     {
-        public const int ROWNUM = 5;
-        public const int COLNUM = 10;
-        public static int[,] grids = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+        public const int ROWNUM = 10;
+        public const int COLNUM = 5;
+        public static int[,] grids = { 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                         { 0, 0, 0, 0, 0 }, 
+                                     };
 
         public static void Init() 
         {
@@ -27,14 +34,14 @@
 
         public static int GetEntity(int row, int col)
         {
-            if (row < 0 
-                || row >= ROWNUM
-                || col < 0
+            if (row < 1 
+                || row > ROWNUM
+                || col < 1
                 || col > COLNUM)
             {
                 return 0;
             }
-            int id = grids[row, col];
+            int id = grids[row - 1, col - 1];
             return id;
         }
 
@@ -53,7 +60,7 @@
                 Debug.Log("");
                 return;
             }
-            grids[row, col] = entityId;
+            grids[row - 1, col - 1] = entityId;
         }
 
         public static void DestroyEntity(int entityId)

@@ -171,7 +171,7 @@
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("ProcessOutEvent:" + e.ToString());
+                    Debug.LogError("ProcessOutEvent:" + e.ToString());
                 }
                 if (doingEventsIn.Count > 0)
                 {

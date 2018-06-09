@@ -102,7 +102,7 @@
                 Debug.Log("");
                 return;
             }
-            Debug.Log(msg.einfo.row + " " + msg.einfo.col);
+            Debug.Log(msg.einfo.id + " " + msg.einfo.row + " " + msg.einfo.col);
             entity = new Entity();
             entity.id = msg.einfo.id;
             entity.typeId = msg.einfo.type_id;
@@ -136,7 +136,7 @@
             Entity entity = GetEntity(msg.eid);
             if (entity == null)
             {
-                Debug.Log("");
+                Debug.Log(msg.eid);
                 return;
             }
             Bullet bullet = GetBullet(msg.binfo.id);
