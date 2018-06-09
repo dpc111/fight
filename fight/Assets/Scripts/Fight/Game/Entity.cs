@@ -32,7 +32,7 @@
 
         public virtual void OnDestroy()
         {
-            Net.Event.FireOut("OnEnityDestroy", new object[] {this});
+            Net.Event.FireOut("OnEntityDestroy", new object[] {this});
         }
     }
 }
