@@ -44,7 +44,7 @@ public class EntityMgr : MonoBehaviour {
             return null;
         }
         entity = Instantiate(entPrefab);
-        entity.AddComponent<Entity>();
+        //entity.AddComponent<Entity>();
         entitys[id] = entity;
         return entity;
     }

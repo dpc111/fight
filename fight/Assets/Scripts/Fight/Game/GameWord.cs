@@ -110,6 +110,7 @@
             entity.row = msg.einfo.row;
             entity.col = msg.einfo.col;
             entity.blood = msg.einfo.blood;
+            entity.bloodMax = msg.einfo.blood;
             entity.cd = msg.einfo.cd;
             entity.pos.x = msg.einfo.pos.x;
             entity.pos.y = msg.einfo.pos.y;

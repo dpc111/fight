@@ -44,7 +44,6 @@ public class BulletMgr : MonoBehaviour {
             return null;
         }
         bullet = Instantiate(prefab);
-        bullet.AddComponent<Bullet>();
         bullets[id] = bullet;
         return bullet;
     }

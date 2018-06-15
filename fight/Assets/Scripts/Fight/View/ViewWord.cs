@@ -14,10 +14,13 @@ public class ViewWord : MonoBehaviour {
         DeregisterEvents();
         RegisterEvents();
 	}
-	
-	void Update () {
-		
-	}
+
+    void Update()
+    {
+        // test
+        //GameObject obj = GameObject.Find("UI Root/Slider");
+        //obj.GetComponent<UISlider>().value = obj.GetComponent<UISlider>().value - 0.001f;
+    }
 
     public void DeregisterEvents()
     {
@@ -37,12 +40,11 @@ public class ViewWord : MonoBehaviour {
     {
         GameObject entObject = GameStatic.entityMgr.CreateEntity(entity.id, entity.typeId);
         entity.renderObj = entObject;
+        entity.bloodBar = Instantiate(GUIImpl.bloodBarPrefab);
         entObject.transform.position = entity.pos;
         Debug.Log(entity.pos.x);
         Debug.Log(entity.pos.y);
         Debug.Log(entity.pos.z);
-        entObject.GetComponent<Entity>().id = entity.id;
-        entObject.GetComponent<Entity>().camp = entity.camp;
         GameStatic.gridMgr.GetGridInfo(entity.row, entity.col).SetGridUsed();
     }
 
@@ -59,7 +61,6 @@ public class ViewWord : MonoBehaviour {
         bulletObject.transform.position = bullet.pos;
         Rigidbody rig = bulletObject.GetComponent<Rigidbody>();
         rig.velocity = bullet.speed;
-        bulletObject.GetComponent<Bullet>().camp = bullet.camp;
     }
 
     public void OnBulletDestroy(Game.Bullet bullet)

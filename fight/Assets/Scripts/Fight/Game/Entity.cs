@@ -17,8 +17,11 @@
         public int camp = 0;
         public int row = 0;
         public int col = 0;
-        public int blood = 0;
         public float cd = 1f;
+
+        public object bloodBar = null;
+        public int blood = 0;
+        public int bloodMax = 0;
 
         public Entity()
         {
