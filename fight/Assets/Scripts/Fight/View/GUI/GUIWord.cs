@@ -21,6 +21,25 @@ public class GUIWord : MonoBehaviour {
     public void RegisterEvents()
     {
         Net.Event.RegisterOut("OnSetBloodBar", this, "OnSetBloodBar");
+        Net.Event.RegisterOut("OnDestroyBloodBar", this, "OnDestroyBloodBar");
+    }
+
+    public object OnCreateBloodBar(Vector3 pos)
+    {
+        GameObject bar = Instantiate(GUIImpl.bloodBarPrefab) as GameObject;
+        bar.transform.position = pos + new Vector3(-4, 5, 2);
+        bar.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);
+        return bar;
+    }
+
+    public void OnDestroyBloodBar(object obj)
+    {
+        if (obj == null)
+        {
+            return;
+        }
+        GameObject bar = obj as GameObject;
+        Destroy(bar);
     }
 
     public void OnSetBloodBar(object obj, int max, int cur)
@@ -30,6 +49,7 @@ public class GUIWord : MonoBehaviour {
             return;
         }
         GameObject bar = obj as GameObject;
-        bar.GetComponent<UISlider>().value = cur / max;
+        GameObject slider = bar.transform.Find("UISlider").gameObject;
+        slider.GetComponent<UISlider>().value = (float)cur / (float)max;
     }
 }

@@ -35,7 +35,14 @@
 
         public virtual void OnDestroy()
         {
-            Net.Event.FireOut("OnEntityDestroy", new object[] {this});
+            Net.Event.FireOut("OnEntityDestroy", new object[] { this });
+            Net.Event.FireOut("OnDestroyBloodBar", new object[] { this.bloodBar });
+        }
+
+        public void SetBlood(int b)
+        {
+            blood = b;
+            Net.Event.FireOut("OnSetBloodBar", new object[] { this.bloodBar, bloodMax, blood });
         }
     }
 }

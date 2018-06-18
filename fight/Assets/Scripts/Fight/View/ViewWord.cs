@@ -4,7 +4,6 @@ using UnityEngine;
 using Net;
 
 public class ViewWord : MonoBehaviour {
-
     void Awake()
     {
         //DontDestroyOnLoad(transform.gameObject);
@@ -40,12 +39,12 @@ public class ViewWord : MonoBehaviour {
     {
         GameObject entObject = GameStatic.entityMgr.CreateEntity(entity.id, entity.typeId);
         entity.renderObj = entObject;
-        entity.bloodBar = Instantiate(GUIImpl.bloodBarPrefab);
         entObject.transform.position = entity.pos;
         Debug.Log(entity.pos.x);
         Debug.Log(entity.pos.y);
         Debug.Log(entity.pos.z);
         GameStatic.gridMgr.GetGridInfo(entity.row, entity.col).SetGridUsed();
+        entity.bloodBar = GameStatic.guiWord.OnCreateBloodBar(entObject.transform.position);
     }
 
     public void OnEntityDestroy(Game.Entity entity)

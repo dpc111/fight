@@ -118,6 +118,8 @@
             entity.OnCreate();
             GridMgr.CreateEntity(entity.row, entity.col, entity.id);
             entitys[entity.id] = entity;
+            // test
+            entity.SetBlood(msg.einfo.blood);
         }
 
         public void s_destroy_entity(battle_msg.s_destroy_entity msg)
@@ -175,7 +177,8 @@
                 Debug.Log("");
                 return;
             }
-            entity.blood = msg.einfo.blood;
+            //entity.blood = msg.einfo.blood;
+            entity.SetBlood(msg.einfo.blood);
             if (msg.bullet_destroy)
             {
                 Debug.Log("");
