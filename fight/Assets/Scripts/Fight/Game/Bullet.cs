@@ -7,8 +7,11 @@
 
     public class Bullet
     {
+        public const float bulletLifeTime = 20f;
+
         public Vector3 lastLocalPos = new Vector3(0f, 0f, 0f);
         public Vector3 lastLocalDir = new Vector3(0f, 0f, 0f);
+        public Vector3 beginPos = new Vector3(0f, 0f, 0f);
         public Vector3 pos = new Vector3(0f, 0f, 0f);
         public Vector3 dir = new Vector3(0f, 0f, 0f);
         public Vector3 speed = new Vector3(0f, 0f, 0f);
@@ -19,10 +22,31 @@
         public int camp = 0;
         public int damage = 0;
         public bool del = false;
+        public float createTime = 0f;
 
         public Bullet()
         {
 
+        }
+
+        public void Update(float now)
+        {
+            if (del)
+            {
+                return;
+            }
+            float interval = now = createTime;
+            if (interval > bulletLifeTime) 
+            {
+                OnDestroy();
+                return;
+            }
+            pos = beginPos + speed * interval;
+            if (Vector3.Distance(pos, lastLocalPos) > 0.5f)
+            {
+                Net.Event.FireOut("OnBulletUpdatePos", new object[] { this.renderObj, pos });
+                lastLocalPos = pos;
+            }
         }
 
         public virtual void OnCreate()

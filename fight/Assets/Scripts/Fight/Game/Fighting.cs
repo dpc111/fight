@@ -7,8 +7,20 @@
 
     public class Fighting
     {
-        public static void Update() {
-
+        public float lastUpdateTime = 0;
+        public void Update() {
+            float now = State.CurRoomTime();
+            if (lastUpdateTime > now)
+            {
+                foreach (var entity in GameWord.entitys)
+                {
+                    entity.Value.Update(now);
+                }
+                foreach (var bullet in GameWord.bullets)
+                {
+                    bullet.Value.Update(now);
+                }
+            }
         }
     }
 

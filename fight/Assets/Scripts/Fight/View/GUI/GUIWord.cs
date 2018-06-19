@@ -29,6 +29,7 @@ public class GUIWord : MonoBehaviour {
         GameObject bar = Instantiate(GUIImpl.bloodBarPrefab) as GameObject;
         bar.transform.position = pos + new Vector3(-4, 5, 2);
         bar.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);
+        bar.transform.rotation = Camera.main.transform.rotation;
         return bar;
     }
 

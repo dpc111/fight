@@ -28,6 +28,11 @@
 
         }
 
+        public void Update(float now) 
+        {
+
+        }
+
         public virtual void OnCreate()
         {
             Net.Event.FireOut("OnEntityCreate", new object[] {this});

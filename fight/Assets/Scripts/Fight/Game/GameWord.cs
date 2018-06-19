@@ -153,12 +153,16 @@
             bullet.typeId = msg.binfo.type_id;
             bullet.camp = msg.binfo.camp;
             bullet.damage = msg.binfo.damage;
+            bullet.beginPos.x = msg.binfo.pos.x;
+            bullet.beginPos.y = msg.binfo.pos.y;
+            bullet.beginPos.z = msg.binfo.pos.z;
             bullet.pos.x = msg.binfo.pos.x;
             bullet.pos.y = msg.binfo.pos.y;
             bullet.pos.z = msg.binfo.pos.z;
             bullet.speed.x = msg.binfo.speed.x;
             bullet.speed.y = msg.binfo.speed.y;
             bullet.speed.z = msg.binfo.speed.z;
+            bullet.createTime = State.CurRoomTime();
             bullet.OnCreate();
             bullets[bullet.id] = bullet;
         }
