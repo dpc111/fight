@@ -47,6 +47,7 @@
         {
             Register("battle_msg.s_login_hall", typeof(battle_msg.s_login_hall));
             Register("battle_msg.s_login", typeof(battle_msg.s_login));
+            Register("battle_msg.s_get_room_info", typeof(battle_msg.s_get_room_info));
             Register("battle_msg.s_room_state", typeof(battle_msg.s_room_state));
             Register("battle_msg.s_create_entity", typeof(battle_msg.s_create_entity));
             Register("battle_msg.s_fire", typeof(battle_msg.s_fire));

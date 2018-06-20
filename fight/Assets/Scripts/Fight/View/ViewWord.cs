@@ -12,6 +12,7 @@ public class ViewWord : MonoBehaviour {
 	void Start () {
         DeregisterEvents();
         RegisterEvents();
+        Net.Event.FireIn("VFightSenceLoadOver");
 	}
 
     void Update()

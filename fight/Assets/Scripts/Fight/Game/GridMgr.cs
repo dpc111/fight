@@ -21,7 +21,7 @@
                                          { 0, 0, 0, 0, 0 }, 
                                      };
 
-        public static void Init() 
+        public static void Reset() 
         {
             for (int i = 0; i < ROWNUM; i++) 
             {

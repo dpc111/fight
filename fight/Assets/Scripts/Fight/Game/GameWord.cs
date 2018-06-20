@@ -28,7 +28,7 @@
         {
             DeRegister();
             RegisterEvents();
-            GridMgr.Init();
+            Reset();
         }
 
         public virtual void OnDestroy()
@@ -37,18 +37,27 @@
             {
                 v.Value.OnDestroy();
             }
+            entitys.Clear();
             foreach (var v in bullets)
             {
                 v.Value.OnDestroy();
             }
+            bullets.Clear();
         }
 
-        public void update()
+        public void Reset()
         {
-            foreach (var item in entitys)
+            foreach (var v in entitys)
             {
-                
+                v.Value.OnDestroy();
             }
+            entitys.Clear();
+            foreach (var v in bullets)
+            {
+                v.Value.OnDestroy();
+            }
+            bullets.Clear();
+            GridMgr.Reset();
         }
 
         public void DeRegister()
@@ -59,6 +68,7 @@
 
         public void RegisterEvents()
         {
+            Net.Event.RegisterIn("battle_msg.s_get_room_info", this, "s_get_room_info");
             Net.Event.RegisterIn("battle_msg.s_room_state", this, "s_room_state");
             Net.Event.RegisterIn("battle_msg.s_create_entity", this, "s_create_entity");
             Net.Event.RegisterIn("battle_msg.s_destroy_entity", this, "s_destroy_entity");
@@ -66,10 +76,10 @@
             Net.Event.RegisterIn("battle_msg.s_collision", this, "s_collision");
 
             Net.Event.RegisterIn("VOnCreateEntity", this, "VOnCreateEntity");
-
+            Net.Event.RegisterIn("VFightSenceLoadOver", this, "VFightSenceLoadOver");
         }
 
-        public Entity GetEntity(int id)
+        public static Entity GetEntity(int id)
         {
             Entity entity = null;
             if (entitys.TryGetValue(id, out entity))
@@ -79,7 +89,7 @@
             return null;
         }
 
-        public Bullet GetBullet(int id)
+        public static Bullet GetBullet(int id)
         {
             Bullet bullet = null;
             if (bullets.TryGetValue(id, out bullet))
@@ -89,108 +99,167 @@
             return null;
         }
 
-        public void s_room_state(battle_msg.s_room_state msg)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // tool function
+        public void GetRoomInfo()
         {
-            Debug.Log(msg.state);
+            battle_msg.c_get_room_info msg = new battle_msg.c_get_room_info();
+            Net.App.Instance().Send(msg);
         }
 
-        public void s_create_entity(battle_msg.s_create_entity msg)
+        public bool ExistEntity(int id)
         {
-            Entity entity = GetEntity(msg.einfo.id);
+            return entitys.ContainsKey(id);
+        }
+
+        public static void CreateEntity(battle_msg.entity_info info)
+        {
+            Entity entity = GetEntity(info.id);
             if (entity != null)
             {
                 Debug.Log("");
                 return;
             }
-            Debug.Log(msg.einfo.id + " " + msg.einfo.row + " " + msg.einfo.col);
             entity = new Entity();
-            entity.id = msg.einfo.id;
-            entity.typeId = msg.einfo.type_id;
-            entity.camp = msg.einfo.camp;
-            entity.row = msg.einfo.row;
-            entity.col = msg.einfo.col;
-            entity.blood = msg.einfo.blood;
-            entity.bloodMax = msg.einfo.blood;
-            entity.cd = msg.einfo.cd;
-            entity.pos.x = msg.einfo.pos.x;
-            entity.pos.y = msg.einfo.pos.y;
-            entity.pos.z = msg.einfo.pos.z;
+            entity.id = info.id;
+            entity.typeId = info.type_id;
+            entity.camp = info.camp;
+            entity.row = info.row;
+            entity.col = info.col;
+            entity.blood = info.blood;
+            entity.bloodMax = info.blood;
+            entity.cd = info.cd;
+            entity.pos.x = info.pos.x;
+            entity.pos.y = info.pos.y;
+            entity.pos.z = info.pos.z;
             entity.OnCreate();
             GridMgr.CreateEntity(entity.row, entity.col, entity.id);
             entitys[entity.id] = entity;
             // test
-            entity.SetBlood(msg.einfo.blood);
+            entity.SetBlood(info.blood);
         }
 
-        public void s_destroy_entity(battle_msg.s_destroy_entity msg)
+        public static void RemoveEntity(int id)
         {
-            Entity entity = GetEntity(msg.eid);
+            Entity entity = GetEntity(id);
             if (entity == null)
             {
                 return;
             }
+            GridMgr.DestroyEntity(id);
             entity.OnDestroy();
-            GridMgr.DestroyEntity(msg.eid);
-            entitys.Remove(msg.eid);
+            entitys.Remove(id);
         }
 
-        public void s_fire(battle_msg.s_fire msg)
+        public bool ExistBullet(int id)
         {
-            Entity entity = GetEntity(msg.eid);
-            if (entity == null)
-            {
-                Debug.Log(msg.eid);
-                return;
-            }
-            Bullet bullet = GetBullet(msg.binfo.id);
+            return bullets.ContainsKey(id);
+        }
+
+        public static void CreateBullet(battle_msg.bullet_info info)
+        {
+            Bullet bullet = GetBullet(info.id);
             if (bullet != null)
             {
                 Debug.Log("");
                 return;
             }
             bullet = new Bullet();
-            bullet.id = msg.binfo.id;
-            bullet.typeId = msg.binfo.type_id;
-            bullet.camp = msg.binfo.camp;
-            bullet.damage = msg.binfo.damage;
-            bullet.beginPos.x = msg.binfo.pos.x;
-            bullet.beginPos.y = msg.binfo.pos.y;
-            bullet.beginPos.z = msg.binfo.pos.z;
-            bullet.pos.x = msg.binfo.pos.x;
-            bullet.pos.y = msg.binfo.pos.y;
-            bullet.pos.z = msg.binfo.pos.z;
-            bullet.speed.x = msg.binfo.speed.x;
-            bullet.speed.y = msg.binfo.speed.y;
-            bullet.speed.z = msg.binfo.speed.z;
-            bullet.createTime = State.CurRoomTime();
+            bullet.id = info.id;
+            bullet.typeId = info.type_id;
+            bullet.camp = info.camp;
+            bullet.damage = info.damage;
+            bullet.beginPos.x = info.pos.x;
+            bullet.beginPos.y = info.pos.y;
+            bullet.beginPos.z = info.pos.z;
+            bullet.pos.x = info.pos.x;
+            bullet.pos.y = info.pos.y;
+            bullet.pos.z = info.pos.z;
+            bullet.speed.x = info.speed.x;
+            bullet.speed.y = info.speed.y;
+            bullet.speed.z = info.speed.z;
+            bullet.createTime = info.begin_time;
             bullet.OnCreate();
             bullets[bullet.id] = bullet;
         }
 
-        public void s_collision(battle_msg.s_collision msg)
+        public static void RemoveBullet(int id)
         {
-            Entity entity = GetEntity(msg.einfo.id);
-            if (entity == null)
-            {
-                Debug.Log("");
-                return;
-            }
-            Bullet bullet = GetBullet(msg.binfo.id);
+            Bullet bullet = GetBullet(id);
             if (bullet == null)
             {
-                Debug.Log("");
                 return;
             }
-            //entity.blood = msg.einfo.blood;
-            entity.SetBlood(msg.einfo.blood);
-            if (msg.bullet_destroy)
+            bullet.OnDestroy();
+            bullets.Remove(id);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // event msg
+        public void s_get_room_info(battle_msg.s_get_room_info msg)
+        {
+            Reset();
+            State.SetTimeDiff(msg.info.now_time);
+            State.SetRoomState(msg.info.state);
+            foreach (var v in msg.entitys)
             {
-                Debug.Log("");
-                bullet.OnDestroy();
-                bullets.Remove(bullet.id);
+                CreateEntity(v);
+            }
+            foreach (var v in msg.bullets)
+            {
+                CreateBullet(v);
             }
         }
 
+        public void s_room_state(battle_msg.s_room_state msg)
+        {
+            State.SetTimeDiff(msg.info.now_time);
+            State.SetRoomState(msg.info.state);
+        }
+
+        public void s_create_entity(battle_msg.s_create_entity msg)
+        {
+            CreateEntity(msg.einfo);  
+        }
+
+        public void s_destroy_entity(battle_msg.s_destroy_entity msg)
+        {
+            if (!ExistEntity(msg.eid))
+            {
+                return;
+            }
+            RemoveEntity(msg.eid);
+        }
+
+        public void s_fire(battle_msg.s_fire msg)
+        {
+            if (!ExistEntity(msg.eid))
+            {
+                return;
+            }
+            CreateBullet(msg.binfo);
+        }
+
+        public void s_collision(battle_msg.s_collision msg)
+        {
+            if (!ExistEntity(msg.einfo.id))
+            {
+                return;
+            }
+            if (!ExistBullet(msg.binfo.id))
+            {
+                return;
+            }
+            Entity entity = GetEntity(msg.einfo.id);
+            entity.SetBlood(msg.einfo.blood);
+            if (msg.bullet_destroy)
+            {
+                RemoveBullet(msg.binfo.id);
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // event view
         public void VOnCreateEntity(int typeId, int row, int col)
         {
             if (GridMgr.ExistEntity(row, col))
@@ -202,6 +271,11 @@
             msg.row = row;
             msg.col = col;
             Net.App.Instance().Send(msg);
+        }
+
+        public void VFightSenceLoadOver()
+        {
+            GetRoomInfo();
         }
     }
 }

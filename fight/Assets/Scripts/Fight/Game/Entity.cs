@@ -18,6 +18,7 @@
         public int row = 0;
         public int col = 0;
         public float cd = 1f;
+        public bool del = false;
 
         public object bloodBar = null;
         public int blood = 0;
@@ -28,7 +29,7 @@
 
         }
 
-        public void Update(float now) 
+        public void Update(double now) 
         {
 
         }

@@ -8,33 +8,36 @@
 
     public class State
     {
+        public static bool run = false;
         public static int roomState;
-        public static float roomBeginTime;
-        public static float timeDiff = 0;
+        public static double timeDiff = 0;
 
-        public static float CurRoomTime()
+        public static void SetRoomState(int state)
         {
-            return CurTime() - roomBeginTime;
+            roomState = state;
+            if (state == 1 || state == 2)
+            {
+                run = true; 
+            } 
+            else
+            {
+                run = false;
+            }
         }
 
-        public static float CurTime()
-        {
-            return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
-        }
-
-        public static void SetTimeDiff(float serverCurTime)
+        public static void SetTimeDiff(double serverCurTime)
         {
             timeDiff = CurTime() - serverCurTime;
         }
 
-        public static float ClientTime(float serverTime)
+        public static double CurServerTime()
         {
-            return serverTime + timeDiff;
+            return CurTime() - timeDiff;
         }
 
-        public static void SetRoomBeginTime(float serverBeginTime)
+        private static double CurTime()
         {
-            roomBeginTime = ClientTime(serverBeginTime);
+            return (double)(DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / (double)10000000;
         }
     }
 
