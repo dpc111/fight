@@ -13,13 +13,13 @@
 
     public class Network
     {
-        public delegate void AsyncConnectMethod(ConnectState state);
-        public delegate void ConnectCallback(string ip, int port, bool success, object userData);
-        public const int tcpPacketMax = 1024;
-        public Socket socket = null;
-        PacketReceiver packetReceiver = null;
-        PacketSender packetSender = null;
-        public bool connected = false;
+        public delegate void        AsyncConnectMethod(ConnectState state);
+        public delegate void        ConnectCallback(string ip, int port, bool success, object userData);
+        public const int            tcpPacketMax = 1024;
+        public Socket               socket = null;
+        public PacketReceiver       packetReceiver = null;
+        public PacketSender         packetSender = null;
+        public bool                 connected = false;
 
         public class ConnectState
         {
@@ -158,7 +158,6 @@
 
         public void Send(object tmsg)
         {
-            Debug.Log(packetSender);
             packetSender.Send(tmsg);
         }
 

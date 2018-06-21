@@ -21,12 +21,12 @@
             public object[] args;
         };
 
-        static public Dictionary<string, List<EventInfo>> eventsOut = new Dictionary<string, List<EventInfo>>();
-        static LinkedList<EventObj> firedEventsOut = new LinkedList<EventObj>();
-        static LinkedList<EventObj> doingEventsOut = new LinkedList<EventObj>();
-        static public Dictionary<string, List<EventInfo>> eventsIn = new Dictionary<string, List<EventInfo>>();
-        static LinkedList<EventObj> firedEventsIn = new LinkedList<EventObj>();
-        static LinkedList<EventObj> doingEventsIn = new LinkedList<EventObj>();
+        static public Dictionary<string, List<EventInfo>>           eventsOut = new Dictionary<string, List<EventInfo>>();
+        static LinkedList<EventObj>                                 firedEventsOut = new LinkedList<EventObj>();
+        static LinkedList<EventObj>                                 doingEventsOut = new LinkedList<EventObj>();
+        static public Dictionary<string, List<EventInfo>>           eventsIn = new Dictionary<string, List<EventInfo>>();
+        static LinkedList<EventObj>                                 firedEventsIn = new LinkedList<EventObj>();
+        static LinkedList<EventObj>                                 doingEventsIn = new LinkedList<EventObj>();
 
         public static void MonitorEnter(object obj)
         {
@@ -36,11 +36,6 @@
         public static void MonitorExit(object obj)
         {
             Monitor.Exit(obj);
-        }
-
-        public Event()
-        {
-
         }
 
         public static void Clear()
@@ -260,11 +255,11 @@
 
         private static void Fire(Dictionary<string, List<EventInfo>> events, LinkedList<EventObj> fireEvents, string eventName, object[] args)
         {
-            Debug.Log("fire: " + eventName);
             MonitorEnter(events);
             List<EventInfo> lst = null;
             if (!events.TryGetValue(eventName, out lst))
             {
+                Debug.Log("fire");
                 MonitorExit(events);
                 return;
             }
@@ -275,6 +270,7 @@
                 eObj.args = args;
                 fireEvents.AddLast(eObj);
             }
+            Debug.Log("fire");
             MonitorExit(events);
         }
     }

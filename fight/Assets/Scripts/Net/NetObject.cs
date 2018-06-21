@@ -17,7 +17,6 @@ public class NetObject : MonoBehaviour {
     void FixedUpdate()
     {
         Net.App.Instance().ProcessMain();
-        Game.Fighting.Update();
     }
 
     void OnApplicationQuit()

@@ -13,52 +13,26 @@
 
     public class PacketReceiver
     {
-        public delegate void AsyncReceiveMethod();
-        private Network network = null;
-        private MsgReader msgReader = null;
-        public byte[] buffer;
-        public int wpos = 0;
-        public int rpos = 0;
-        public int rlen = 0;
-
-        public void MonitorEnter()
-        {
-            Monitor.Enter(this);
-        }
-
-        public void MonitorExit()
-        {
-            Monitor.Exit(this);
-        }
+        public delegate void            AsyncReceiveMethod();
+        private Network                 network = null;
+        private MsgReader               msgReader = null;
+        public RingBuffer               ringBuffer = null;
+        public byte[]                   readBuffer;
 
         public PacketReceiver(Network net) 
         {
             network = net;
             msgReader = new MsgReader(this);
-            buffer = new byte[Config.tcpPacketMax];
+            ringBuffer = new RingBuffer(Config.recvRingBuffMax);
+            readBuffer = new byte[Config.tcpPacketMax];
+            Reset();
         }
 
-        public int Free()
+        public void Reset() 
         {
-            MonitorEnter();
-            int len = 0;
-            if (wpos == buffer.Length)
-            {
-                if (rpos == 0)
-                {
-                    MonitorExit();
-                    return len;
-                }
-                wpos = 0;
-            }
-            if (rpos <= wpos)
-            {
-                len = buffer.Length - wpos;
-                MonitorExit();
-                return len;
-            }
-            MonitorExit();
-            return rpos - wpos - 1;
+            msgReader.Reset();
+            ringBuffer.Reset();
+            Array.Clear(readBuffer, 0, readBuffer.Length);
         }
 
         public void StartRecv() 
@@ -77,47 +51,24 @@
             Socket socket = network.socket;
             while (true)
             {
-                int first = 0;
-                int space = Free();
-                while (space == 0)
-                {
-                    if (first > 0)
-                    {
-                        if (first > 1000)
-                        {
-                            Event.FireIn("OnCloseNetwork", new object[] { network });
-                            Debug.Log("");
-                            return;
-                        }
-                        System.Threading.Thread.Sleep(5);
-                    }
-                    ++first;
-                    space = Free();
-                }
-                int len = 0;
                 try
                 {
-                    //Debug.Log("recv start");
-                    len = socket.Receive(buffer, wpos, space, 0);
-                    //Debug.Log("recv end " + len);
+                    int len = socket.Receive(readBuffer, 0, Config.tcpPacketMax, 0);
+                    if (len < 0)
+                    {
+                        Event.FireIn("OnCloseNetwork", new object[] { network });
+                        return;
+                    }
+                    while (ringBuffer.GetResLen() < len)
+                    {
+                        System.Threading.Thread.Sleep(10);
+                    }
+                    ringBuffer.Write(readBuffer, 0, len);
                 }
                 catch (SocketException e)
                 {
+                    Debug.LogError(e.ToString());
                     Event.FireIn("OnCloseNetwork", new object[] { network });
-                    Debug.LogError("AsyncReceive:" + e.ToString());
-                    return;
-                }
-                if (len > 0)
-                {
-                    MonitorEnter();
-                    wpos = wpos + len;
-                    rlen = rlen + len;
-                    MonitorExit();
-                }
-                else
-                {
-                    Event.FireIn("OnCloseNetwork", new object[] { network });
-                    Debug.Log(len);
                     return;
                 }
             }
@@ -134,9 +85,7 @@
         // 主线程
         public void Process()
         {
-            MonitorEnter();
             msgReader.Process();
-            MonitorExit();
         }
         
     }

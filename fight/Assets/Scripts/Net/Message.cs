@@ -65,19 +65,5 @@
             }
             return type;
         }
-
-        //public static void Register(System.Reflection.Assembly assembly)
-        //{
-        //    if (protoMap.Count > 0)
-        //    {
-        //        // error
-        //        return;
-        //    }
-        //    foreach (Type type in assembly.GetTypes())
-        //    {
-        //        if (!type.IsAbstract && !type.IsInterface && type.GetCustomAttributes(typeof(ProtoBuf.ProtoContractAttribute), false).Length > 0)
-        //            protoMap[type.Name] = type;
-        //    }
-        //}
     }
 }

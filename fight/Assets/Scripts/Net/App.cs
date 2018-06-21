@@ -8,10 +8,10 @@
 
     public class App
     {
-        public static App app = null;
-        private static readonly object locker = new object();
-        public Net.Network network = null;
-        public Thread netThread = null;
+        private static readonly object          locker = new object();
+        public static App                       app = null;
+        public Net.Network                      network = null;
+        public Thread                           netThread = null;
 
         public static App Instance()
         {
@@ -43,6 +43,10 @@
 
         public void ProcessMain()
         {
+            // logic and view in same thread 
+            Net.Event.ProcessInEvent();
+            Game.Fighting.Update();
+
             Net.Event.ProcessOutEvent();
         }
 
@@ -55,7 +59,8 @@
                 {
                     App.Instance().network.Process();
                 }
-                Net.Event.ProcessInEvent();
+                // logic and view in same thread 
+                //Net.Event.ProcessInEvent();
                 System.Threading.Thread.Sleep(5);
             }
         }

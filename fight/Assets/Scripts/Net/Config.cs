@@ -12,6 +12,7 @@
     public class Config
     {
         public static int tcpPacketMax = 10240;
+        public static int recvRingBuffMax = 102400;
         public static string ip = "139.199.82.153";
         public static int port = 7769;
         public static string loginIp = "139.199.82.153";

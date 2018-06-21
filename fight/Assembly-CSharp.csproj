@@ -221,6 +221,7 @@
      <Compile Include="Assets\Scripts\Net\ObjectPool.cs" />
      <Compile Include="Assets\Scripts\Net\PacketReceiver.cs" />
      <Compile Include="Assets\Scripts\Net\PacketSender.cs" />
+     <Compile Include="Assets\Scripts\Net\RingBuffer.cs" />
      <Compile Include="Assets\Scripts\Test\JsonTest.cs" />
      <Compile Include="Assets\Scripts\Test\Test1.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />

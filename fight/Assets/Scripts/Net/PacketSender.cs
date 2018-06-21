@@ -14,27 +14,25 @@
 
     public class PacketSender
     {
-        public delegate void AsyncSendMethod();
-        AsyncSendMethod asyncSendMethod;
-        public Network network;
-        private byte[] buffer;
-        public int wpos = 0;
-        public int spos = 0;
-        public int wLen = 0;
- 
-        public PacketSender(Network network_) 
+        public delegate void                AsyncSendMethod();
+        AsyncSendMethod                     asyncSendMethod;
+        public Network                      network;
+        public RingBuffer                   ringBuffer;
+        private byte[]                      sendBuffer;
+
+        public PacketSender(Network net) 
         {
             asyncSendMethod = new AsyncSendMethod(this.AsyncSend);
-            network = network_;
-            buffer = new byte[Config.tcpPacketMax];
-            Clear();
+            network = net;
+            ringBuffer = new RingBuffer(Config.recvRingBuffMax);
+            sendBuffer = new byte[Config.recvRingBuffMax];
+            Reset();
         }
 
-        public void Clear()
+        public void Reset()
         {
-            wpos = 0;
-            spos = 0;
-            wLen = 0;
+            ringBuffer.Reset();
+            Array.Clear(sendBuffer, 0, sendBuffer.Length);
         }
 
         public void Send(object tmsg)
@@ -43,61 +41,22 @@
             {
                 ProtoBuf.Serializer.NonGeneric.Serialize(ms, tmsg);
                 int msgLen = (int)ms.Position;
-                if (buffer.Length - wLen < msgLen + 10)
+                while (ringBuffer.GetResLen() < msgLen + 10)
                 {
-                    return;
+                    System.Threading.Thread.Sleep(10);
                 }
-
                 string msgName = tmsg.GetType().Name;
                 msgName = "battle_msg." + msgName;
                 Debug.Log("send msg " + msgName);
-                Array.Copy(BitConverter.GetBytes(msgName.Length), 0, buffer, wpos, 4);
-                wpos = wpos + 4;
-                wLen = wLen + 4;
-
-                Array.Copy(BitConverter.GetBytes(msgLen), 0, buffer, wpos, 4);
-                wpos = wpos + 4;
-                wLen = wLen + 4;
-
-                Array.Copy(BitConverter.GetBytes(MsgType.pb), 0, buffer, wpos, 4);
-                wpos = wpos + 4;
-                wLen = wLen + 4;
-
                 int sid = 1;
-                Array.Copy(BitConverter.GetBytes(sid), 0, buffer, wpos, 4);
-                wpos = wpos + 4;
-                wLen = wLen + 4;
-
                 int tid = 1;
-                Array.Copy(BitConverter.GetBytes(tid), 0, buffer, wpos, 4);
-                wpos = wpos + 4;
-                wLen = wLen + 4;
-
-                Array.Copy(System.Text.Encoding.ASCII.GetBytes(msgName), 0, buffer, wpos, msgName.Length);
-                wpos = wpos + msgName.Length;
-                wLen = wLen + msgName.Length;
-
-                var fullBytes = ms.GetBuffer();
-                if (buffer.Length - wpos > msgLen)
-                {
-                    Array.Copy(fullBytes, 0, buffer, wpos, msgLen);
-                    wpos = wpos + msgLen;
-                    wLen = wLen + msgLen;
-                }
-                else if (buffer.Length - wpos == msgLen)
-                {
-                    Array.Copy(fullBytes, 0, buffer, wpos, msgLen);
-                    wpos = 0;
-                    wLen = wLen + msgLen;
-                }
-                else
-                {
-                    Array.Copy(fullBytes, 0, buffer, wpos, buffer.Length - wpos);
-                    Array.Copy(fullBytes, buffer.Length - wpos, buffer, 0, msgLen - buffer.Length + wpos);
-                    wpos = msgLen - buffer.Length + wpos;
-                    wLen = wLen + msgLen;
-                }
-
+                ringBuffer.Write(BitConverter.GetBytes(msgName.Length), 0, 4);
+                ringBuffer.Write(BitConverter.GetBytes(msgLen), 0, 4);
+                ringBuffer.Write(BitConverter.GetBytes(MsgType.pb), 0, 4);
+                ringBuffer.Write(BitConverter.GetBytes(sid), 0, 4);
+                ringBuffer.Write(BitConverter.GetBytes(tid), 0, 4);
+                ringBuffer.Write(System.Text.Encoding.ASCII.GetBytes(msgName), 0, msgName.Length);
+                ringBuffer.Write(ms.GetBuffer(), 0, msgLen);
             }
             asyncSendMethod.BeginInvoke(OnSent, null);
         }
@@ -112,33 +71,20 @@
             Socket socket = network.socket;
             while (true)
             {
-                if (wLen <= 0)
+                if (ringBuffer.GetDataLen() <= 0)
                 {
                     return;
                 }
-                int len;
                 try
                 {
-                    if (buffer.Length - spos >= wLen)
-                    {
-                        len = socket.Send(buffer, spos, wLen, 0);
-                    }
-                    else
-                    {
-                        len = socket.Send(buffer, spos, buffer.Length - spos, 0);
-                    }
+                    int len = ringBuffer.ReadAll(sendBuffer, 0);
+                    len = socket.Send(sendBuffer, 0, len, 0);
                 }
                 catch (Exception e)
                 {
                     Event.FireIn("OnCloseNetwork", new object[] { network });
                     Debug.Log("AsyncSend:" + e.ToString());
                     return;
-                }
-                spos = spos + len;
-                wLen = wLen - len;
-                if (spos == buffer.Length)
-                {
-                    spos = 0;
                 }
             }
         }

@@ -49,7 +49,7 @@
                 del = true;
                 return;
             }
-            if (Vector3.Distance(pos, lastLocalPos) > 0.5f)
+            if (Vector3.Distance(pos, lastLocalPos) > 2.0f)
             {
                 Net.Event.FireOut("OnBulletUpdatePos", new object[] { this.renderObj, pos });
                 lastLocalPos = pos;
