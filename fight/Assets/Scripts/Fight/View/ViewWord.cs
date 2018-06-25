@@ -34,7 +34,7 @@ public class ViewWord : MonoBehaviour {
         Net.Event.RegisterOut("OnEntityDestroy", this, "OnEntityDestroy");
         Net.Event.RegisterOut("OnBulletCreate", this, "OnBulletCreate");
         Net.Event.RegisterOut("OnBulletDestroy", this, "OnBulletDestroy");
-        Net.Event.RegisterOut("OnBulletUpdatePos", this, "OnBulletUpdatePos");
+        Net.Event.RegisterOut("OnBulletUpdateState", this, "OnBulletUpdateState");
     }
 
     public void OnEntityCreate(Game.Entity entity)
@@ -69,7 +69,7 @@ public class ViewWord : MonoBehaviour {
         GameStatic.bulletMgr.DestoryBullet(bullet.id);
     }
 
-    public void OnBulletUpdatePos(object obj, Vector3 pos)
+    public void OnBulletUpdateState(object obj, Vector3 pos, Vector3 speed)
     {
         if (obj == null)
         {
@@ -77,5 +77,7 @@ public class ViewWord : MonoBehaviour {
         }
         GameObject bullet = obj as GameObject;
         bullet.transform.position = pos;
+        Rigidbody rig = bullet.GetComponent<Rigidbody>();
+        rig.velocity = speed;
     }
 }

@@ -195,6 +195,7 @@
      <Compile Include="Assets\Scripts\Common\Config\ConfigMgr.cs" />
      <Compile Include="Assets\Scripts\Common\ProtoBuf\battle.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\Bullet.cs" />
+     <Compile Include="Assets\Scripts\Fight\Game\Config.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\Entity.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\Fighting.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\GameWord.cs" />

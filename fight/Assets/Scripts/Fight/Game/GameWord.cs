@@ -170,12 +170,16 @@
             bullet.typeId = info.type_id;
             bullet.camp = info.camp;
             bullet.damage = info.damage;
+            bullet.path = info.path;
             bullet.beginPos.x = info.pos.x;
             bullet.beginPos.y = info.pos.y;
             bullet.beginPos.z = info.pos.z;
             bullet.pos.x = info.pos.x;
             bullet.pos.y = info.pos.y;
             bullet.pos.z = info.pos.z;
+            bullet.beginSpeed.x = info.begin_speed.x;
+            bullet.beginSpeed.y = info.begin_speed.y;
+            bullet.beginSpeed.z = info.begin_speed.z;
             bullet.speed.x = info.speed.x;
             bullet.speed.y = info.speed.y;
             bullet.speed.z = info.speed.z;
