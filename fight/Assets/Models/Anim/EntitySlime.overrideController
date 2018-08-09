@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: EntitySlime
+  m_Controller: {fileID: 9100000, guid: 6ee5350dc1204fd4bbef809fdbf71267, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400010, guid: 0a84e7512a821104d907910edcc429d1, type: 3}
+    m_OverrideClip: {fileID: 7400004, guid: b5c7ea7a702c9704486f4543564b8999, type: 3}
+  - m_OriginalClip: {fileID: 7400016, guid: 0a84e7512a821104d907910edcc429d1, type: 3}
+    m_OverrideClip: {fileID: 7400014, guid: b5c7ea7a702c9704486f4543564b8999, type: 3}
+  - m_OriginalClip: {fileID: 7400002, guid: 0a84e7512a821104d907910edcc429d1, type: 3}
+    m_OverrideClip: {fileID: 7400000, guid: b5c7ea7a702c9704486f4543564b8999, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 0a84e7512a821104d907910edcc429d1, type: 3}
+    m_OverrideClip: {fileID: 7400020, guid: b5c7ea7a702c9704486f4543564b8999, type: 3}

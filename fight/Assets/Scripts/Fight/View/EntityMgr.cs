@@ -31,7 +31,7 @@ public class EntityMgr : MonoBehaviour {
         }
     }
 
-    public GameObject CreateEntity(int id, int typeId)
+    public GameObject CreateEntity(int id, int typeId, int camp)
     {
         GameObject entity = null;
         if (entitys.TryGetValue(id, out entity))
@@ -44,6 +44,10 @@ public class EntityMgr : MonoBehaviour {
             return null;
         }
         entity = Instantiate(entPrefab);
+        if (camp == 2)
+        {
+            entity.transform.Rotate(0, 180, 0);
+        }
         //entity.AddComponent<Entity>();
         entitys[id] = entity;
         return entity;

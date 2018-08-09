@@ -4,9 +4,64 @@ timeCreated: 18446744011573954816
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
+    100000: bone01
+    100002: bone02
+    100004: bone03
+    100006: bone04
+    100008: bone05
+    100010: bone06
+    100012: bone07
+    100014: bone08
+    100016: bone09
+    100018: bone10
+    100020: bone11
+    100022: bone12
+    100024: bone13
+    100026: Dummy01
+    100028: //RootNode
+    100030: slime
+    100032: slime_eye
+    400000: bone01
+    400002: bone02
+    400004: bone03
+    400006: bone04
+    400008: bone05
+    400010: bone06
+    400012: bone07
+    400014: bone08
+    400016: bone09
+    400018: bone10
+    400020: bone11
+    400022: bone12
+    400024: bone13
+    400026: Dummy01
+    400028: //RootNode
+    400030: slime
+    400032: slime_eye
+    2300000: slime_eye
+    3300000: slime_eye
     4300000: slime
     4300002: slime_eye
-  externalObjects: {}
+    7400000: idle
+    7400002: move
+    7400004: attack1
+    7400006: attack2
+    7400008: hiphop
+    7400010: hit1
+    7400012: hit2
+    7400014: die
+    7400016: idle2
+    7400018: ALLANIMS
+    7400020: dance
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: slime
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: slime1
+    second: {fileID: 2100000, guid: ebb2e7c72eef4124fb5282df7944d39b, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -25,7 +80,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -44,7 +99,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 1
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -385,10 +440,10 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 1
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

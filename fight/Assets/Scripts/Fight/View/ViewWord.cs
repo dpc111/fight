@@ -33,13 +33,14 @@ public class ViewWord : MonoBehaviour {
         Net.Event.RegisterOut("OnEntityCreate", this, "OnEntityCreate");
         Net.Event.RegisterOut("OnEntityDestroy", this, "OnEntityDestroy");
         Net.Event.RegisterOut("OnBulletCreate", this, "OnBulletCreate");
+        Net.Event.RegisterOut("OnEnitytFire", this, "OnEnitytFire");
         Net.Event.RegisterOut("OnBulletDestroy", this, "OnBulletDestroy");
         Net.Event.RegisterOut("OnBulletUpdateState", this, "OnBulletUpdateState");
     }
 
     public void OnEntityCreate(Game.Entity entity)
     {
-        GameObject entObject = GameStatic.entityMgr.CreateEntity(entity.id, entity.typeId);
+        GameObject entObject = GameStatic.entityMgr.CreateEntity(entity.id, entity.typeId, entity.camp);
         entity.renderObj = entObject;
         entObject.transform.position = entity.pos;
         Debug.Log(entity.pos.x);
@@ -49,8 +50,16 @@ public class ViewWord : MonoBehaviour {
         entity.bloodBar = GameStatic.guiWord.OnCreateBloodBar(entObject.transform.position);
     }
 
+    public void OnEnitytFire(Game.Entity entity)
+    {
+        GameObject ent = entity.renderObj as GameObject;
+        ent.GetComponent<EntityAnimator>().SetState(EntityAnimator.stateAttack);               
+    }
+
     public void OnEntityDestroy(Game.Entity entity)
     {
+        GameObject ent = entity.renderObj as GameObject;
+        ent.GetComponent<EntityAnimator>().SetState(EntityAnimator.stateIdle);
         GameStatic.entityMgr.DestroyEnity(entity.id);
         GameStatic.gridMgr.GetGridInfo(entity.row, entity.col).SetGridUnUsed();
     }

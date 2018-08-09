@@ -141,7 +141,6 @@
 
         public static void RemoveEntity(int id)
         {
-            Debug.LogError(".................");
             Entity entity = GetEntity(id);
             if (entity == null)
             {
@@ -242,6 +241,8 @@
             {
                 return;
             }
+            Entity entity = GetEntity(msg.eid);
+            entity.OnFire();
             CreateBullet(msg.binfo);
         }
 

@@ -12,7 +12,7 @@
          "gun_pos" : [1,2,0],
          "fire_begin_time" : 2,
          "fire_end_time" : 1,
-         "entity_prefab" : "Entity/Entity1"
+         "entity_prefab" : "Entity/Slime"
       },
       {
          "id" : 2,
@@ -27,7 +27,7 @@
          "gun_pos" : [1,2,0],
          "fire_begin_time" : 1,
          "fire_end_time" : 1,
-         "entity_prefab" : "Entity/Entity2"
+         "entity_prefab" : "Entity/Plant"
       },
       {
          "id" : 3,
@@ -42,7 +42,7 @@
          "gun_pos" : [1,2,0],
          "fire_begin_time" : 1,
          "fire_end_time" : 1,
-         "entity_prefab" : "Entity/Entity3"
+         "entity_prefab" : "Entity/Elongata"
       },
       {
          "id" : 4,
@@ -57,6 +57,6 @@
          "gun_pos" : [1,2,0],
          "fire_begin_time" : 2,
          "fire_end_time" : 1,
-         "entity_prefab" : "Entity/Entity3"
+         "entity_prefab" : "Entity/Elongata"
       }
 ]
