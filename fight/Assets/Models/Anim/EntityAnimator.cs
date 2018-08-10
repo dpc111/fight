@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EntityAnimator : MonoBehaviour {
-    public static int stateIdle = 1;
-    public static int stateAttack = 2;
-    public static int stateDeath = 3;
+    public static int stateApper = 1;
+    public static int stateIdle = 2;
+    public static int stateAttack = 3;
+    public static int stateDeath = 4;
     Animator animator;
 
 	void Start () {
@@ -38,13 +39,17 @@ public class EntityAnimator : MonoBehaviour {
             //Debug.LogError("");
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
             int state = animator.GetInteger("state");
+            if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.Appear"))
+            {
+                animator.SetInteger("state", 2);
+            }
             if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.Idle"))
             {
                 //animator.SetInteger("state", 1);                
             }
             if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.Attack"))
             {
-               animator.SetInteger("state", 1);
+               animator.SetInteger("state", 2);
             }
             if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.Death"))
             {

@@ -17,9 +17,7 @@ public class ViewWord : MonoBehaviour {
 
     void Update()
     {
-        // test
-        //GameObject obj = GameObject.Find("UI Root/Slider");
-        //obj.GetComponent<UISlider>().value = obj.GetComponent<UISlider>().value - 0.001f;
+
     }
 
     public void DeregisterEvents()
@@ -33,9 +31,11 @@ public class ViewWord : MonoBehaviour {
         Net.Event.RegisterOut("OnEntityCreate", this, "OnEntityCreate");
         Net.Event.RegisterOut("OnEntityDestroy", this, "OnEntityDestroy");
         Net.Event.RegisterOut("OnBulletCreate", this, "OnBulletCreate");
-        Net.Event.RegisterOut("OnEnitytFire", this, "OnEnitytFire");
         Net.Event.RegisterOut("OnBulletDestroy", this, "OnBulletDestroy");
         Net.Event.RegisterOut("OnBulletUpdateState", this, "OnBulletUpdateState");
+        Net.Event.RegisterOut("OnEntityBore", this, "OnEntityBore");
+        Net.Event.RegisterOut("OnEntityFire", this, "OnEntityFire");
+        Net.Event.RegisterOut("OnEntityDeath", this, "OnEntityDeath");
     }
 
     public void OnEntityCreate(Game.Entity entity)
@@ -50,17 +50,11 @@ public class ViewWord : MonoBehaviour {
         entity.bloodBar = GameStatic.guiWord.OnCreateBloodBar(entObject.transform.position);
     }
 
-    public void OnEnitytFire(Game.Entity entity)
-    {
-        GameObject ent = entity.renderObj as GameObject;
-        ent.GetComponent<EntityAnimator>().SetState(EntityAnimator.stateAttack);               
-    }
-
     public void OnEntityDestroy(Game.Entity entity)
     {
         GameObject ent = entity.renderObj as GameObject;
         ent.GetComponent<EntityAnimator>().SetState(EntityAnimator.stateIdle);
-        GameStatic.entityMgr.DestroyEnity(entity.id);
+        GameStatic.entityMgr.DestroyEntity(entity.id);
         GameStatic.gridMgr.GetGridInfo(entity.row, entity.col).SetGridUnUsed();
     }
 
@@ -88,5 +82,35 @@ public class ViewWord : MonoBehaviour {
         bullet.transform.position = pos;
         Rigidbody rig = bullet.GetComponent<Rigidbody>();
         rig.velocity = speed;
+    }
+
+    public void OnEntityBore(object obj)
+    {
+        //if (obj == null)
+        //{
+        //    return;
+        //}
+        //GameObject entity = obj as GameObject;
+        //entity.GetComponent<EntityAnimator>().SetState(EntityAnimator.stateApper);               
+    }
+
+    public void OnEntityFire(object obj)
+    {
+        if (obj == null)
+        {
+            return;
+        }
+        GameObject entity = obj as GameObject;
+        entity.GetComponent<EntityAnimator>().SetState(EntityAnimator.stateAttack); 
+    }
+
+    public void OnEntityDeath(object obj)
+    {
+        if (obj == null)
+        {
+            return;
+        }
+        GameObject entity = obj as GameObject;
+        entity.GetComponent<EntityAnimator>().SetState(EntityAnimator.stateDeath);
     }
 }

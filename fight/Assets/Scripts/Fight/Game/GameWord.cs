@@ -71,9 +71,10 @@
             Net.Event.RegisterIn("battle_msg.s_get_room_info", this, "s_get_room_info");
             Net.Event.RegisterIn("battle_msg.s_room_state", this, "s_room_state");
             Net.Event.RegisterIn("battle_msg.s_create_entity", this, "s_create_entity");
-            Net.Event.RegisterIn("battle_msg.s_destroy_entity", this, "s_destroy_entity");
+            //Net.Event.RegisterIn("battle_msg.s_destroy_entity", this, "s_destroy_entity");
             Net.Event.RegisterIn("battle_msg.s_fire", this, "s_fire");
             Net.Event.RegisterIn("battle_msg.s_collision", this, "s_collision");
+            Net.Event.RegisterIn("battle_msg.s_update_state", this, "s_update_state");
 
             Net.Event.RegisterIn("VOnCreateEntity", this, "VOnCreateEntity");
             Net.Event.RegisterIn("VFightSenceLoadOver", this, "VFightSenceLoadOver");
@@ -226,14 +227,14 @@
             CreateEntity(msg.einfo);  
         }
 
-        public void s_destroy_entity(battle_msg.s_destroy_entity msg)
-        {
-            if (!ExistEntity(msg.eid))
-            {
-                return;
-            }
-            RemoveEntity(msg.eid);
-        }
+        //public void s_destroy_entity(battle_msg.s_destroy_entity msg)
+        //{
+        //    if (!ExistEntity(msg.eid))
+        //    {
+        //        return;
+        //    }
+        //    RemoveEntity(msg.eid);
+        //}
 
         public void s_fire(battle_msg.s_fire msg)
         {
@@ -242,7 +243,6 @@
                 return;
             }
             Entity entity = GetEntity(msg.eid);
-            entity.OnFire();
             CreateBullet(msg.binfo);
         }
 
@@ -258,9 +258,73 @@
             }
             Entity entity = GetEntity(msg.einfo.id);
             entity.SetBlood(msg.einfo.blood);
-            if (msg.bullet_destroy)
+            //if (msg.bullet_destroy)
+            //{
+            //    RemoveBullet(msg.binfo.id);
+            //}
+        }
+
+        public void s_update_state(battle_msg.s_update_state msg)
+        {
+            foreach (var st in msg.states)
             {
-                RemoveBullet(msg.binfo.id);
+                int state = st.state;
+                int id = st.id;
+                Entity entity = null;
+                Bullet bullet = null;
+                if (state == Const.ENTITY_STATE_BORN ||
+                    state == Const.ENTITY_STATE_IDLE ||
+                    state == Const.ENTITY_STATE_FIRE ||
+                    state == Const.ENTITY_STATE_DEATH ||
+                    state == Const.ENTITY_STATE_DEL)
+                {
+                    entity = GetEntity(id);
+                    if (entity == null)
+                    {
+                        continue;
+                    }
+                }
+                else if (state == Const.BULLET_STATE_BORN ||
+                    state == Const.BULLET_STATE_FLY ||
+                    state == Const.BULLET_STATE_HIT ||
+                    state == Const.BULLET_STATE_DEL)
+                {
+                    bullet = GetBullet(id);
+                    if (bullet == null)
+                    {
+                        continue;
+                    }
+                }
+
+                switch (state)
+                {
+                    case Const.ENTITY_STATE_BORN:
+                        Net.Event.FireOut("OnEntityBore", new object[] { entity.renderObj }); 
+                        break;
+                    case Const.ENTITY_STATE_IDLE:
+                        break;
+                    case Const.ENTITY_STATE_FIRE:
+                        Net.Event.FireOut("OnEntityFire", new object[] { entity.renderObj }); 
+                        break;
+                    case Const.ENTITY_STATE_DEATH:
+                        Net.Event.FireOut("OnEntityDeath", new object[] { entity.renderObj });                        
+                        break;
+                    case Const.ENTITY_STATE_DEL:
+                        RemoveEntity(id);
+                        break; 
+
+                    case Const.BULLET_STATE_BORN:
+                        break;
+                    case Const.BULLET_STATE_FLY:
+                        break;
+                    case Const.BULLET_STATE_HIT:
+                        break;
+                    case Const.BULLET_STATE_DEL:
+                        RemoveBullet(id);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

@@ -53,6 +53,7 @@
             Register("battle_msg.s_fire", typeof(battle_msg.s_fire));
             Register("battle_msg.s_collision", typeof(battle_msg.s_collision));
             Register("battle_msg.s_destroy_entity", typeof(battle_msg.s_destroy_entity));
+            Register("battle_msg.s_update_state", typeof(battle_msg.s_update_state));
         }
 
         public static Type GetProtoType(string name)

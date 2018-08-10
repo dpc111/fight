@@ -194,6 +194,7 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
      <Compile Include="Assets\Prefabs\UI\Test.cs" />
      <Compile Include="Assets\Scripts\Common\Config\ConfigMgr.cs" />
+     <Compile Include="Assets\Scripts\Common\const\Const.cs" />
      <Compile Include="Assets\Scripts\Common\ProtoBuf\battle.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\Bullet.cs" />
      <Compile Include="Assets\Scripts\Fight\Game\Config.cs" />

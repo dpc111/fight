@@ -39,11 +39,6 @@
             Net.Event.FireOut("OnEntityCreate", new object[] {this});
         }
 
-        public void OnFire()
-        {
-            Net.Event.FireOut("OnEnitytFire", new object[] { this });
-        }
-
         public virtual void OnDestroy()
         {
             Net.Event.FireOut("OnEntityDestroy", new object[] { this });
