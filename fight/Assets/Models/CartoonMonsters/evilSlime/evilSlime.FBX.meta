@@ -4,8 +4,38 @@ timeCreated: 18446744011573954816
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
+    100000: Box01
+    100002: Box02
+    100004: Box03
+    100006: Box04
+    100008: Box05
+    100010: EvilSlime
+    100012: //RootNode
+    400000: Box01
+    400002: Box02
+    400004: Box03
+    400006: Box04
+    400008: Box05
+    400010: EvilSlime
+    400012: //RootNode
     4300000: EvilSlime
-  externalObjects: {}
+    7400000: idle
+    7400002: move
+    7400004: attack1
+    7400006: attack2
+    7400008: hit1
+    7400010: hit2
+    7400012: die
+    7400014: ALLANIMS
+    7400016: dance
+    11100000: //RootNode
+    13700000: EvilSlime
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: evilslime_dark
+    second: {fileID: 2100000, guid: 2bac8ad97cf405644a73c4e79063711d, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

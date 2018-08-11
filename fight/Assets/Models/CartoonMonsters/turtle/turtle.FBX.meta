@@ -4,8 +4,85 @@ timeCreated: 18446744011573954816
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
+    100000: Box01
+    100002: Box02
+    100004: Box03
+    100006: Box04
+    100008: Box05
+    100010: Box06
+    100012: Box07
+    100014: Box08
+    100016: Box09
+    100018: Box10
+    100020: Box11
+    100022: Box12
+    100024: Box13
+    100026: Box14
+    100028: Box15
+    100030: Box16
+    100032: Box17
+    100034: Box18
+    100036: Box19
+    100038: Dummy01
+    100040: Dummy02
+    100042: Dummy04
+    100044: Dummy05
+    100046: Dummy06
+    100048: IK Chain01
+    100050: IK Chain02
+    100052: IK Chain03
+    100054: IK Chain04
+    100056: //RootNode
+    100058: turtle
+    400000: Box01
+    400002: Box02
+    400004: Box03
+    400006: Box04
+    400008: Box05
+    400010: Box06
+    400012: Box07
+    400014: Box08
+    400016: Box09
+    400018: Box10
+    400020: Box11
+    400022: Box12
+    400024: Box13
+    400026: Box14
+    400028: Box15
+    400030: Box16
+    400032: Box17
+    400034: Box18
+    400036: Box19
+    400038: Dummy01
+    400040: Dummy02
+    400042: Dummy04
+    400044: Dummy05
+    400046: Dummy06
+    400048: IK Chain01
+    400050: IK Chain02
+    400052: IK Chain03
+    400054: IK Chain04
+    400056: //RootNode
+    400058: turtle
     4300000: turtle
-  externalObjects: {}
+    7400000: idle
+    7400002: move
+    7400004: attack1
+    7400006: attack2
+    7400008: hit1
+    7400010: hit2
+    7400012: die
+    7400014: swim
+    7400016: ALLANIMS
+    7400018: dance
+    11100000: //RootNode
+    13700000: turtle
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: turtle1
+    second: {fileID: 2100000, guid: 9cbe2005ba045134faf3f24533d0c89b, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
