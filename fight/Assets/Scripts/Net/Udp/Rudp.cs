@@ -160,7 +160,18 @@
 		    c.ack = recvMinSeq + 1;
 		    sendQueue.AddFirst(c);
 		    ++reqTimes;
-	    } 
+	    }
+
+        public void SendChunkForce(UdpChunk c) {
+            sendQueue.AddFirst(c);
+        }
+
+        public void SendBuffIn(UdpChunk c) {
+            c.type = UdpConst.udpTypeData;
+            c.seq = ++sendSeq;
+            c.ack = recvMinSeq;
+            sendQueue.AddLast(c);
+        }
 
 	    public void SendBuffIn(byte[] buff, int size) {
 		    if (size > UdpConst.udpDataMaxLen) {

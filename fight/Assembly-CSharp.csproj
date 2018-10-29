@@ -239,6 +239,7 @@
      <Compile Include="Assets\Scripts\Net\Udp\Rudp.cs" />
      <Compile Include="Assets\Scripts\Net\Udp\UdpChunk.cs" />
      <Compile Include="Assets\Scripts\Net\Udp\UdpConst.cs" />
+     <Compile Include="Assets\Scripts\Net\Udp\UdpMsg.cs" />
      <Compile Include="Assets\Scripts\Net\Udp\UdpNet.cs" />
      <Compile Include="Assets\Scripts\Test\JsonTest.cs" />
      <Compile Include="Assets\Scripts\Test\Test1.cs" />
