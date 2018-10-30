@@ -26,7 +26,7 @@
         public void Start()
         {
             rudp = new Rudp();
-            rudp.Init(0);
+            rudp.Init(NetTool.GetMilSec());
             clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             clientSocket.Bind(new IPEndPoint(IPAddress.Parse(clientIp), clientPort));
             serverPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
@@ -56,17 +56,19 @@
             }
         }
 
-        public void Send(int uid, int msgid, Object obj)
+        public void Send(int msgid, Object obj)
         {
             UdpChunk c = new UdpChunk();
-            NetTool.Int32ToBytes(ref c.buff, 0, uid);
+            int offset = 0;
             NetTool.Int32ToBytes(ref c.buff, 4, msgid);
+            offset += 4;
             int size = Marshal.SizeOf(obj);  
             IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(obj, ptr, false);
-            Marshal.Copy(ptr, c.buff, 8, size);
+            Marshal.Copy(ptr, c.buff, offset, size);
+            offset += size;
             Marshal.FreeHGlobal(ptr);
-            c.size = (byte)(size + 8);
+            c.size = (byte)offset;
             Monitor.Enter(rudp);
             rudp.SendBuffIn(c);
             Monitor.Exit(rudp);
@@ -83,30 +85,38 @@
                 {
                     break;
                 }
-                if (c.size < 12)
+                if (c.size < 4)
                 {
                     break;
                 }
-                int uid = NetTool.BytesToInt32(ref c.buff, 0);
-                int msgid = NetTool.BytesToInt32(ref c.buff, 4);
-                Type type = UdpMsg.Proto(msgid);
-                if (type == null)
+                int offset = 0;
+                int frame = NetTool.BytesToInt32(ref c.buff, 0);
+                offset += 4;
+                while (c.size - offset > 8)
                 {
-                    break;
+                    int uid = NetTool.BytesToInt32(ref c.buff, offset);
+                    offset += 4;
+                    int msgid = NetTool.BytesToInt32(ref c.buff, offset);
+                    offset += 4;
+                    Type type = UdpMsg.Proto(msgid);
+                    if (type == null)
+                    {
+                        break;
+                    }
+                    int sizeObj = Marshal.SizeOf(type);
+                    if (sizeObj < c.size - offset)
+                    {
+                        break;
+                    }
+                    IntPtr ptr = Marshal.AllocHGlobal(sizeObj);
+                    Marshal.Copy(c.buff, offset, ptr, sizeObj);
+                    offset += sizeObj;
+                    object obj = Marshal.PtrToStructure(ptr, type);
+                    Marshal.FreeHGlobal(ptr);
                 }
-                int sizeObj = Marshal.SizeOf(type);
-                if (sizeObj < c.size - 8)  
-                {  
-                    break;  
-                }
-                IntPtr ptr = Marshal.AllocHGlobal(sizeObj);
-                Marshal.Copy(c.buff, 8, ptr, sizeObj);
-                object obj = Marshal.PtrToStructure(ptr, type);
-                Marshal.FreeHGlobal(ptr);
-                // msg call back
             }
             Monitor.Enter(rudp);
-            rudp.HandleProcess(0);
+            rudp.HandleProcess(NetTool.GetMilSec());
             Monitor.Exit(rudp);
         }
 

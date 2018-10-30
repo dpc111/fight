@@ -22,13 +22,14 @@
 
         }
 
-        public static Type Proto(int msgid) {
-  			Type type = null;
+        public static Type Proto(int msgid)
+        {
+            Type type = null;
             if (!msgMap.TryGetValue(msgid, out type))
             {
                 return null;
             }
             return type;
-  		}
+        }
     }
 }
