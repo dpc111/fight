@@ -224,6 +224,7 @@
      <Compile Include="Assets\Scripts\Login\Game\LoginMgr.cs" />
      <Compile Include="Assets\Scripts\Login\GUI\GUIImplLogin.cs" />
      <Compile Include="Assets\Scripts\Login\Test\TestButton.cs" />
+     <Compile Include="Assets\Scripts\math\Fix.cs" />
      <Compile Include="Assets\Scripts\Net\App.cs" />
      <Compile Include="Assets\Scripts\Net\Config.cs" />
      <Compile Include="Assets\Scripts\Net\Event.cs" />
