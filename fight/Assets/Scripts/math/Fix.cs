@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define _CLIENT_LOGIC_
+
+using System;
 using System.IO;
 
 public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
@@ -15,7 +17,7 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     public static readonly Fix fixPi180 = new Fix((long)72);
     public static readonly Fix fixRad2Deg = pi * (Fix)2 / (Fix)360;
     public static readonly Fix fixDeg2Rad = (Fix)360 / (pi * (Fix)2);
-    readonly long rawValue;
+    public readonly long rawValue;
     
     Fix(long value)
     {
@@ -745,6 +747,298 @@ public struct FixVector2
     public UnityEngine.Vector2 ToVector2()
     {
         return new UnityEngine.Vector2((float)x, (float)y);
+    }
+#endif
+}
+
+public struct NormalVector2
+{
+    public float x;
+    public float y;
+
+    public NormalVector2(float x, float y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public NormalVector2(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public NormalVector2(NormalVector2 v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+    }
+
+    public static NormalVector2 operator -(NormalVector2 a, int b)
+    {
+        return new NormalVector2(a.x - b, a.y - b);
+    }
+
+    public float this[int index]
+    {
+        get 
+        {
+            if (index == 0)
+                return x;
+            else
+                return y;
+        }
+        set
+        {
+            if (index == 0)
+                x = value;
+            else
+                y = value;
+        }
+    }
+
+    public static NormalVector2 Zero
+    {
+        get
+        {
+            return new NormalVector2(0, 0);
+        }
+    }
+
+    public static NormalVector2 operator +(NormalVector2 a, NormalVector2 b)
+    {
+        return new NormalVector2(a.x + b.y, a.y + b.y);
+    }
+
+    public static NormalVector2 operator -(NormalVector2 a, NormalVector2 b)
+    {
+        return new NormalVector2(a.x - b.y, a.y - b.y);
+    }
+
+    public static NormalVector2 operator *(NormalVector2 a, float b)
+    {
+        return new NormalVector2(a.x * b, a.y * b);
+    }
+
+    public static NormalVector2 operator *(float a, NormalVector2 b)
+    {
+        return new NormalVector2(a * b.x, a * b.y);
+    }
+
+    public static NormalVector2 operator /(NormalVector2 a, float b)
+    {
+        return new NormalVector2(a.x / b, a.y / b);
+    }
+
+    public static bool operator ==(NormalVector2 a, NormalVector2 b)
+    {
+        return a.x == b.x && a.y == b.y;
+    }
+
+    public static bool operator !=(NormalVector2 a, NormalVector2 b)
+    {
+        return a.x != b.x || a.y != b.y;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is NormalVector2 && ((NormalVector2)obj) == this;
+    }
+
+    public override int GetHashCode()
+    {
+        return this.x.GetHashCode() + this.y.GetHashCode();
+    }
+
+    public static float SqrMod(NormalVector2 a)
+    {
+        return a.x * a.x + a.y * a.y;
+    }
+
+    public static float Mod(NormalVector2 a)
+    {
+        // ???
+        return SqrMod(a);
+    }
+
+    public static float Distance(NormalVector2 a, NormalVector2 b)
+    {
+        return Mod(a - b);
+    }
+
+    public void Normalize()
+    {
+        float n = x * x + y * y;
+        if (n == 0)
+            return;
+        // n = float.Sqrt(n);
+        if (n < (float)0.0001)
+            return;
+        n = 1 / n;
+        x *= n;
+        y *= n;
+    }
+
+    public NormalVector2 GetNormalize()
+    {
+        NormalVector2 v = new NormalVector2(this);
+        v.Normalize();
+        return v;
+    }
+
+    public override string ToString()
+    {
+        return string.Format("x:{0} y:{1}", x, y);
+    }
+
+#if _CLIENT_LOGIC_
+    public UnityEngine.Vector2 ToVector2()
+    {
+        return new UnityEngine.Vector2((float)x, (float)y);
+    }
+#endif
+}
+
+public struct IntVector2
+{
+    public int x;
+    public int y;
+
+    public IntVector2(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public IntVector2(IntVector2 v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+    }
+
+    public static IntVector2 operator -(IntVector2 a, int b)
+    {
+        return new IntVector2(a.x - b, a.y - b);
+    }
+
+    public int this[int index]
+    {
+        get
+        {
+            if (index == 0)
+                return x;
+            else
+                return y;
+        }
+        set
+        {
+            if (index == 0)
+                x = value;
+            else
+                y = value;
+        }
+    }
+
+    public static IntVector2 Zero
+    {
+        get
+        {
+            return new IntVector2(0, 0);
+        }
+    }
+
+    public static IntVector2 operator +(IntVector2 a, IntVector2 b)
+    {
+        return new IntVector2(a.x + b.x, a.y + b.y);
+    }
+
+    public static IntVector2 operator -(IntVector2 a, IntVector2 b)
+    {
+        return new IntVector2(a.x - b.x, a.y - b.y);
+    }
+
+    public static IntVector2 operator *(IntVector2 a, int b)
+    {
+        return new IntVector2(a.x * b, a.y * b);
+    }
+
+    public static IntVector2 operator *(int a, IntVector2 b)
+    {
+        return new IntVector2(a * b.x, a * b.y);
+    }
+
+    public static IntVector2 operator /(IntVector2 a, int b)
+    {
+        return new IntVector2(a.x / b, a.y / b);
+    }
+
+    public static bool operator ==(IntVector2 a, IntVector2 b)
+    {
+        return a.x == b.x && a.y == b.y;
+    }
+
+    public static bool operator !=(IntVector2 a, IntVector2 b)
+    {
+        return a.x != b.x || a.y != b.y;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is IntVector2 && ((IntVector2)obj) == this;
+    }
+
+    public override int GetHashCode()
+    {
+        return this.x.GetHashCode() + this.y.GetHashCode();
+    }
+
+    public static int SqrMod(IntVector2 a)
+    {
+        return a.x * a.x + a.y * a.y;
+    }
+
+    public static int Mod(IntVector2 a)
+    {
+        // ???
+        return IntVector2.SqrMod(a);
+    }
+
+    public static int Distance(IntVector2 a, IntVector2 b)
+    {
+        return Mod(a - b);
+    }
+
+    public void Normalize()
+    {
+        int n = x * x + y * y;
+        if (n == 0)
+            return;
+        // n = int.Sqrt(n);
+        if (n < (int)0.0001)
+        {
+            return;
+        }
+        n = 1 / n;
+        x *= n;
+        y *= n;
+    }
+
+    public IntVector2 GetNormalize()
+    {
+        IntVector2 v = new IntVector2(this);
+        v.Normalize();
+        return v;
+    }
+
+    public override string ToString()
+    {
+        return string.Format("x:{0} y:{1}", x, y);
+    }
+
+#if _CLIENT_LOGIC_
+    public UnityEngine.Vector2 ToVector2()
+    {
+        return new UnityEngine.Vector2((int)x, (int)y);
     }
 #endif
 }
