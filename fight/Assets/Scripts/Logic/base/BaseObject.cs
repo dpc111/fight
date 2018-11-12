@@ -2,10 +2,11 @@
 
 public class BaseObject : UnityObject 
 {
-    public MoveTo mMoveToAction = null;
-    public string mScName = "";
-    public ActionMgr mActionMgr = null;
+    public int mObjType = GameConst.ObjTypeNull;
     public bool mUneffect = false;
+    public MoveTo mActionMoveTo = null;
+    public ActionMgr mActionMgr = null;
+    public StateMachine mStateMachine = null;
 
     public BaseObject()
     {
@@ -20,45 +21,37 @@ public class BaseObject : UnityObject
 
     public void MoveTo(FixVector3 startPos, FixVector3 endPos, Fix time, ActionCallback cb = null)
     {
-        if (mMoveToAction != null)
-        {
+        if (mActionMoveTo != null)
             return;
-        }
-        mMoveToAction = new MoveTo();
-        mMoveToAction.Init(this, startPos, endPos, time, cb);
-        mActionMgr.AddAction(mMoveToAction);
+        mActionMoveTo = new MoveTo();
+        mActionMoveTo.Init(this, startPos, endPos, time, cb);
+        mActionMgr.AddAction(mActionMoveTo);
     }
 
-    public void DelayDo(Fix time, ActionCallback cb, string label = null)
+    public void DelayDo(Fix time, ActionCallback cb, int type = 0)
     {
         DelayDo delayDoAction = new DelayDo();
         delayDoAction.Init(time, cb);
-        if (label != null)
+        if (type != GameConst.ActionChangeNull)
         {
-            delayDoAction.SetLable(label);
+            delayDoAction.SetType(type);
         }
         mActionMgr.AddAction(delayDoAction);
     }
 
     public void StopMove()
     {
-        if (mMoveToAction == null)
-        {
+        if (mActionMoveTo == null)
             return;
-        }
-        mActionMgr.RemoveAction(mMoveToAction);
-        mMoveToAction = null;
+        mActionMgr.RemoveAction(mActionMoveTo);
+        mActionMoveTo = null;
     }
 
-    public void StopActionByLable(string label)
+    public void StopAction(int type)
     {
-        mActionMgr.StopActionByLable(label);
+        mActionMgr.StopAction(type);
     }
 
-    public void StopActionByName(string label)
-    {
-        mActionMgr.StopActionByName(label);
-    }
 
     public void StopAllAction()
     {
@@ -80,28 +73,36 @@ public class BaseObject : UnityObject
         return mFv3LogicPos;
     }
 
-    public void CheckIsDead()
+    public void RecordLastPos()
     {
-        if (mKilled)
-        {
-            KillSelf();
-        }
+        mFv3LastPos = mFv3LogicPos;
     }
 
-    public void KillSelf()
+    virtual public void KillSelf()
     {
         StopAllAction();
         KillActionMgr();
+        if (mStateMachine != null)
+            mStateMachine.ExitState();
         mKilled = true;
         CheckEvent();
     }
 
-    public void RecordLastPos(){
-        mFv3LastPos = mFv3LogicPos;
+    public void CheckIsDead()
+    {
+        if (mKilled)
+            KillSelf();
+    }
+
+    virtual public void CheckState()
+    {
+
     }
 
     public void CheckEvent()
     {
-
+        if (!mKilled)
+            return;
+        mActionMgr.StopActionByKind(GameConst.ActionKindDelayDo);
     }
 }

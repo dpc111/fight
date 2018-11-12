@@ -5,7 +5,7 @@ public class UnityObject
 {
     public string mScBundle = "";
     public string mScAsset = "";
-    public string mScType = "";
+    public int mObjType = GameConst.ObjTypeNull;
     public bool mKilled = false;
     public GameObject mGameObj;
     public FixVector3 mFv3LastPos = new FixVector3(Fix.fixZero, Fix.fixZero, Fix.fixZero);
@@ -22,7 +22,7 @@ public class UnityObject
     {
         if (mKilled)
             return;
-        if ((mScType == "soldier" || mScType == "bullet") && interpolation != 0)
+        if ((mObjType == GameConst.ObjTypeSoldier || mObjType == GameConst.ObjTypeBullet) && interpolation != 0)
             mGameObj.transform.localPosition = Vector3.Lerp(mFv3LastPos.ToVector3(), mFv3LogicPos.ToVector3(), interpolation);
         else
             mGameObj.transform.localPosition = mFv3LogicPos.ToVector3();

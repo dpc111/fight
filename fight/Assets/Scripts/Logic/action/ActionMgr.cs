@@ -16,33 +16,33 @@ public class ActionMgr {
         action.mEnable = false;
     }
 
+    public void StopAction(int type)
+    {
+        for (int i = mListAction.Count - 1; i >= 0; i--)
+        {
+            if (mListAction[i].mType == type)
+            {
+                mListAction.Remove(mListAction[i]);
+            }
+        }
+    }
+
+    public void StopActionByKind(int kind)
+    {
+        for (int i = mListAction.Count - 1; i >= 0; i--)
+        {
+            if (mListAction[i].mKind == kind)
+            {
+                mListAction.Remove(mListAction[i]);
+            }
+        }
+    }
+
     public void StopActionAll()
     {
         for (int i = mListAction.Count - 1; i >= 0; i--)
         {
             mListAction.Remove(mListAction[i]);
-        }
-    }
-
-    public void StopActionByLable(string lable)
-    {
-        for (int i = mListAction.Count - 1; i >= 0; i--)
-        {
-            if (mListAction[i].mScLabel == lable)
-            {
-                mListAction.Remove(mListAction[i]);
-            }
-        }
-    }
-
-    public void StopActionByName(string name)
-    {
-        for (int i = mListAction.Count - 1; i >= 0; i--)
-        {
-            if (mListAction[i].mScName == name)
-            {
-                mListAction.Remove(mListAction[i]);
-            }
         }
     }
 

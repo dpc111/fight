@@ -227,9 +227,15 @@
      <Compile Include="Assets\Scripts\Logic\action\DelayDo.cs" />
      <Compile Include="Assets\Scripts\Logic\action\MoveTo.cs" />
      <Compile Include="Assets\Scripts\Logic\base\BaseObject.cs" />
+     <Compile Include="Assets\Scripts\Logic\base\LiveObject.cs" />
      <Compile Include="Assets\Scripts\Logic\base\Prefabs.cs" />
      <Compile Include="Assets\Scripts\Logic\base\UnityObject.cs" />
+     <Compile Include="Assets\Scripts\Logic\GameConst.cs" />
      <Compile Include="Assets\Scripts\Logic\GameData.cs" />
+     <Compile Include="Assets\Scripts\Logic\state\StateBase.cs" />
+     <Compile Include="Assets\Scripts\Logic\state\StateCooling.cs" />
+     <Compile Include="Assets\Scripts\Logic\state\StateMachine.cs" />
+     <Compile Include="Assets\Scripts\Logic\state\StateNormal.cs" />
      <Compile Include="Assets\Scripts\Login\Game\LoginMgr.cs" />
      <Compile Include="Assets\Scripts\Login\GUI\GUIImplLogin.cs" />
      <Compile Include="Assets\Scripts\Login\Test\TestButton.cs" />

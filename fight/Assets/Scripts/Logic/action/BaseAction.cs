@@ -6,11 +6,11 @@ public delegate void ActionCallback();
 public delegate void ActionCallback<in T>(T value);
 
 public class BaseAction {
-    public ActionCallback mActionCb = null;
     public bool mEnable = true;
-    public string mScLabel = "";
-    public string mScName = "";
-    public BaseObject mUnit = null;
+    public int mType = GameConst.ActionChangeNull;
+    public int mKind = GameConst.ActionKindNull;
+    public ActionCallback mActionCb = null;
+    public BaseObject mObj = null;
     public ActionMgr mMgr = null;
 
     public void SetMgr(ActionMgr mgr)
@@ -28,9 +28,9 @@ public class BaseAction {
         mMgr.RemoveAction(this);
     }
 
-    public void SetLable(string value)
+    public void SetType(int type)
     {
-        mScLabel = value;
+        mType = type;
     }
 
     public virtual void UpdateLogic()

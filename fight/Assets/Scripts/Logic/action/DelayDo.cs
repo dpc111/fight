@@ -20,7 +20,7 @@ public class DelayDo : BaseAction
 
     public void Init(Fix time, ActionCallback cb)
     {
-        mScName = "delaydo";
+        mKind = GameConst.ActionKindDelayDo;
         mFixPlanTime = time;
         mActionCb = cb;
     }

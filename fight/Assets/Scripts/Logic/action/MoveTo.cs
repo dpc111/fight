@@ -19,7 +19,7 @@ public class MoveTo : BaseAction {
             actionOver = true;
         }
         FixVector3 newPos = mFv3StartPos + mFv3Distance * timeScale;
-        mUnit.mFv3LogicPos = newPos;
+        mObj.mFv3LogicPos = newPos;
         if (actionOver)
         {
             RemoveSelf();
@@ -32,9 +32,9 @@ public class MoveTo : BaseAction {
 
     public void Init(BaseObject unitBody, FixVector3 startPos, FixVector3 endPos, Fix time, ActionCallback cb)
     {
-        mScName = "moveto";
-        mUnit = unitBody;
-        mUnit.mFv3LogicPos = startPos;
+        mKind = GameConst.ActionKindMoveTo;
+        mObj = unitBody;
+        mObj.mFv3LogicPos = startPos;
         mFixMoveTime = time;
         mFv3Distance = endPos - startPos;
         mFv3StartPos = startPos;
