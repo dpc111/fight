@@ -230,11 +230,13 @@
      <Compile Include="Assets\Scripts\Logic\base\LiveObject.cs" />
      <Compile Include="Assets\Scripts\Logic\base\Prefabs.cs" />
      <Compile Include="Assets\Scripts\Logic\base\UnityObject.cs" />
+     <Compile Include="Assets\Scripts\Logic\BattleLogic.cs" />
      <Compile Include="Assets\Scripts\Logic\bullet\BaseBullet.cs" />
      <Compile Include="Assets\Scripts\Logic\bullet\BulletFactory.cs" />
      <Compile Include="Assets\Scripts\Logic\bullet\DirectionShootBullet.cs" />
      <Compile Include="Assets\Scripts\Logic\GameConst.cs" />
      <Compile Include="Assets\Scripts\Logic\GameData.cs" />
+     <Compile Include="Assets\Scripts\Logic\LockStepLogic.cs" />
      <Compile Include="Assets\Scripts\Logic\soldier\BaseSoldier.cs" />
      <Compile Include="Assets\Scripts\Logic\soldier\Grizzly.cs" />
      <Compile Include="Assets\Scripts\Logic\soldier\SoldierFactory.cs" />

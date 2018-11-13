@@ -13,4 +13,14 @@ public class GameData {
     public static BulletFactory factoryBullet = new BulletFactory();
     public static ActionMgrMgr actionMgrMgr = new ActionMgrMgr();
     public static FixRandom fixRandom = new FixRandom(1000);
+
+    public static void Init()
+    {
+        fixRandom = new FixRandom(1000);
+    }
+
+    public static void Release()
+    {
+        actionMgrMgr.Release();
+    }
 }
