@@ -5,11 +5,24 @@ public class LiveObject : BaseObject {
     public Fix mFixHp = Fix.fixZero;
     public Fix mFixOrignalHp = Fix.fixZero;
     public Fix mFixDamage = Fix.fixZero;
+    public bool mIsCooling = false;
+    public Fix mFixAttackRange = Fix.fixZero;
+    public Fix mFixAttackSpeed = Fix.fixZero;
+    public LiveObject mLockAttackObj = null;
     public List<LiveObject> mListAttacked = new List<LiveObject>();
     public List<BaseObject> mListAttackedBullet = new List<BaseObject>();
     public List<LiveObject> mListAttacking = new List<LiveObject>();
-    public LiveObject mLockAttackObj = null;
-    public bool mIsCooling = false;
+
+    public override void KillSelf()
+    {
+        OnDead();
+        base.KillSelf();
+    }
+
+    public virtual void LoadProperties()
+    {
+
+    }
 
     public void SetHp(Fix value)
     {
@@ -76,12 +89,6 @@ public class LiveObject : BaseObject {
     public void SetPrevState(int state)
     {
         mStateMachine.SetPrevState(state);
-    }
-
-    public override void KillSelf()
-    {
-        OnDead();
-        base.KillSelf();
     }
 
     public void OnDamage(Fix damage)

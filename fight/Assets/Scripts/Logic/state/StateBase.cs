@@ -5,6 +5,7 @@ public class StateBase {
     public LiveObject mObj = null;
     public int mPrevState = GameConst.ObjStateNull;
     public int mCurState = GameConst.ObjStateNull;
+
     virtual public void OnInit(LiveObject obj)
     {
 
