@@ -28,7 +28,7 @@ public class LockStepLogic
     {
         float deltaTime = UnityEngine.Time.deltaTime;
         mTotalTime += deltaTime;
-        while (mTotalTime > mNextGameTime)
+        while (mTotalTime > mNextGameTime && GameData.msgFrame.CheckFrame(mLogicFrame))
         {
             mBattleLogic.FrameLockLogic();
             mNextGameTime += mFrameLen;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class BattleLogic 
 {
-    LockStepLogic mLockStepLogic = null;
+    private LockStepLogic mLockStepLogic = null;
     public static int mLogicFrame = 0;
     public bool mIsPause = true;
     public bool mIsGame = false;
@@ -39,7 +39,7 @@ public class BattleLogic
         {
             GameData.listSoldier[i].UpdateLogic();
         }
-        GameData.frameMsg.UpdateLogic(mLockStepLogic.mLogicFrame);
+        GameData.msgFrame.UpdateLogic(mLockStepLogic.mLogicFrame);
         if (mIsGame && GameData.listSoldier.Count == 0)
         {
             StopBattle();

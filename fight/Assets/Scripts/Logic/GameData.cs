@@ -11,14 +11,15 @@ public class GameData {
     public static SoldierFactory factorySoldier = new SoldierFactory();
     public static BulletFactory factoryBullet = new BulletFactory();
     public static ActionMgrMgr actionMgrMgr = new ActionMgrMgr();
-    public static FrameMsg frameMsg = new FrameMsg();
+    public static MsgFrame msgFrame = new MsgFrame();
     public static Net.UdpNet udpNet = new Net.UdpNet();
     public static FixRandom fixRandom = new FixRandom(1000);
     public static Fix fixFrameLen = Fix.FromRaw(273);
 
     public static void Init()
     {
-        frameMsg.Init();
+        udpNet.Start();
+        msgFrame.Init();
         fixRandom = new FixRandom(1000);
     }
 

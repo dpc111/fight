@@ -10,7 +10,7 @@
     using System.Threading;
     using System.Runtime.InteropServices;
 
-    class UdpNet
+    public class UdpNet
     {
         public Rudp rudp;
 
@@ -24,7 +24,8 @@
 
         public Thread netThread;
 
-        public MethodInfo RecvMsgCallBack = null;
+        public Object msgCallBackObj = null;
+        public MethodInfo msgCallBack = null;
 
         public void Start()
         {
@@ -35,6 +36,7 @@
             serverPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             netThread = new Thread(NetProcess);
             netThread.Start();
+            ConnectToServer(0);
         }
 
         public void Stop()
@@ -57,6 +59,30 @@
                 netThread.Abort();
                 netThread = null;
             }
+            if (msgCallBackObj != null)
+            {
+                msgCallBackObj = null;
+            }
+            if (msgCallBack != null)
+            {
+                msgCallBack = null;
+            }
+        }
+
+        public void ConnectToServer(int uid)
+        {
+            UdpChunk c = new UdpChunk();
+            c.size = (byte)0;
+            c.type = UdpConst.udpTypeConnect;
+            c.seq = 0;
+            c.ack = uid;
+            rudp.SendChunkForce(c);
+        }
+
+        public void RegisterMsgCallback(object obj, string name)
+        {
+            msgCallBackObj = obj;
+            msgCallBack = obj.GetType().GetMethod(name);
         }
 
         public void Send(int msgid, Object obj)
@@ -116,6 +142,10 @@
                     offset += sizeObj;
                     object obj = Marshal.PtrToStructure(ptr, type);
                     Marshal.FreeHGlobal(ptr);
+                    if (msgCallBackObj != null && msgCallBack != null)
+                    {
+                        msgCallBack.Invoke(msgCallBackObj, new object[] { frame, uid, obj });
+                    }
                 }
             }
             Monitor.Enter(rudp);
