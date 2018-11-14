@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 public class StateCooling : StateBase
 {
-    public void Init()
-    {
-        mCurState = GameConst.ObjStateCooling;
-    }
-
     public StateCooling()
     {
         Init();
@@ -41,5 +36,10 @@ public class StateCooling : StateBase
     public override void UpdateLogic()
     {
     
+    }
+
+    public void Init()
+    {
+        mCurState = GameConst.ObjStateCooling;
     }
 }

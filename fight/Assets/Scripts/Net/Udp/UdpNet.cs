@@ -1,6 +1,7 @@
 ﻿namespace Net
 {
     using System;
+    using System.Reflection;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -14,14 +15,16 @@
         public Rudp rudp;
 
         public Socket clientSocket;
-        public string clientIp = "0.0.0.0";
-        public int clientPort = 6000;
+        public static string clientIp = "0.0.0.0";
+        public static int clientPort = 6000;
 
         public EndPoint serverPoint;
-        public string serverIp = "192.168.0.104";
-        public int serverPort = 6000;
+        public static string serverIp = "192.168.0.104";
+        public static int serverPort = 6000;
 
         public Thread netThread;
+
+        public MethodInfo RecvMsgCallBack = null;
 
         public void Start()
         {

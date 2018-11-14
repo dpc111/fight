@@ -8,11 +8,6 @@ public class StateNormal : StateBase
         Init();
     }
 
-    public void Init()
-    {
-        mCurState = GameConst.ObjStateNormal;
-    }
-
     public override void OnInit(LiveObject obj)
     {
         mObj = obj;
@@ -31,5 +26,10 @@ public class StateNormal : StateBase
     public override void UpdateLogic()
     {
 
+    }
+
+    public void Init()
+    {
+        mCurState = GameConst.ObjStateNormal;
     }
 }

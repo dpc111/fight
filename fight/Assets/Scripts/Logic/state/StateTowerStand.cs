@@ -11,11 +11,6 @@ public class StateTowerStand : StateBase
         Init();
     }
 
-    public void Init()
-    {
-        mCurState = GameConst.ObjStateTowerStand;
-    }
-
     public override void OnInit(LiveObject obj)
     {
         mObj = obj;
@@ -45,5 +40,10 @@ public class StateTowerStand : StateBase
                 mObj.ChangeState(GameConst.ObjStateTowerAttack);
             }
         }
+    }
+
+    public void Init()
+    {
+        mCurState = GameConst.ObjStateTowerStand;
     }
 }

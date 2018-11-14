@@ -8,7 +8,7 @@ public class BaseTower : LiveObject
         Init();
     }
 
-    virtual public void UpdateLogic()
+    public virtual void UpdateLogic()
     {
         mStateMachine.UpdateLogic();
         CheckIsDead();

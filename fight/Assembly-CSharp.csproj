@@ -237,6 +237,8 @@
      <Compile Include="Assets\Scripts\Logic\GameConst.cs" />
      <Compile Include="Assets\Scripts\Logic\GameData.cs" />
      <Compile Include="Assets\Scripts\Logic\LockStepLogic.cs" />
+     <Compile Include="Assets\Scripts\Logic\msg\FrameMsg.cs" />
+     <Compile Include="Assets\Scripts\Logic\msg\MsgCallback.cs" />
      <Compile Include="Assets\Scripts\Logic\soldier\BaseSoldier.cs" />
      <Compile Include="Assets\Scripts\Logic\soldier\Grizzly.cs" />
      <Compile Include="Assets\Scripts\Logic\soldier\SoldierFactory.cs" />

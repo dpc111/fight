@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-public class MoveTo : BaseAction {
+public class MoveTo : BaseAction 
+{
     Fix mFixMoveTime = Fix.fixZero;
     Fix mFixMoveElpaseTime = Fix.fixZero;
     FixVector3 mFv3Distance = new FixVector3(Fix.fixZero, Fix.fixZero, Fix.fixZero);

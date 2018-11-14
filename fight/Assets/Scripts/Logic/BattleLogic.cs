@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class BattleLogic 
 {
-    public static int mGameFrame = 0;
     LockStepLogic mLockStepLogic = null;
+    public static int mLogicFrame = 0;
     public bool mIsPause = true;
     public bool mIsGame = false;
 
@@ -14,6 +13,7 @@ public class BattleLogic
         if (mIsPause)
             return;
         mLockStepLogic.UpdateLogic();
+        GameData.udpNet.MainProcess();
     }
 
     public void FrameLockLogic()
@@ -39,6 +39,7 @@ public class BattleLogic
         {
             GameData.listSoldier[i].UpdateLogic();
         }
+        GameData.frameMsg.UpdateLogic(mLockStepLogic.mLogicFrame);
         if (mIsGame && GameData.listSoldier.Count == 0)
         {
             StopBattle();
@@ -48,7 +49,7 @@ public class BattleLogic
     public void StopBattle()
     {
         mIsGame = false;
-        mGameFrame = mLockStepLogic.mLogicFrame;
+        mLogicFrame = mLockStepLogic.mLogicFrame;
         if (mIsPause)
             return;
         for (int i = GameData.listTower.Count - 1; i >= 0; i--)

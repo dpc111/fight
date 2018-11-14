@@ -17,7 +17,7 @@ public class LockStepLogic
 
     public void Init()
     {
-        mFrameLen = (float)Fix.FromRaw(273);
+        mFrameLen = (float)GameData.fixFrameLen;
         mTotalTime = 0;
         mNextGameTime = 0;
         mFrameInterval = 0;
