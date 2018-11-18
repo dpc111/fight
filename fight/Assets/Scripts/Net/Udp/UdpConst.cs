@@ -12,6 +12,7 @@
         public const int udpTypeData = 3;
         public const int udpTypeDataAgain = 4;
         public const int udpTypeConnect = 5;
+        public const int udpTypeDisconnect = 6;
 
         public const int udpHeadByteLen = 1;
         public const int udpHeadByteType = 1;

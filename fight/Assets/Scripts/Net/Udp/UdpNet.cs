@@ -9,6 +9,7 @@
     using System.Net.Sockets;
     using System.Threading;
     using System.Runtime.InteropServices;
+    using UnityEngine;
 
     public class UdpNet
     {
@@ -19,12 +20,12 @@
         public static int clientPort = 6000;
 
         public EndPoint serverPoint;
-        public static string serverIp = "192.168.0.104";
-        public static int serverPort = 6000;
+        public static string serverIp = "139.199.82.153";
+        public static int serverPort = 7002;
 
         public Thread netThread;
 
-        public Object msgCallBackObj = null;
+        public object msgCallBackObj = null;
         public MethodInfo msgCallBack = null;
 
         public void Start()
@@ -41,6 +42,7 @@
 
         public void Stop()
         {
+            DisconnectToServer(0);
             if (rudp != null)
             {
                 rudp = null;
@@ -71,11 +73,25 @@
 
         public void ConnectToServer(int uid)
         {
+            if (rudp == null)
+                return;
             UdpChunk c = new UdpChunk();
             c.size = (byte)0;
             c.type = UdpConst.udpTypeConnect;
             c.seq = 0;
             c.ack = uid;
+            rudp.SendChunkForce(c);
+        }
+
+        public void DisconnectToServer(int uid)
+        {
+            if (rudp == null)
+                return;
+            UdpChunk c = new UdpChunk();
+            c.size = (byte)0;
+            c.type = UdpConst.udpTypeDisconnect;
+            c.seq = 0;
+            c.ack = 0;
             rudp.SendChunkForce(c);
         }
 
@@ -85,7 +101,7 @@
             msgCallBack = obj.GetType().GetMethod(name);
         }
 
-        public void Send(int msgid, Object obj)
+        public void Send(int msgid, object obj)
         {
             UdpChunk c = new UdpChunk();
             int offset = 0;
@@ -93,6 +109,24 @@
             offset += 4;
             int size = Marshal.SizeOf(obj);  
             IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(obj, ptr, false);
+            Marshal.Copy(ptr, c.buff, offset, size);
+            offset += size;
+            Marshal.FreeHGlobal(ptr);
+            c.size = (byte)offset;
+            Monitor.Enter(rudp);
+            rudp.SendBuffIn(c);
+            Monitor.Exit(rudp);
+        }
+
+        public void Send(object obj)
+        {
+            UdpChunk c = new UdpChunk();
+            int offset = 0;
+            NetTool.Int32ToBytes(ref c.buff, 4, UdpMsg.MsgId(obj.GetType()));
+            offset += 4;
+            int size = Marshal.SizeOf(obj);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(obj, ptr, false);
             Marshal.Copy(ptr, c.buff, offset, size);
             offset += size;
@@ -121,22 +155,32 @@
                 int offset = 0;
                 int frame = NetTool.BytesToInt32(ref c.buff, 0);
                 offset += 4;
+                if (msgCallBackObj != null && msgCallBack != null)
+                {
+                    msgCallBack.Invoke(msgCallBackObj, new object[] { frame, 0, null });
+                }
                 while (c.size - offset > 8)
                 {
+                    Debug.Log(111);
                     int uid = NetTool.BytesToInt32(ref c.buff, offset);
                     offset += 4;
                     int msgid = NetTool.BytesToInt32(ref c.buff, offset);
                     offset += 4;
-                    Type type = UdpMsg.Proto(msgid);
+                    Type type = UdpMsg.MsgType(msgid);
+                    Debug.Log(uid);
+                    Debug.Log(msgid);
                     if (type == null)
                     {
                         break;
                     }
+                    Debug.Log(msgid);
                     int sizeObj = Marshal.SizeOf(type);
+                    Debug.Log(msgid);
                     if (sizeObj < c.size - offset)
                     {
                         break;
                     }
+                    Debug.Log(msgid);
                     IntPtr ptr = Marshal.AllocHGlobal(sizeObj);
                     Marshal.Copy(c.buff, offset, ptr, sizeObj);
                     offset += sizeObj;

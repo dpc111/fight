@@ -68,7 +68,7 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
 
     public static explicit operator decimal(Fix value)
     {
-        return (decimal)value / one;
+        return (decimal)value.rawValue / one;
     }
 
     public static Fix operator +(Fix x, Fix y)

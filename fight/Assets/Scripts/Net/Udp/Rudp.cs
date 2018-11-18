@@ -125,7 +125,7 @@
                     break;
                 case UdpConst.udpTypeData:
                 case UdpConst.udpTypeDataAgain:
-                    if (recvMinSeq <= c.seq)
+                    if (recvMinSeq >= c.seq)
                     {
                         break;
                     }
@@ -160,11 +160,12 @@
                 return null;
             }
             UdpChunk c = n.Value;
-            if (c.seq <= recvMinSeq)
+            if (c.seq > recvMinSeq)
             {
-                return c;
+                return null;
             }
-            return null;
+            recvQueue.RemoveFirst();
+            return c;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
