@@ -26,7 +26,7 @@ public class MsgFrame
 
     public void OnRecv(int frame, int uid, object msg)
     {
-        Debug.Log(frame + " " + listFrame.Count);
+        //Debug.Log(frame + " " + listFrame.Count);
         if (frame < minFrame)
             return;
         if (!listFrame.ContainsKey(frame))

@@ -32,16 +32,26 @@ public class LockStepLogic
             mLogicFrame += 1;
             //Debug.Log(mLogicFrame);
             //test
-            //if (mLogicFrame == 50)
-            //{
-                //GameData.udpNet.DisconnectToServer(0);
+            if (mLogicFrame == 50)
+            {
+                GameData.udpNet.DisconnectToServer();
                 //GameData.Stop();
-                //return;
-            //}
+                return;
+            }
             MsgCreateTower msg = new MsgCreateTower();
             msg.type = 1;
             msg.posx = 11;
             msg.posy = 111;
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
+            GameData.udpNet.Send(1, msg);
             GameData.udpNet.Send(1, msg);
         }
         mFrameInterval = (mFrameLen - (mNextGameTime - mTotalTime)) / mFrameLen;

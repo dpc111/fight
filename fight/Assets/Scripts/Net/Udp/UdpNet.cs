@@ -30,6 +30,7 @@
 
         public void Start()
         {
+            UdpMsg.Init();
             rudp = new Rudp();
             rudp.Init(NetTool.GetMilSec());
             clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -37,12 +38,12 @@
             serverPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             netThread = new Thread(NetProcess);
             netThread.Start();
-            ConnectToServer(0);
+            ConnectToServer(111);
         }
 
         public void Stop()
         {
-            DisconnectToServer(0);
+            DisconnectToServer();
             if (rudp != null)
             {
                 rudp = null;
@@ -83,7 +84,7 @@
             rudp.SendChunkForce(c);
         }
 
-        public void DisconnectToServer(int uid)
+        public void DisconnectToServer()
         {
             if (rudp == null)
                 return;
@@ -105,7 +106,7 @@
         {
             UdpChunk c = new UdpChunk();
             int offset = 0;
-            NetTool.Int32ToBytes(ref c.buff, 4, msgid);
+            NetTool.Int32ToBytes(ref c.buff, offset, msgid);
             offset += 4;
             int size = Marshal.SizeOf(obj);  
             IntPtr ptr = Marshal.AllocHGlobal(size);
@@ -123,7 +124,7 @@
         {
             UdpChunk c = new UdpChunk();
             int offset = 0;
-            NetTool.Int32ToBytes(ref c.buff, 4, UdpMsg.MsgId(obj.GetType()));
+            NetTool.Int32ToBytes(ref c.buff, offset, UdpMsg.MsgId(obj.GetType()));
             offset += 4;
             int size = Marshal.SizeOf(obj);
             IntPtr ptr = Marshal.AllocHGlobal(size);
@@ -161,26 +162,22 @@
                 }
                 while (c.size - offset > 8)
                 {
-                    Debug.Log(111);
                     int uid = NetTool.BytesToInt32(ref c.buff, offset);
                     offset += 4;
                     int msgid = NetTool.BytesToInt32(ref c.buff, offset);
                     offset += 4;
                     Type type = UdpMsg.MsgType(msgid);
-                    Debug.Log(uid);
-                    Debug.Log(msgid);
                     if (type == null)
                     {
+                        Debug.Log("");
                         break;
                     }
-                    Debug.Log(msgid);
                     int sizeObj = Marshal.SizeOf(type);
-                    Debug.Log(msgid);
-                    if (sizeObj < c.size - offset)
+                    if (sizeObj > c.size - offset)
                     {
+                        Debug.Log("");
                         break;
                     }
-                    Debug.Log(msgid);
                     IntPtr ptr = Marshal.AllocHGlobal(sizeObj);
                     Marshal.Copy(c.buff, offset, ptr, sizeObj);
                     offset += sizeObj;

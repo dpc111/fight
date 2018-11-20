@@ -243,6 +243,10 @@
      <Compile Include="Assets\Scripts\Moba\GameConst.cs" />
      <Compile Include="Assets\Scripts\Moba\GameData.cs" />
      <Compile Include="Assets\Scripts\Moba\LockStepLogic.cs" />
+     <Compile Include="Assets\Scripts\Moba\move\AStar.cs" />
+     <Compile Include="Assets\Scripts\Moba\move\GridPos.cs" />
+     <Compile Include="Assets\Scripts\Moba\move\MinHeap.cs" />
+     <Compile Include="Assets\Scripts\Moba\move\MinHeapBataBase.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgCallback.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgFrame.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgType.cs" />
