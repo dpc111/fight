@@ -247,6 +247,7 @@
      <Compile Include="Assets\Scripts\Moba\move\GridPos.cs" />
      <Compile Include="Assets\Scripts\Moba\move\MinHeap.cs" />
      <Compile Include="Assets\Scripts\Moba\move\MinHeapBataBase.cs" />
+     <Compile Include="Assets\Scripts\Moba\move\MoveObject.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgCallback.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgFrame.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgType.cs" />

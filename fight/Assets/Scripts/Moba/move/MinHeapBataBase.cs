@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MinHeapDataBase
 {
-    public Fix GetValue()
+    public int GetValue()
     {
-        return (Fix)0;
+        return 0;
     }
 }

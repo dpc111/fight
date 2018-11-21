@@ -11,15 +11,13 @@ public class MinHeap
     public MinHeap(int len) 
     {
         mLen = len;
-        mData = new MinHeapDataBase[len];
+        mCur = 1;
+        mData = new MinHeapDataBase[mLen];
     }
 
     public void Clear() 
     {
-        for (int i = 0; i < mLen; i++)
-        {
-            mData[i] = null;
-        }
+        mCur = 1;
     }
 
     public void Exchange(int pos1, int pos2)
@@ -29,7 +27,7 @@ public class MinHeap
         mData[pos2] = tmp;
     }
 
-    void Push(MinHeapDataBase data)
+    public void Push(MinHeapDataBase data)
     {
         if (mCur >= mLen)
             return;
@@ -55,7 +53,7 @@ public class MinHeap
         }
     }
 
-    MinHeapDataBase Pop()
+    public MinHeapDataBase Pop()
     {
         if (mCur <= 0)
             return null;
