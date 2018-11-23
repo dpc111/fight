@@ -504,9 +504,9 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 383c0000
+    m_SelectedIDs: 563c0000
     m_LastClickedID: 0
-    m_ExpandedIDs: 9efbffff00000000
+    m_ExpandedIDs: 98fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -578,9 +578,9 @@ MonoBehaviour:
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 18}
-    m_SelectedIDs: 9a360000
-    m_LastClickedID: 13978
-    m_ExpandedIDs: 00000000402a0000662a00002e2b0000da2d0000a02e0000fe2f00006a350000303700003a380000be38000020390000e43b0000e63b0000e83b0000ea3b0000ec3b0000ee3b0000f03b0000f23b000000ca9a3bffffff7f
+    m_SelectedIDs: ac360000
+    m_LastClickedID: 13996
+    m_ExpandedIDs: 00000000502a0000762a0000402b0000de2c0000ec2d0000b22e000010300000423700004c380000d038000032390000f83b0000fa3b0000fc3b0000fe3b0000003c0000023c0000043c0000063c000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -608,7 +608,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000402a0000662a00002e2b0000da2d0000a02e0000fe2f00006a350000303700003a380000be38000020390000e43b0000e63b0000e83b0000ea3b0000ec3b0000ee3b0000f03b0000f23b0000
+    m_ExpandedIDs: 00000000502a0000762a0000402b0000ec2d0000b22e0000103000007c350000423700004c380000d038000032390000f83b0000fa3b0000fc3b0000fe3b0000003c0000023c0000043c0000063c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -636,21 +636,21 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000d4330000d02a0000000000004c490000064a0000d4490000fe49000004480000ee5900003c5c0000444800001e660000e46600004e2e00006c2a0000e62b0000ac2a0000262b0000942d00009a2d0000
+    m_ExpandedInstanceIDs: c6230000d4330000d02a0000000000004c490000064a0000d4490000fe49000004480000ee5900003c5c0000444800001e660000e46600004e2e00006c2a0000e62b0000ac2a0000262b0000942d00009a2d00004a3c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: MoveObject
-      m_OriginalName: MoveObject
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 15416
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 10}
     m_CreateAssetUtility:

@@ -42,6 +42,7 @@ public class BattleLogic
             GameData.listSoldier[i].UpdateLogic();
         }
         GameData.msgFrame.UpdateLogic(GameData.lockStepLogic.mLogicFrame);
+        GameData.transformMgr.UpdateLogic();
         if (mIsGame && GameData.listSoldier.Count == 0)
         {
             //StopBattle();

@@ -141,6 +141,11 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
         return (Fix)x - y;
     }
 
+    public static Fix operator ++(Fix x) 
+    {
+        return x + one;
+    }
+
     public static Fix operator *(Fix x, Fix y)
     {
         return new Fix((x.rawValue * y.rawValue) >> fractionalPlace);

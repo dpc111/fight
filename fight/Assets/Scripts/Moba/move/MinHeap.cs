@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MinHeap 
 {
-    public MinHeapDataBase[] mData;
+    public GridPos[] mData;
     public int mLen;
     public int mCur;
 
@@ -12,7 +12,7 @@ public class MinHeap
     {
         mLen = len;
         mCur = 1;
-        mData = new MinHeapDataBase[mLen];
+        mData = new GridPos[mLen];
     }
 
     public void Clear() 
@@ -22,12 +22,12 @@ public class MinHeap
 
     public void Exchange(int pos1, int pos2)
     {
-        MinHeapDataBase tmp = mData[pos1];
+        GridPos tmp = mData[pos1];
         mData[pos1] = mData[pos2];
         mData[pos2] = tmp;
     }
 
-    public void Push(MinHeapDataBase data)
+    public void Push(GridPos data)
     {
         if (mCur >= mLen)
             return;
@@ -53,11 +53,11 @@ public class MinHeap
         }
     }
 
-    public MinHeapDataBase Pop()
+    public GridPos Pop()
     {
         if (mCur <= 0)
             return null;
-        MinHeapDataBase value = mData[1];
+        GridPos value = mData[1];
         if (mCur <= 1)
         {
             mData[1] = null;

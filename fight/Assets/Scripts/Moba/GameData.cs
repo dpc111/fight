@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 
 public class GameData {
+    public static TransformMgr transformMgr = new TransformMgr();
     public static List<BaseTower> listTower = new List<BaseTower>();
     public static List<BaseSoldier> listSoldier = new List<BaseSoldier>();
     public static List<BaseBullet> listBullet = new List<BaseBullet>();
@@ -27,6 +28,7 @@ public class GameData {
         msgFrame.Init();
         battleLogic.Init();
         lockStepLogic.Init();
+        transformMgr.Init();
     }
 
     public static void Stop()

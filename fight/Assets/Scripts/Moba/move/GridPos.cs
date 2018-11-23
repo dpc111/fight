@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridPos : MinHeapDataBase
+public class GridPos
 {
     public static int blockNone = 1;
     public static int blockStatic = 2;
@@ -10,6 +10,8 @@ public class GridPos : MinHeapDataBase
     public static int stateNone = 1;
     public static int stateOpen = 2;
     public static int stateClose = 3;
+
+    public FixVector2 posCenter;
     public GridPos posParent;
     public int block;
     public int state;
