@@ -53,7 +53,7 @@ public class MsgFrame
         return true;
     }
 
-    public void UpdateLogic(int frame)
+    public void Update(int frame)
     {
         if (frame < minFrame)
             return;

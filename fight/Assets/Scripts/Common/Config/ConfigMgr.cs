@@ -48,6 +48,16 @@ public class ConfigMgr : MonoBehaviour {
         jsonArrays[jsonName] = jsonArray;
     }
 
+    public static JObject GetJObject(string jsonName)
+    {
+        JObject obj = null;
+        if (!jsonObjects.TryGetValue(jsonName, out obj))
+        {
+            return null;
+        }
+        return obj;
+    }
+
     public static int GetArrayCount(string jsonName)
     {
         JArray array = null;
@@ -66,6 +76,16 @@ public class ConfigMgr : MonoBehaviour {
             return null;
         }
         return array[k1][k2];
+    }
+
+    public static JToken GetValue(string jsonName, string k1, string k2)
+    {
+        JObject obj = null;
+        if (!jsonObjects.TryGetValue(jsonName, out obj))
+        {
+            return 0;
+        }
+        return obj[jsonName][k1][k2];
     }
 
     //public static JToken GetValue(string jsonName, object key1, object key2)

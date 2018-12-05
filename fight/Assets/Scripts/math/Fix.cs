@@ -10,8 +10,8 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     const int fractionalPlace = 12;
     const long one = 1L << fractionalPlace;
     public static readonly decimal mPrecision = (decimal)(new Fix(1L));
-    public static readonly Fix fixOne = new Fix(one);
-    public static readonly Fix fixZero = new Fix();
+    public static readonly Fix fix1 = new Fix(one);
+    public static readonly Fix fix0 = new Fix(0);
     public static readonly Fix fixPi = new Fix(pi);
     public static readonly Fix fixPi2 = new Fix(pi2);
     public static readonly Fix fixPi180 = new Fix((long)72);
@@ -327,14 +327,14 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
 
     public static Fix Ceil(Fix value)
     {
-        return ((value.rawValue & 0x0000000000000FFF) != 0) ? Floor(value) + fixOne : value;
+        return ((value.rawValue & 0x0000000000000FFF) != 0) ? Floor(value) + fix1 : value;
     }
 
     public static Fix Pow(Fix x, int y)
     {
         if (y == 1)
             return x;
-        Fix res = Fix.fixZero;
+        Fix res = Fix.fix0;
         Fix tmp = Pow(x, y / 2);
         if ((y & 1) != 0)
             res = x * tmp * tmp;
@@ -348,8 +348,8 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
         if (x.rawValue < 0)
             throw new ArithmeticException("sqrt error");
         if (x.rawValue == 0)
-            return Fix.fixZero;
-        Fix k = x + Fix.fixOne >> 1;
+            return Fix.fix0;
+        Fix k = x + Fix.fix1 >> 1;
         for (int i = 0; i < num; i++)
             k = (k + (x / k)) >> 1;
         if (k.rawValue < 0)
@@ -396,12 +396,12 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     private static Fix Sin(Fix x)
     {
         Fix y = (Fix)0;
-        for (; x < Fix.fixZero; )
+        for (; x < Fix.fix0; )
             x += Fix.FromRaw(25736);
         if (x > Fix.FromRaw(25736))
             x %= Fix.FromRaw(25736);
         Fix z = (x * Fix.FromRaw(10)) / Fix.FromRaw(714);
-        if (x != Fix.fixZero &&
+        if (x != Fix.fix0 &&
             x != Fix.FromRaw(6434) &&
             x != Fix.FromRaw(12868) &&
             x != Fix.FromRaw(19302) &&
@@ -433,14 +433,14 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     {
         bool isNegative = x < 0;
         x = Abs(x);
-        if (x > Fix.fixOne)
+        if (x > Fix.fix1)
             throw new ArithmeticException("bad Asin arg");
         Fix f1 = ((((Fix.FromRaw(145103 >> fractionalPlace) * x) -
             Fix.FromRaw(599880 >> fractionalPlace) * x) +
             Fix.FromRaw(1420468 >> fractionalPlace) * x) -
             Fix.FromRaw(3592413 >> fractionalPlace) * x) +
             Fix.FromRaw(26353447 >> fractionalPlace);
-        Fix f2 = fixPi / (Fix)2 - (Sqrt(Fix.fixOne - x) * f1);
+        Fix f2 = fixPi / (Fix)2 - (Sqrt(Fix.fix1 - x) * f1);
         return isNegative ? -f2 : f2;
     }
     #endregion
@@ -448,7 +448,7 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     #region ATan Atan2
     public static Fix Atan(Fix x)
     {
-        return Asin(x / Sqrt(Fix.fixOne + (x * x)));
+        return Asin(x / Sqrt(Fix.fix1 + (x * x)));
     }
 
     public static Fix Atan2(Fix f1, Fix f2)
@@ -516,7 +516,7 @@ public struct FixVector3
 
     public static FixVector3 Zero
     {
-        get { return new FixVector3(Fix.fixZero, Fix.fixZero, Fix.fixZero); }
+        get { return new FixVector3(Fix.fix0, Fix.fix0, Fix.fix0); }
     }
 
     public static FixVector3 operator +(FixVector3 a, FixVector3 b)
@@ -572,7 +572,7 @@ public struct FixVector3
     public void Normalize()
     {
         Fix n = x * x + y * y + z * z;
-        if (n == Fix.fixZero)
+        if (n == Fix.fix0)
             return;
         n = Fix.Sqrt(n);
         if (n < (Fix)0.0001)
@@ -655,7 +655,7 @@ public struct FixVector2
 
     public static FixVector2 Zero
     {
-        get { return new FixVector2(Fix.fixZero, Fix.fixZero); }
+        get { return new FixVector2(Fix.fix0, Fix.fix0); }
     }
 
     public static FixVector2 operator +(FixVector2 a, FixVector2 b)
@@ -711,7 +711,7 @@ public struct FixVector2
     public void Normalize()
     {
         Fix n = x * x + y * y;
-        if (n == Fix.fixZero)
+        if (n == Fix.fix0)
             return;
         n = Fix.Sqrt(n);
         if (n < (Fix)0.0001)

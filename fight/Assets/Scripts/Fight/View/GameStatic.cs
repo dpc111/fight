@@ -8,7 +8,7 @@ public class GameStatic : MonoBehaviour {
     public static int entityMask;
     public static GridMgr gridMgr;
     public static EntityMgr entityMgr;
-    public static BulletMgr bulletMgr;
+    public static BulletMgrF bulletMgr;
     public static GUIWord guiWord;
 
     void Awake()
@@ -19,7 +19,7 @@ public class GameStatic : MonoBehaviour {
 	void Start () {
         gridMgr = GameObject.Find("GridMgr").GetComponent<GridMgr>();
         entityMgr = GameObject.Find("EntityMgr").GetComponent<EntityMgr>();
-        bulletMgr = GameObject.Find("BulletMgr").GetComponent<BulletMgr>();
+        bulletMgr = GameObject.Find("BulletMgr").GetComponent<BulletMgrF>();
         guiWord = GameObject.Find("GUI").GetComponent<GUIWord>();
         if (gridMgr == null)
         {

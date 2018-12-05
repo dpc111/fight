@@ -2,6 +2,21 @@
 using System.Collections.Generic;
 
 public class GameConst {
+    public const int UnitAttrBegin = 0;
+    public const int UnitAttrBlockR = 1;
+    public const int UnitAttrSpeed = 1;
+    public const int UnitAttrBlood = 1;
+    public const int UnitAttrCd = 1;
+    public const int UnitAttrDamage = 1;
+    public const int UnitAttrDamageRange = 1;
+    public const int UnitAttrEnd = 1;
+
+    public const int GroupNull = 0;
+    public const int GroupTeamSingle = 1;
+    public const int GroupTeamMul = 2;
+    public const int GroupEnemySingle = 3;
+    public const int GroupEnemyMul = 4;
+
     public const int ObjTypeNull = 0;
     public const int ObjTypeTower = 1;
     public const int ObjTypeSoldier = 2;
@@ -9,19 +24,48 @@ public class GameConst {
     public const int ObjTypeMagicStand = 4;
     public const int ObjTypeMagicGrizzly = 5;
 
-    public const int ObjStateNull = 0;
-    public const int ObjStateCooling = 1;
-    public const int ObjStateNormal = 2;
-    public const int ObjStateTowerAttack = 3;
-    public const int ObjStateTowerStand = 4;
-    public const int ObjStateSoldierMove = 5;
+    public const int SkillCellSize = 5;
 
-    public const int ActionChangeNull = 0;
-    public const int ActionChangePrevState = 1;
-    public const int ActionTowerStand = 2;
-    public const int ActionDelayToStand = 3;
 
-    public const int ActionKindNull = 0;
-    public const int ActionKindDelayDo = 1;
-    public const int ActionKindMoveTo = 2;
+}
+
+public enum UnitAttrType
+{
+    None = 0,
+    Hp,
+    Armor,
+    MoveSpeed,
+    AttCd,
+    AttRange,
+    AttDamage,
+    Num
+}
+
+public enum BuffType
+{
+    Cac,
+    AddHp,
+    AddMaxHp,
+    SubHp,
+    SubMaxHp,
+}
+
+public enum BuffUpdateType
+{
+    Once = 1,
+    Loop
+}
+
+public enum BuffAddType
+{
+    None = 1,
+    Time,
+    Layer,
+    ResetTime,
+}
+
+public enum BuffRemoveType
+{
+    All = 1,
+    Layer,
 }

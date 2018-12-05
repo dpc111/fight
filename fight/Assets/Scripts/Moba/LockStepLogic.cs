@@ -12,7 +12,7 @@ public class LockStepLogic
 
     public void Init()
     {
-        mFrameLen = (float)GameData.fixFrameLen;
+        mFrameLen = (float)GameData.timeFrame;
         mTotalTime = 0;
         mNextGameTime = 0;
         mFrameInterval = 0;
@@ -30,6 +30,7 @@ public class LockStepLogic
             GameData.battleLogic.FrameLockLogic();
             mNextGameTime += mFrameLen;
             mLogicFrame += 1;
+            GameData.timeCur += GameData.timeFrame;
             //Debug.Log(mLogicFrame);
             //test
             if (mLogicFrame == 50)
