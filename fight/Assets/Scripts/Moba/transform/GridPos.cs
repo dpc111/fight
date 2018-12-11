@@ -25,6 +25,7 @@ public class GridPos
 
     public GridPos(int x_, int z_, int index_)
     {
+        block = GridPos.blockNone;
         state = stateNone;
         posParent = null;
         index = index_;
@@ -37,6 +38,8 @@ public class GridPos
 
     public void Init(int runTime_)
     {
+        if (block != GridPos.blockStatic)
+            block = GridPos.blockNone;
         runTime = runTime_;
         state = stateNone;
         posParent = null;

@@ -7,13 +7,15 @@ public class BulletBase : UnitBase
     public UnitBase mUnitTri = null;
     public UnitBase mUnitTar = null;
 
-    public virtual void Init(BulletCfg cfg)
-    {
-        base.Init();
-    }
-
-    public virtual void Update()
+    public override void Update()
     {
         base.Update();
+    }
+
+    public virtual void OnHit(UnitBase unitHit)
+    {
+        Kill = true;
+        Fix damage = mAttr.GetAttr(UnitAttrType.AttDamage);
+        unitHit.mAttr.AddAttr(UnitAttrType.Hp, damage);
     }
 }

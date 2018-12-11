@@ -14,15 +14,15 @@ public class TransformWalk : TransformBase
     public Fix mTimeMove = Fix.fix0;
     public Fix mTimePass = Fix.fix0;
 
-    public virtual void Init(FixVector2 pos, Fix blockR, Fix speed)
+    public override void Init(FixVector3 pos, Fix blockRange, Fix speed)
     {
-        base.Init(pos, blockR, speed);
+        base.Init(pos, blockRange, speed);
         mPathLen = 0;
         mPathIndex = 0;
         SetNextStep();
     }
 
-    public virtual void Update()
+    public override void Update()
     {
         base.Update();
         if (!Move)
@@ -40,7 +40,24 @@ public class TransformWalk : TransformBase
         mPos = mPosStart + (mPosEnd - mPosStart) * timeScale;
     }
 
-    public bool SetNextStep()
+    public override void MoveToTarget(FixVector2 target)
+    {
+        mPathLen = 0;
+        mPathIndex = 0;
+        mPosTarget = target;
+        int begin = GameData.transformMgr.mAstar.ToGridIndex(mPos);
+        int end = GameData.transformMgr.mAstar.ToGridIndex(mPosTarget);
+        bool ok = GameData.transformMgr.mAstar.FindPath(begin, end, ref mPath, ref mPathLen);
+        if (!ok)
+        {
+            Debug.LogError("");
+            return;
+        }
+        if (SetNextStep())
+            Move = true;
+    }
+
+    private bool SetNextStep()
     {
         if (mPathIndex >= mPathLen)
             return false;
@@ -55,17 +72,5 @@ public class TransformWalk : TransformBase
         mDir = mPosEnd - mPosStart;
         mDir.Normalize();
         return true;
-    }
-
-    public virtual void MoveToTarget(FixVector2 target)
-    {
-        mPathLen = 0;
-        mPathIndex = 0;
-        mPosTarget = target;
-        int begin = GameData.transformMgr.mAstar.ToGridIndex(mPos);
-        int end = GameData.transformMgr.mAstar.ToGridIndex(mPosTarget);
-        GameData.transformMgr.mAstar.FindPath(begin, end, ref mPath, ref mPathLen);
-        if (SetNextStep())
-            Move = true;
     }
 }

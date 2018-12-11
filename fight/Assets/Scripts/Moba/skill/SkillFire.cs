@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class SkillFire : SkillBase 
 {
-    public virtual void OnTrigger()
+    public override void OnTrigger()
     {
         base.OnTrigger();
         Fire();
     }
 
-    public virtual void Update()
+    public override void Update()
     {
-        base.UpdateLogic();    
+        base.Update();    
     }
 
     private void Fire()

@@ -11,12 +11,12 @@ public class BuffCac : BuffBase
     public UnitAttrType mAddCdAttr;
     public Fix mAddCdValue;
 
-    public virtual void Init(int type)
+    public override void Init(int type)
     {
         base.Init(type);
     }
 
-    public virtual void Start()
+    public override void Start()
     {
         if (mAddAttr != UnitAttrType.None)
             mUnitTar.mAttr.AddAttr(mAddAttr, mAddValue);
@@ -24,12 +24,12 @@ public class BuffCac : BuffBase
             mUnitTar.mAttr.MulAttr(mMulAttr, mMulValue + 1);
     }
 
-    public virtual void End()
+    public override void End()
     {
         
     }
 
-    public virtual void Update()
+    public override void Update()
     {
         base.Update();
         if (mTimeLast - GameData.timeCur < mCd)
@@ -39,7 +39,7 @@ public class BuffCac : BuffBase
             mUnitTar.mAttr.AddAttr(mAddCdAttr, mAddCdValue);
     }
 
-    public virtual void Refresh()
+    public override void Refresh()
     {
         base.Refresh();
         if (mAddAttr != UnitAttrType.None)

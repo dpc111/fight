@@ -4,13 +4,12 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class TowerCfg
+public class TowerCfg : UnitCfg
 {
-    public int id;
-    public int type;
-    public string prefab;
-    public int bullet_id;
-    public int soldier_id;
+    public int id = 0;
+    public int type = 0;
+    public int bullet_id = 0;
+    public int soldier_id = 0;
 }
 
 public class TowerFactory 
@@ -19,15 +18,25 @@ public class TowerFactory
 
     public static void Init()
     {
-        JToken cfgs = ConfigMgr.GetJObject("tower");
+        JObject cfgs = ConfigMgr.GetJObject("tower");
         if (cfgs == null)
             return;
-        foreach (JToken cfg in cfgs.Children())
+        foreach (JToken cfgt in cfgs.Values())
         {
+            JObject cfg = cfgt.ToObject<JObject>();
             TowerCfg tower = new TowerCfg();
+            tower.hp = (Fix)(int)cfg["hp"];
+            tower.armor = Fix.fix0;
+            tower.moveType = (int)MoveType.Stand;
+            tower.moveSpeed = Fix.fix0;
+            tower.attCd = (Fix)(int)cfg["attack_cd"];
+            tower.attRange = (Fix)(int)cfg["attack_range"];
+            tower.attDamage = (Fix)(int)cfg["attack_damage"];
+            tower.blockRange = (Fix)(int)cfg["block_range"];
+            tower.prefab = (string)cfg["prefab"];
+         
             tower.id = (int)cfg["id"];
             tower.type = (int)cfg["type"];
-            tower.prefab = (string)cfg["prefab"];
             tower.bullet_id = (int)cfg["bullet_id"];
             tower.soldier_id = (int)cfg["soldier_id"];
             towerCfgs[tower.id] = tower;
@@ -41,19 +50,26 @@ public class TowerFactory
         return towerCfgs[id];
     }
 
-    public static TowerBase CreateTower(int id)
+    public static TowerBase CreateTower(int id, FixVector3 pos)
     {
         TowerCfg cfg = GetCfg(id);
         if (cfg == null)
             return null;
-        TowerBase tower = new TowerBase();
-        tower.Init(cfg);
+        TowerBase tower = null;
+        if (cfg.type == (int)TowerType.Shoot)
+            tower = new TowerShoot();
+        else if (cfg.type == (int)TowerType.Soldier)
+            tower = new TowerSoldier();
+        if (tower == null)
+            return null;
+        tower.Init(cfg, pos);
         GameData.towerMgr.AddTower(tower);
         return tower;
     }
 
     public static void RemoveTower(TowerBase tower) 
     {
+        tower.Destory();
         GameData.towerMgr.RemoveTower(tower);
     }
 }

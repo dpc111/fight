@@ -22,14 +22,14 @@ public class SkillAddBuff : SkillBase
     public Fix mMulSpeed = Fix.fix0;
     public Fix mAddSpeed = Fix.fix0;
 
-    public virtual void OnTrigger()
+    public override void OnTrigger()
     {
         base.OnTrigger();
     }
 
-    public virtual void UpdateLogic()
+    public override void Update()
     {
-        base.UpdateLogic();
+        base.Update();
     }
 
     public void AddBuff()

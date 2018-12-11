@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class UnitUnity 
 {
-    public string mScBundle = "";
-    public string mScAsset = "";
+    public string mPrefabName = "";
     public int mObjType = GameConst.ObjTypeNull;
     public bool mKilled = false;
     public GameObject mGameObj;
@@ -14,9 +13,16 @@ public class UnitUnity
     FixVector3 mFv3LogicRot;
     FixVector3 mFv3LogicScale;
 
-    public void CreateFromPrefab(string path, UnitUnity script)
+    public void Init(UnitCfg cfg, FixVector3 pos)
     {
-        Prefabs.Create(path, script);
+        mPrefabName = cfg.prefab;
+        mGameObj = ResFactory.prefabs.Create(mPrefabName);
+        mGameObj.transform.localPosition = pos.ToVector3();
+    }
+
+    public void Destory()
+    {
+        ResFactory.prefabs.Destory(mGameObj);
     }
 
     public void UpdateRenderPosition(float interpolation)

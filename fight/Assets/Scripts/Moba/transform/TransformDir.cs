@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class TransformDir : TransformBase
 {
-    public virtual void MoveDir(FixVector2 dir) 
+    public override void MoveDir(FixVector2 dir) 
     {
         mDir.Normalize();
         Move = true;
     }
 
-   public virtual void Update()
+   public override void Update()
    {
        base.Update();
        if (!Move)

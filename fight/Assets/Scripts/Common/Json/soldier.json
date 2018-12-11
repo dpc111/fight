@@ -1,0 +1,15 @@
+{
+      "2001" : {
+         "id" : "2001",
+         "type" : 1,
+         "hp" : 100,
+         "attack_cd" : 2,
+         "attack_range" : 10,
+         "attack_damage" : 10,
+         "block_range" : 2,
+         "move_type" : 1,
+         "move_speed" : 8,
+         "prefab" : "plant",
+         "bullet_id" : 3001
+      }
+}

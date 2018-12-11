@@ -6,38 +6,23 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class ConfigMgr : MonoBehaviour {
+public class ConfigMgr {
 
     public static Dictionary<string, JObject> jsonObjects = new Dictionary<string, JObject>();
     public static Dictionary<string, JArray> jsonArrays = new Dictionary<string, JArray>();
 
-    void Awake()
+    public static void Init()
     {
-        DontDestroyOnLoad(transform.gameObject);
+        jsonObjects.Clear();
+        jsonArrays.Clear();
+        LoadObject("Assets/Scripts/Common/Json/tower.json", "tower");
+        LoadObject("Assets/Scripts/Common/Json/soldier.json", "soldier");
+        LoadObject("Assets/Scripts/Common/Json/bullet.json", "bullet");
+        LoadObject("Assets/Scripts/Common/Json/buff.json", "buff");
     }
 
-	void Start() {
-        Init();
-	}
-
-    public void Init()
+    public static void LoadArray(string fileName, string jsonName)
     {
-        Load("Assets/Scripts/Common/Json/entity.json", "entity");
-        Load("Assets/Scripts/Common/Json/bullet.json", "bullet");
-    }
-
-    public void Load(string fileName, string jsonName)
-    {
-        //JObject obj = null;
-        //if (jsonObjects.TryGetValue(jsonName, out obj))
-        //{
-        //    return;
-        //}
-        //string fileData = File.ReadAllText(fileName, Encoding.UTF8);
-        //string jsonData = "{" + jsonName + ":" + fileData + "}";
-        //JObject jsonObj = JObject.Parse(jsonData);
-        //jsonObjects[jsonName] = jsonObj;
-
         JArray array = null;
         if (jsonArrays.TryGetValue(fileName, out array))
         {
@@ -46,6 +31,19 @@ public class ConfigMgr : MonoBehaviour {
         string fileData = File.ReadAllText(fileName, Encoding.UTF8);
         JArray jsonArray = JArray.Parse(fileData);
         jsonArrays[jsonName] = jsonArray;
+    }
+
+    public static void LoadObject(string fileName, string jsonName)
+    {
+        JObject obj = null;
+        if (jsonObjects.TryGetValue(jsonName, out obj))
+        {
+            return;
+        }
+        string fileData = File.ReadAllText(fileName, Encoding.UTF8);
+        //string jsonData = "{" + jsonName + ":" + fileData + "}";
+        JObject jsonObj = JObject.Parse(fileData);
+        jsonObjects[jsonName] = jsonObj;
     }
 
     public static JObject GetJObject(string jsonName)

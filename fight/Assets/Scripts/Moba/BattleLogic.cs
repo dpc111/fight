@@ -22,6 +22,7 @@ public class BattleLogic
     {
         GameData.msgFrame.Update(GameData.lockStepLogic.mLogicFrame);
         GameData.towerMgr.Update();
+        GameData.soldierMgr.Update();
         GameData.bulletMgr.Update();
         GameData.transformMgr.Update();
         //if (mIsGame && GameData.listSoldier.Count == 0)

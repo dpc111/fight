@@ -6,7 +6,7 @@ public class TransformLock : TransformBase
 {
     public TransformBase mObjLock = null;
 
-    public virtual void MoveLock(TransformBase objLock) 
+    public override void MoveLock(TransformBase objLock) 
     {
         if (objLock == null)
             return;
@@ -14,7 +14,7 @@ public class TransformLock : TransformBase
         Move = true;
     }
 
-    public virtual void Update()
+    public override void Update()
     {
         base.Update();
         if (!Move)

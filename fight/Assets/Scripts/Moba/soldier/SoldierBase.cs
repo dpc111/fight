@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class SoldierBase : UnitBase
 {
-    public virtual void Init(SoldierCfg cfg)
-    {
-        base.Init();
-    }
+    public UnitBase mUnitTri = null;
+    public UnitBase mUnitTar = null;
 }

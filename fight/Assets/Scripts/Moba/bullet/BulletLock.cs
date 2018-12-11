@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class BulletLock : BulletBase
 {
-    public virtual void Init(BulletCfg cfg)
+    public override void Update()
     {
-        base.Init(cfg);
-    }
-
-    public virtual void Update()
-    {
+        if (mUnitTar == null || mUnitTar.Kill)
+        {
+            if (!Kill)
+                Kill = true;
+            return;
+        }
+        if (TransformBase.CheckHit2(mTransform, mUnitTar.mTransform))
+        {
+            OnHit(mUnitTar);
+            return;
+        }
         base.Update();
     }
 }

@@ -1,6 +1,4 @@
-﻿#define _CLIENT_LOGIC_
-
-using System;
+﻿using System;
 using System.IO;
 
 public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
@@ -330,6 +328,11 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
         return ((value.rawValue & 0x0000000000000FFF) != 0) ? Floor(value) + fix1 : value;
     }
 
+    public static Fix Sqr(Fix x)
+    {
+        return x * x;
+    }
+
     public static Fix Pow(Fix x, int y)
     {
         if (y == 1)
@@ -381,6 +384,16 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
         4096
     };
 
+    public static Fix Ang2Rad(Fix ang)
+    {
+        return Fix.pi / (Fix)180 * ang;
+    }
+
+    public static Fix Rad2Ang(Fix rad)
+    {
+        return (Fix)180 / Fix.pi * rad;
+    }
+
     // 插值 x度数 y小数
     private static Fix SinLookUp(Fix x, Fix y)
     {
@@ -393,7 +406,7 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     }
 
     // x弧度值
-    private static Fix Sin(Fix x)
+    public static Fix Sin(Fix x)
     {
         Fix y = (Fix)0;
         for (; x < Fix.fix0; )
@@ -610,12 +623,10 @@ public struct FixVector3
         return a * (1 - c) + b * c;
     }
 
-    #if _CLIENT_LOGIC_
     public UnityEngine.Vector3 ToVector3()
     {
         return new UnityEngine.Vector3((float)x, (float)y, (float)z);
     }
-    #endif
 }
 
 public struct FixVector2
@@ -748,12 +759,10 @@ public struct FixVector2
         return a * (1 - c) + b * c;
     }
 
-#if _CLIENT_LOGIC_
     public UnityEngine.Vector2 ToVector2()
     {
         return new UnityEngine.Vector2((float)x, (float)y);
     }
-#endif
 }
 
 public struct NormalVector2
@@ -896,12 +905,10 @@ public struct NormalVector2
         return string.Format("x:{0} y:{1}", x, y);
     }
 
-#if _CLIENT_LOGIC_
     public UnityEngine.Vector2 ToVector2()
     {
         return new UnityEngine.Vector2((float)x, (float)y);
     }
-#endif
 }
 
 public struct IntVector2
@@ -1040,10 +1047,8 @@ public struct IntVector2
         return string.Format("x:{0} y:{1}", x, y);
     }
 
-#if _CLIENT_LOGIC_
     public UnityEngine.Vector2 ToVector2()
     {
         return new UnityEngine.Vector2((int)x, (int)y);
     }
-#endif
 }

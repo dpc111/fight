@@ -10,15 +10,15 @@ public class TransformMgr
     public void Init()
     {
         mObjectList.Clear();
-        mAstar.Init((Fix)500, (Fix)300, (Fix)5);
+        mAstar.Init((Fix)200, (Fix)200, (Fix)1);
     }
 
-    public void AddObject(TransformBase obj)
+    public void Add(TransformBase obj)
     {
         mObjectList.Add(obj);
     }
 
-    public void RemoveObject(TransformBase obj)
+    public void Remove(TransformBase obj)
     {
         mObjectList.Remove(obj);
     }
@@ -30,5 +30,22 @@ public class TransformMgr
         {
             mObjectList[i].Update();
         }
+    }
+
+    public TransformBase Create(int type)
+    {
+        TransformBase tran = null;
+        if (type == (int)MoveType.Walk)
+            tran = new TransformWalk();
+        else if (type == (int)MoveType.Lock)
+            tran = new TransformLock();
+        else if (type == (int)MoveType.Dir)
+            tran = new TransformDir();
+        else if (type == (int)MoveType.Stand)
+            tran = new TransformStand();
+        if (tran == null)
+            return null;
+        Add(tran);
+        return tran;
     }
 }

@@ -226,8 +226,10 @@
      <Compile Include="Assets\Scripts\Login\Test\TestButton.cs" />
      <Compile Include="Assets\Scripts\math\Fix.cs" />
      <Compile Include="Assets\Scripts\math\FixRandom.cs" />
+     <Compile Include="Assets\Scripts\math\Matrix3.cs" />
      <Compile Include="Assets\Scripts\Moba\BattleLogic.cs" />
      <Compile Include="Assets\Scripts\Moba\bullet\BulletBase.cs" />
+     <Compile Include="Assets\Scripts\Moba\bullet\BulletDir.cs" />
      <Compile Include="Assets\Scripts\Moba\bullet\BulletFactory.cs" />
      <Compile Include="Assets\Scripts\Moba\bullet\BulletLock.cs" />
      <Compile Include="Assets\Scripts\Moba\bullet\BulletMgr.cs" />
@@ -239,6 +241,10 @@
      <Compile Include="Assets\Scripts\Moba\msg\MsgFrame.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgType.cs" />
      <Compile Include="Assets\Scripts\Moba\res\Prefabs.cs" />
+     <Compile Include="Assets\Scripts\Moba\res\ResBase.cs" />
+     <Compile Include="Assets\Scripts\Moba\res\ResFactory.cs" />
+     <Compile Include="Assets\Scripts\Moba\res\ResPrefab.cs" />
+     <Compile Include="Assets\Scripts\Moba\res\ResSprite.cs" />
      <Compile Include="Assets\Scripts\Moba\skill\BuffBase.cs" />
      <Compile Include="Assets\Scripts\Moba\skill\BuffCac.cs" />
      <Compile Include="Assets\Scripts\Moba\skill\BuffFactory.cs" />

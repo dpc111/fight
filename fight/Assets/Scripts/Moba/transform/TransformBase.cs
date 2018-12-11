@@ -13,19 +13,28 @@ public class TransformBase
     public Fix mSpeed = Fix.fix0;
     public bool mIsMove = false;
 
-    public bool Move { get {return mIsMove; } set { mIsMove = value; } }
+    public FixVector3 mGPos = new FixVector3();
+    public FixVector3 mGDir = new FixVector3();
+
+    public Fix mBlockRange = Fix.fix0;
+
+    public bool Move { get { return mIsMove; } set { mIsMove = value; } }
+    public FixVector3 Pos { get { mGPos.x = mPos.x; mGPos.z = mPos.y; return mGPos; } }
+    public FixVector3 Dir { get { mGDir.x = mDir.x; mGDir.z = mDir.y; return mGDir; } }
+    public Fix BlockRange { get { return mBlockRange; } set { mBlockRange = value; } }
     public virtual void MoveToTarget(FixVector2 target) { }
     public virtual void MoveDir(FixVector2 dir) { }
     public virtual void MoveLock(TransformBase objLock) { }
 
-    public virtual void Init(FixVector2 pos, Fix blockR, Fix speed)
+    public virtual void Init(FixVector3 pos, Fix blockRange, Fix speed)
     {
-        mPos = pos;
+        mPos = new FixVector2(pos.x, pos.z);
         mSpeed = speed;
         Move = false;
-        if (blockR != Fix.fix0)
+        mBlockRange = blockRange;
+        if (mBlockRange != Fix.fix0)
         {
-            SetBlockShap(blockR);
+            SetBlockShap(mBlockRange);
             SetBlockDynamic();
         }
         else
@@ -74,5 +83,37 @@ public class TransformBase
         {
             mBlockDynamic[i] = indexCur + mBlockShape[i];
         }
+    }
+
+    public FixVector3 GetPos()
+    {
+        return new FixVector3(mPos.x, Fix.fix0, mPos.y);
+    }
+
+    public static bool CheckHit1(TransformBase t1, TransformBase t2)
+    {
+        if (t1 == null || t2 == null)
+            return false;
+        if (FixVector3.SqrMod(t1.Pos - t2.Pos) > Fix.Sqr(t1.BlockRange))
+            return false;
+        return true;
+    }
+
+    public static bool CheckHit2(TransformBase t1, TransformBase t2)
+    {
+        if (t1 == null || t2 == null)
+            return false;
+        if (FixVector3.SqrMod(t1.Pos - t2.Pos) > Fix.Sqr(t2.BlockRange))
+            return false;
+        return true;
+    }
+
+    public static bool CheckHit12(TransformBase t1, TransformBase t2)
+    {
+        if (t1 == null || t2 == null)
+            return false;
+        if (FixVector3.SqrMod(t1.Pos - t2.Pos) > Fix.Sqr(t1.BlockRange + t2.BlockRange))
+            return false;
+        return true;
     }
 }

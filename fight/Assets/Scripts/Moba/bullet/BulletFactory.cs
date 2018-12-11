@@ -4,11 +4,10 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class BulletCfg
+public class BulletCfg : UnitCfg
 {
-    public int id;
-    public int type;
-    public string prefab;
+    public int id = 0;
+    public int type = 0;
 }
 
 public class BulletFactory
@@ -20,12 +19,22 @@ public class BulletFactory
         JToken cfgs = ConfigMgr.GetJObject("bullet");
         if (cfgs == null)
             return;
-        foreach (JToken cfg in cfgs.Children()) 
+        foreach (JToken cfgt in cfgs.Values())
         {
+            JObject cfg = cfgt.ToObject<JObject>();
             BulletCfg bullet = new BulletCfg();
+            bullet.hp = Fix.fix0;
+            bullet.armor = Fix.fix0;
+            bullet.moveType = (int)cfg["move_type"];
+            bullet.moveSpeed = (Fix)(int)cfg["move_speed"];
+            bullet.attCd = Fix.fix0;
+            bullet.attRange = Fix.fix0;
+            bullet.attDamage = Fix.fix0;
+            bullet.blockRange = Fix.fix0;
+            bullet.prefab = (string)cfg["prefab"];
+
             bullet.id = (int)cfg["id"];
             bullet.type = (int)cfg["type"];
-            bullet.prefab = (string)cfg["prefab"];
             bulletCfgs[bullet.id] = bullet;
         }
     }
@@ -37,19 +46,26 @@ public class BulletFactory
         return bulletCfgs[id];
     }
 
-    public static BulletBase CreateBullet(int id)
+    public static BulletBase CreateBullet(int id, FixVector3 pos)
     {
         BulletCfg cfg = GetCfg(id);
         if (cfg == null)
             return null;
-        BulletBase bullet = new BulletBase();
-        bullet.Init(cfg);
+        BulletBase bullet = null;
+        if (cfg.type == (int)BulletType.Lock)
+            bullet = new BulletLock();
+        else if (cfg.type == (int)BulletType.Dir)
+            bullet = new BulletDir();
+        if (bullet == null)
+            return null;
+        bullet.Init(cfg, pos);
         GameData.bulletMgr.AddBullet(bullet);
         return bullet;
     }
 
     public static void RemoveBullet(BulletBase bullet)
     {
+        bullet.Destory();
         GameData.bulletMgr.RemoveBullet(bullet);
     }
 }

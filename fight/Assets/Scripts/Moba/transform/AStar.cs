@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AStar
 {
-    public static int findPathLen = 50;
+    public static int findPathLen = 500;
     public static int objectBlockLen = 50;
 
     public int mX;
@@ -30,13 +30,17 @@ public class AStar
         mOpenGrids = new MinHeap(mX * mZ + 1);
         mGrids = new GridPos[mTotal];
         mPath = new GridPos[mTotal];
-        for (int i = 0; i < mZ; i++)
+        for (int kz = 0; kz < mZ; kz++)
         {
-            for (int j = 0; j < mX; j++)
+            for (int kx = 0; kx < mX; kx++)
             {
-                int index = i * mX + j;
-                mGrids[index] = new GridPos(i, j, index);
-                mGrids[index].posCenter = new FixVector2((Fix)(j*mWidth) + width/(Fix)2, (Fix)(i*mWidth) + width/(Fix)2);
+                int index = kz * mX + kx;
+                mGrids[index] = new GridPos(kx, kz, index);
+                mGrids[index].posCenter = new FixVector2((Fix)(kx*mWidth) + width/(Fix)2, (Fix)(kz*mWidth) + width/(Fix)2);
+                if (kx >= 50 && kx <= 55 && kz >= 5 && kz <= 100)
+                {
+                    mGrids[index].block = GridPos.blockStatic;
+                }
             }
         }
     }
@@ -77,7 +81,7 @@ public class AStar
 
     public GridPos GetGridPos(int x, int z)
     {
-        if (x < 0 || x >= mX || z < 0 || z > mZ)
+        if (x < 0 || x >= mX || z < 0 || z >= mZ)
             return null;
         int index = z * mX + x;
         return GetGridPos(index);
@@ -113,7 +117,7 @@ public class AStar
         int f = g + h;
         if (around.f == 0 || around.f > f)
         {
-            //重新排序？
+            //重新排序???
             around.g = g;
             around.h = h;
             around.f = f;
@@ -162,8 +166,11 @@ public class AStar
             {
                 checkLen++;
             }
+            devX = devX1;
+            devZ = devZ1;
             posCur = posNext;
             path[checkLen] = posCur.index;
+            //Debug.LogError(devX + " " + devX1 + " " + devZ + " " + devZ1 + " " + checkLen);
         }
         pathLen = checkLen + 1;
     }
@@ -194,15 +201,15 @@ public class AStar
         {
             GridPos posCur = (GridPos)mOpenGrids.Pop();
             if (posCur == null)
-                break;
+            { break; }
             if (posCur.state != GridPos.stateOpen)
-                break;
+            { break; }
             GetAround(posCur, ref arounds);
             for (int i = 0; i < 8; i++)
             {
                 GridPos posA = arounds[i];
                 if (posA == null)
-                    continue;
+                { continue; }
                 if (posA.index == posEnd.index)
                 {
                     posA.posParent = posCur;
@@ -211,9 +218,9 @@ public class AStar
                     break;
                 }
                 if (posA.state == GridPos.stateClose)
-                    continue;
+                { continue; }
                 if (posA.block != GridPos.blockNone)
-                    continue;
+                { continue; }
                 OptAround(posA, posCur, posEnd);
             }
             posCur.state = GridPos.stateClose;

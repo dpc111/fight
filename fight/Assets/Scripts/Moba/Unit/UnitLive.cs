@@ -21,7 +21,7 @@ public class UnitLive : UnitBase
             {
                 break;
             }
-            skill.UpdateLogic();
+            skill.Update();
         }
     }
 }

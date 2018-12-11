@@ -11,13 +11,13 @@ public class MinHeap
     public MinHeap(int len) 
     {
         mLen = len;
-        mCur = 1;
+        mCur = 0;
         mData = new GridPos[mLen];
     }
 
     public void Clear() 
     {
-        mCur = 1;
+        mCur = 0;
     }
 
     public void Exchange(int pos1, int pos2)
@@ -39,6 +39,8 @@ public class MinHeap
         while (true)
         {
             int pos2 = pos1 / 2;
+            if (pos2 <= 0)
+                break;
             if (mData[pos2].GetValue() > mData[pos1].GetValue())
             {
                 Exchange(pos2, pos1);
@@ -47,9 +49,7 @@ public class MinHeap
                     break;
             }
             else
-            {
                 break;
-            }
         }
     }
 

@@ -20,7 +20,7 @@ public class SkillBase
         mCd = sCd;
     }
 
-    public virtual void UpdateLogic()
+    public virtual void Update()
     {
         if (mCd > Fix.fix0)
         {

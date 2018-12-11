@@ -25,8 +25,6 @@ public class GameConst {
     public const int ObjTypeMagicGrizzly = 5;
 
     public const int SkillCellSize = 5;
-
-
 }
 
 public enum UnitAttrType
@@ -39,6 +37,22 @@ public enum UnitAttrType
     AttRange,
     AttDamage,
     Num
+}
+
+public enum TowerType
+{
+    Begin = 0,
+    Shoot,
+    Soldier,
+    End,
+}
+
+public enum BulletType
+{
+    Begin = 0,
+    Lock,
+    Dir,
+    End,
 }
 
 public enum BuffType
@@ -68,4 +82,14 @@ public enum BuffRemoveType
 {
     All = 1,
     Layer,
+}
+
+public enum MoveType
+{
+    Begin = 0,
+    Walk,
+    Lock,
+    Dir,
+    Stand,
+    End,
 }
