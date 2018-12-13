@@ -46,7 +46,7 @@ public class BulletFactory
         return bulletCfgs[id];
     }
 
-    public static BulletBase CreateBullet(int id, FixVector3 pos)
+    public static BulletBase Create(int id, FixVector3 pos)
     {
         BulletCfg cfg = GetCfg(id);
         if (cfg == null)
@@ -59,13 +59,7 @@ public class BulletFactory
         if (bullet == null)
             return null;
         bullet.Init(cfg, pos);
-        GameData.bulletMgr.AddBullet(bullet);
+        GameData.bulletMgr.Add(bullet);
         return bullet;
-    }
-
-    public static void RemoveBullet(BulletBase bullet)
-    {
-        bullet.Destory();
-        GameData.bulletMgr.RemoveBullet(bullet);
     }
 }

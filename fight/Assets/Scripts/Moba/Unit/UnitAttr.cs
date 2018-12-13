@@ -28,28 +28,28 @@ public class UnitAttr
 
     public Fix GetAttr(UnitAttrType attr)
     {
-        if (attr < UnitAttrType.Num|| attr > UnitAttrType.Num)
+        if (attr < UnitAttrType.None || attr >= UnitAttrType.Num)
             return Fix.fix0;
         return mAttrCur[(int)attr];
     }
 
     public void SetAttr(UnitAttrType attr, Fix value)
     {
-        if (attr < UnitAttrType.Num || attr > UnitAttrType.Num)
+        if (attr < UnitAttrType.None || attr >= UnitAttrType.Num)
             return;
         mAttrCur[(int)attr] = value;
     }
 
     public void AddAttr(UnitAttrType attr, Fix value)
     {
-        if (attr < UnitAttrType.Num || attr > UnitAttrType.Num)
+        if (attr < UnitAttrType.None || attr >= UnitAttrType.Num)
             return;
         mAttrCur[(int)attr] += value; 
     }
 
     public void MulAttr(UnitAttrType attr, Fix value)
     {
-        if (attr < UnitAttrType.Num || attr > UnitAttrType.Num)
+        if (attr < UnitAttrType.None || attr >= UnitAttrType.Num)
             return;
         mAttrCur[(int)attr] *= value;
     }

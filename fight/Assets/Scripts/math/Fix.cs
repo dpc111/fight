@@ -505,6 +505,20 @@ public struct FixVector3
         this.z = v.z;
     }
 
+    public FixVector3(int x, int y, int z)
+    {
+        this.x = (Fix)x;
+        this.y = (Fix)y;
+        this.z = (Fix)z;
+    }
+
+    public FixVector3(float x, float y, float z)
+    {
+        this.x = (Fix)x;
+        this.y = (Fix)y;
+        this.z = (Fix)z;
+    }
+
     public Fix this[int index]
     {
         get
@@ -638,6 +652,18 @@ public struct FixVector2
     {
         this.x = x;
         this.y = y;
+    }
+
+    public FixVector2(int x, int y)
+    {
+        this.x = (Fix)x;
+        this.y = (Fix)y;
+    }
+
+    public FixVector2(float x, float y)
+    {
+        this.x = (Fix)x;
+        this.y = (Fix)y;
     }
 
     public FixVector2(FixVector2 v)

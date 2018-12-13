@@ -4,24 +4,42 @@ using UnityEngine;
 
 public class UnitLive : UnitBase 
 {
-    public Fix mBlood = Fix.fix0;
-    public SkillBase[] mSkills = new SkillBase[GameConst.SkillCellSize];
+    public Fix mTimeNextAtt = Fix.fix0;
 
-    public virtual void OnDeath()
+    public override void Init(UnitCfg cfg, FixVector3 pos)
     {
-
+        base.Init(cfg, pos);
+        mTimeNextAtt = GameData.timeCur + mAttr.GetAttr(UnitAttrType.AttCd);
     }
 
-    public virtual void UpdateLogic()
+    public override void Update()
     {
-        for (int i = 0; i < GameConst.SkillCellSize; i++)
+        base.Update();
+        if (AttackCheck())
         {
-            SkillBase skill = mSkills[i];
-            if (skill == null)
+            if (Attack())
             {
-                break;
+                AttackOver();
             }
-            skill.Update();
         }
+    }
+
+    public virtual bool Attack()
+    {
+        return true;
+    }
+
+    public bool AttackCheck()
+    {
+        if (GameData.timeCur < mTimeNextAtt)
+        {    
+            return false;
+        }
+        return true;
+    }
+
+    public void AttackOver()
+    {
+        mTimeNextAtt = GameData.timeCur + mAttr.GetAttr(UnitAttrType.AttCd);
     }
 }

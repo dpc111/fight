@@ -25,6 +25,11 @@ public class GameConst {
     public const int ObjTypeMagicGrizzly = 5;
 
     public const int SkillCellSize = 5;
+
+    public static Fix XMax = (Fix)100;
+    public static Fix ZMax = (Fix)100;
+
+    public static int TowerAttackNumMax = 10;
 }
 
 public enum UnitAttrType

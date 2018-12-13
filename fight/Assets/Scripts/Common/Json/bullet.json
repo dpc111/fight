@@ -1,16 +1,16 @@
 {
       "3001" : {
          "id" : "3001",
-         "type" : 1,
-         "move_type" : 1,
-         "move_speed" : 1,
-         "prefab" : "bullet_3001"
+         "type" : 2,
+         "move_type" : 2,
+         "move_speed" : 10,
+         "prefab" : "Bullet"
       },
       "3002" : {
          "id" : "3002",
          "type" : 2,
          "move_type" : 1,
          "move_speed" : 2,
-         "prefab" : "bullet_3002"
+         "prefab" : "Bullet1"
       }
 }

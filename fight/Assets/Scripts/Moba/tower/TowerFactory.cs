@@ -10,6 +10,7 @@ public class TowerCfg : UnitCfg
     public int type = 0;
     public int bullet_id = 0;
     public int soldier_id = 0;
+    public int attack_num = 0;
 }
 
 public class TowerFactory 
@@ -39,6 +40,7 @@ public class TowerFactory
             tower.type = (int)cfg["type"];
             tower.bullet_id = (int)cfg["bullet_id"];
             tower.soldier_id = (int)cfg["soldier_id"];
+            tower.attack_num = (int)cfg["attack_num"];
             towerCfgs[tower.id] = tower;
         }
     }
@@ -50,7 +52,7 @@ public class TowerFactory
         return towerCfgs[id];
     }
 
-    public static TowerBase CreateTower(int id, FixVector3 pos)
+    public static TowerBase Create(int id, FixVector3 pos)
     {
         TowerCfg cfg = GetCfg(id);
         if (cfg == null)
@@ -63,13 +65,7 @@ public class TowerFactory
         if (tower == null)
             return null;
         tower.Init(cfg, pos);
-        GameData.towerMgr.AddTower(tower);
+        GameData.towerMgr.Add(tower);
         return tower;
-    }
-
-    public static void RemoveTower(TowerBase tower) 
-    {
-        tower.Destory();
-        GameData.towerMgr.RemoveTower(tower);
     }
 }

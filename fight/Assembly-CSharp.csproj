@@ -237,6 +237,8 @@
      <Compile Include="Assets\Scripts\Moba\GameConst.cs" />
      <Compile Include="Assets\Scripts\Moba\GameData.cs" />
      <Compile Include="Assets\Scripts\Moba\LockStepLogic.cs" />
+     <Compile Include="Assets\Scripts\Moba\mgr\FightTool.cs" />
+     <Compile Include="Assets\Scripts\Moba\mgr\UnitMgrBase.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgCallback.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgFrame.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgType.cs" />

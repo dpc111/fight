@@ -6,7 +6,7 @@ public class TransformDir : TransformBase
 {
     public override void MoveDir(FixVector2 dir) 
     {
-        mDir.Normalize();
+        mDir = dir.GetNormalize();
         Move = true;
     }
 

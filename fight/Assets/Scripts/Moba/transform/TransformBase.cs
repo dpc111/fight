@@ -29,6 +29,7 @@ public class TransformBase
     public virtual void Init(FixVector3 pos, Fix blockRange, Fix speed)
     {
         mPos = new FixVector2(pos.x, pos.z);
+        mGPos = pos;
         mSpeed = speed;
         Move = false;
         mBlockRange = blockRange;
@@ -85,9 +86,11 @@ public class TransformBase
         }
     }
 
-    public FixVector3 GetPos()
+    public bool CheckOutWorld()
     {
-        return new FixVector3(mPos.x, Fix.fix0, mPos.y);
+        if (mPos.x >= Fix.fix0 && mPos.x <= GameConst.XMax && mPos.y >= Fix.fix0 && mPos.y <= GameConst.ZMax)
+            return false;
+        return true;
     }
 
     public static bool CheckHit1(TransformBase t1, TransformBase t2)

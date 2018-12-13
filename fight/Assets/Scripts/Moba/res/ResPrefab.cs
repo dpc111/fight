@@ -15,6 +15,6 @@ public class ResPrefab : ResBase<GameObject>
 
     public void Destory(GameObject obj)
     {
-        Destory(obj);
+        GameObject.Destroy(obj);
     }
 }

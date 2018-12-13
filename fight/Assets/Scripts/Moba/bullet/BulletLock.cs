@@ -6,6 +6,7 @@ public class BulletLock : BulletBase
 {
     public override void Update()
     {
+        base.Update();
         if (mUnitTar == null || mUnitTar.Kill)
         {
             if (!Kill)
@@ -17,6 +18,5 @@ public class BulletLock : BulletBase
             OnHit(mUnitTar);
             return;
         }
-        base.Update();
     }
 }

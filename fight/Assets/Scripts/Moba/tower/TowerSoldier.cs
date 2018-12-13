@@ -17,10 +17,11 @@ public class TowerSoldier : TowerBase
         base.Update();
     }
 
-    public override void Attack()
+    public override bool Attack()
     {
-        SoldierBase soldier = SoldierFactory.CreateSoldier(mSoldierId, mTransform.Pos);
+        SoldierBase soldier = SoldierFactory.Create(mSoldierId, mTransform.Pos);
         Fix damage = mAttr.GetAttr(UnitAttrType.AttDamage);
         soldier.mAttr.SetAttr(UnitAttrType.AttDamage, damage);
+        return true;
     }
 }

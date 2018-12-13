@@ -22,7 +22,9 @@ public class UnitBase
     public TransformBase mTransform = null;
     public BuffMgr mBuffMgr = new BuffMgr();
     public bool mIsKill = false;
+    public int mCamp = 1;
     public bool Kill { get { return mIsKill; } set { mIsKill = value; } }
+    public int Camp { get { return mCamp; } set { mCamp = value; } }
 
     public virtual void Init(UnitCfg cfg, FixVector3 pos)
     {
@@ -50,11 +52,30 @@ public class UnitBase
         mBuffMgr = null;
     }
 
-
     public virtual void Update()
     {
+        if (Kill)
+        {  
+            return;
+        }
         if (mBuffMgr != null)
+        {
             mBuffMgr.Update();
+        }
         mUnitUnity.SetGameObjectPosition(mTransform.Pos);
+        if (mTransform.CheckOutWorld())
+        {
+            Kill = true;
+            return;
+        }
+    }
+
+    public bool CanBeAttack()
+    {
+        if (Kill)
+        {
+            return false;
+        }
+        return true;
     }
 }

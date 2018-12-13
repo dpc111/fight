@@ -48,20 +48,14 @@ public class SoldierFactory
         return soldierCfgs[id];
     }
 
-    public static SoldierBase CreateSoldier(int id, FixVector3 pos)
+    public static SoldierBase Create(int id, FixVector3 pos)
     {
         SoldierCfg cfg = GetCfg(id);
         if (cfg == null)
             return null;
         SoldierBase soldier = new SoldierBase();
         soldier.Init(cfg, pos);
-        GameData.soldierMgr.AddSoldier(soldier);
+        GameData.soldierMgr.Add(soldier);
         return soldier;
-    }
-
-    public static void RemoveSoldier(SoldierBase soldier)
-    {
-        soldier.Destory();
-        GameData.soldierMgr.RemoveSoldier(soldier);
     }
 }

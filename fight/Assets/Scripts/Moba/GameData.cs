@@ -38,8 +38,8 @@ public class GameData {
 
     public static void Test()
     {
-        TowerFactory.CreateTower(1001, new FixVector3((Fix)30, (Fix)0, (Fix)30));
-        UnitBase soldier = SoldierFactory.CreateSoldier(2001, new FixVector3((Fix)10, (Fix)0, (Fix)40));
+        TowerFactory.Create(1001, new FixVector3((Fix)30, (Fix)0, (Fix)30));
+        UnitBase soldier = SoldierFactory.Create(2001, new FixVector3((Fix)10, (Fix)0, (Fix)40));
         soldier.mTransform.MoveToTarget(new FixVector2((Fix)100, (Fix)50));
     }
 
