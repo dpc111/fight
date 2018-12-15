@@ -2,73 +2,82 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightTool 
-{
-    public static bool IsSameCamp(UnitBase u1, UnitBase u2)
-    {
-        if (u1 == null || u2 == null)
-        {
+public class FightTool {
+    public static bool IsSameCamp(UnitBase u1, UnitBase u2) {
+        if (u1 == null || u2 == null) {
             return false;
         }
-        if (u1.Camp != u2.Camp)
-        {
+        if (u1.Camp != u2.Camp) {
             return false;
         }
         return true;
     }
 
-    public static bool IsInAttackRange(UnitBase u1, UnitBase u2)
-    {
+    public static int CampOther(int camp) {
+        if (camp == GameConst.CampLeft) {
+            return GameConst.CampRight;
+        } else {
+            return GameConst.CampLeft;
+        }
+    }
+
+    public static FixVector3 CampDir(int camp) {
+        if (camp == GameConst.CampLeft) {
+            return GameConst.CampLeftDir;
+        } else {
+            return GameConst.CampRightDir;
+        }
+    }
+
+    public static bool IsInAttackRange(UnitBase u1, UnitBase u2) {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
-        Fix attackRange = u1.mAttr.GetAttr(UnitAttrType.AttRange);
-        if (Fix.Abs(pos1.x - pos2.x) > attackRange || Fix.Abs(pos1.z - pos2.z) > attackRange)
-        {
+        Fix attackRange = u1.mAttr.GetAttr(UnitAttrType.AttackRange);
+        if (Fix.Abs(pos1.x - pos2.x) > attackRange || Fix.Abs(pos1.z - pos2.z) > attackRange) {
             return false;
         }
-        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > attackRange * attackRange)
-        {
+        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > attackRange * attackRange) {
             return false;
         }
         return true;
     }
 
-    public static bool IsHit(UnitBase u1, UnitBase u2)
-    {
+    public static bool IsHit(UnitBase u1, UnitBase u2) {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
-        Fix blockRange = u2.mTransform.BlockRange;
-        if (Fix.Abs(pos1.x - pos2.x) > blockRange || Fix.Abs(pos1.z - pos2.z) > blockRange)
-        {
+        Fix blockRange = u2.mTransform.mBlock.BlockRange;
+        if (Fix.Abs(pos1.x - pos2.x) > blockRange || Fix.Abs(pos1.z - pos2.z) > blockRange) {
             return false;
         }
-        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > blockRange * blockRange)
-        {
+        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > blockRange * blockRange) {
             return false;
         }
         return true;
     }
 
-    public static Fix SqrDistance(UnitBase u1, UnitBase u2)
-    {
+    public static bool IsOutOfWorld(UnitBase u) {
+        FixVector3 pos = u.mTransform.Pos;
+        if (pos.x < Fix.fix0 || pos.x > GameConst.XMax || pos.z < Fix.fix0 || pos.z > GameConst.ZMax) {
+            return true;
+        }
+        return false;
+    }
+
+    public static Fix SqrDistance(UnitBase u1, UnitBase u2) {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
         Fix sqrDis = (pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z);
         return sqrDis;
     }
 
-    public static UnitBase FindEnemySoldier(UnitBase unit)
-    {
+    public static UnitBase FindEnemySoldier(UnitBase unit) {
         List<SoldierBase> units = GameData.soldierMgr.GetList();
-        for (int i = 0; i < units.Count; i++)
-        {
+        for (int i = 0; i < units.Count; i++) {
             UnitBase u = units[i];
-            if (FightTool.IsSameCamp(unit, u))
-            {
+            if (FightTool.IsSameCamp(unit, u)) {
                 continue;
             }
-            if (!FightTool.IsInAttackRange(unit, u))
-            {
+            if (!FightTool.IsInAttackRange(unit, u)) {
                 continue;
             }
             return u;
@@ -76,18 +85,14 @@ public class FightTool
         return null;
     }
 
-    public static UnitBase FindEnemyTower(UnitBase unit)
-    {
+    public static UnitBase FindEnemyTower(UnitBase unit) {
         List<TowerBase> units = GameData.towerMgr.GetList();
-        for (int i = 0; i < units.Count; i++)
-        {
+        for (int i = 0; i < units.Count; i++) {
             UnitBase u = units[i];
-            if (FightTool.IsSameCamp(unit, u))
-            {
+            if (FightTool.IsSameCamp(unit, u)) {
                 continue;
             }
-            if (!FightTool.IsInAttackRange(unit, u))
-            {
+            if (!FightTool.IsInAttackRange(unit, u)) {
                 continue;
             }
             return u;
@@ -95,80 +100,64 @@ public class FightTool
         return null;
     }
 
-    public static int FindEnemySoldierList(UnitBase unit, ref UnitBase[] list, int num)
-    {
+    public static int FindEnemySoldierList(UnitBase unit, ref UnitBase[] list, int num) {
         List<SoldierBase> units = GameData.soldierMgr.GetList();
         int index = 0;
-        for (int i = 0; i < units.Count; i++)
-        {
+        for (int i = 0; i < units.Count; i++) {
             UnitBase u = units[i];
-            if (FightTool.IsSameCamp(unit, u))
-            {
+            if (FightTool.IsSameCamp(unit, u)) {
                 continue;
             }
-            if (!FightTool.IsInAttackRange(unit, u))
-            {
+            if (!FightTool.IsInAttackRange(unit, u)) {
                 continue;
             }
             list[index] = u;
             index++;
-            if (index >= num)
-            {
+            if (index >= num) {
                 return index;
             }
         }
         return index;
     }
 
-    public static int FindEnemyTowerList(UnitBase unit, ref UnitBase[] list, int num)
-    {
+    public static int FindEnemyTowerList(UnitBase unit, ref UnitBase[] list, int num) {
         List<TowerBase> units = GameData.towerMgr.GetList();
         int index = 0;
-        for (int i = 0; i < units.Count; i++)
-        {
+        for (int i = 0; i < units.Count; i++) {
             UnitBase u = units[i];
-            if (FightTool.IsSameCamp(unit, u))
-            {
+            if (FightTool.IsSameCamp(unit, u)) {
                 continue;
             }
-            if (!FightTool.IsInAttackRange(unit, u))
-            {
+            if (!FightTool.IsInAttackRange(unit, u)) {
                 continue;
             }
             list[index] = u;
             index++;
-            if (index >= num)
-            {
+            if (index >= num) {
                 return index;
             }
         }
         return index;
     }
 
-    public static UnitBase FindEnemyTowerNearest(UnitBase unit)
-    {
+    public static UnitBase FindEnemyTowerNearest(UnitBase unit) {
         List<TowerBase> units = GameData.towerMgr.GetList();
         UnitBase nearestUnit = null;
         Fix nearestSqrDis = Fix.fix0;
-        for (int i = 0; i < units.Count; i++)
-        {
+        for (int i = 0; i < units.Count; i++) {
             UnitBase u = units[i];
-            if (FightTool.IsSameCamp(unit, u))
-            {
+            if (FightTool.IsSameCamp(unit, u)) {
                 continue;
             }
-            if (!FightTool.IsInAttackRange(unit, u))
-            {
+            if (!FightTool.IsInAttackRange(unit, u)) {
                 continue;
             }
             Fix sqrDis = FightTool.SqrDistance(unit, u);
-            if (nearestUnit == null)
-            {
+            if (nearestUnit == null) {
                 nearestUnit = u;
                 nearestSqrDis = sqrDis;
             }
-            if (sqrDis < nearestSqrDis)
-            {
+            if (sqrDis < nearestSqrDis) {
                 nearestUnit = u;
                 nearestSqrDis = sqrDis;
             }
@@ -176,30 +165,24 @@ public class FightTool
         return nearestUnit;
     }
 
-    public static UnitBase FindEnemySoldierNearest(UnitBase unit)
-    {
+    public static SoldierBase FindEnemySoldierNearest(UnitBase unit) {
         List<SoldierBase> units = GameData.soldierMgr.GetList();
-        UnitBase nearestUnit = null;
+        SoldierBase nearestUnit = null;
         Fix nearestSqrDis = Fix.fix0;
-        for (int i = 0; i < units.Count; i++)
-        {
-            UnitBase u = units[i];
-            if (FightTool.IsSameCamp(unit, u))
-            {
+        for (int i = 0; i < units.Count; i++) {
+            SoldierBase u = units[i];
+            if (FightTool.IsSameCamp(unit, u)) {
                 continue;
             }
-            if (!FightTool.IsInAttackRange(unit, u))
-            {
+            if (!FightTool.IsInAttackRange(unit, u)) {
                 continue;
             }
             Fix sqrDis = FightTool.SqrDistance(unit, u);
-            if (nearestUnit == null)
-            {
+            if (nearestUnit == null) {
                 nearestUnit = u;
                 nearestSqrDis = sqrDis;
             }
-            if (sqrDis < nearestSqrDis)
-            {
+            if (sqrDis < nearestSqrDis) {
                 nearestUnit = u;
                 nearestSqrDis = sqrDis;
             }
@@ -207,24 +190,18 @@ public class FightTool
         return nearestUnit;
     }
 
-    public static UnitBase FindEnemyUnitNearest(UnitBase unit)
-    {
+    public static UnitBase FindEnemyUnitNearest(UnitBase unit) {
         UnitBase tower = FightTool.FindEnemyTowerNearest(unit);
         UnitBase soldier = FightTool.FindEnemySoldierNearest(unit);
-        if (tower == null)
-        {
+        if (tower == null) {
             return soldier;
         }
-        if (soldier == null)
-        {
+        if (soldier == null) {
             return tower;
         }
-        if (FightTool.SqrDistance(unit, tower) < FightTool.SqrDistance(unit, soldier))
-        {
+        if (FightTool.SqrDistance(unit, tower) < FightTool.SqrDistance(unit, soldier)) {
             return tower;
-        }
-        else
-        {
+        } else {
             return soldier;
         }
     }

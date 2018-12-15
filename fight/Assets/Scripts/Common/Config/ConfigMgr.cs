@@ -18,6 +18,7 @@ public class ConfigMgr {
         LoadObject("Assets/Scripts/Common/Json/tower.json", "tower");
         LoadObject("Assets/Scripts/Common/Json/soldier.json", "soldier");
         LoadObject("Assets/Scripts/Common/Json/bullet.json", "bullet");
+        LoadObject("Assets/Scripts/Common/Json/skill.json", "skill");
         LoadObject("Assets/Scripts/Common/Json/buff.json", "buff");
     }
 

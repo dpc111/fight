@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LockStepLogic 
-{
+public class LockStepLogic {
     float mTotalTime = 0;
     float mNextGameTime = 0;
     float mFrameLen = 0;
     float mFrameInterval = 0;
     public int mLogicFrame = 1;
 
-    public void Init()
-    {
+    public void Init() {
         mFrameLen = (float)GameData.timeFrame;
         mTotalTime = 0;
         mNextGameTime = 0;
@@ -19,24 +17,17 @@ public class LockStepLogic
         mLogicFrame = 1;
     }
 
-    public void UpdateLogic()
-    {
+    public void UpdateLogic() {
         float deltaTime = UnityEngine.Time.deltaTime;
         mTotalTime += deltaTime;
-        //test
-        while (mTotalTime > mNextGameTime && GameData.msgFrame.CheckFrame(mLogicFrame))
-        //while (mTotalTime > mNextGameTime)
-        {
+        while (mTotalTime > mNextGameTime && GameData.msgFrame.CheckFrame(mLogicFrame)) {
             GameData.battleLogic.FrameLockLogic();
             mNextGameTime += mFrameLen;
             mLogicFrame += 1;
             GameData.timeCur += GameData.timeFrame;
             //test
-            //Debug.Log("test111");
-            if (mLogicFrame == 300)
-            {
+            if (mLogicFrame == 300) {
                 GameData.udpNet.DisconnectToServer();
-                //GameData.Stop();
                 return;
             }
             //MsgCreateTower msg = new MsgCreateTower();

@@ -1,25 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-public class BattleLogic 
-{
+public class BattleLogic {
     public static int mLogicFrame = 0;
     public bool mIsPause = true;
     public bool mIsGame = false;
 
-    public void Init()
-    {
+    public void Init() {
         mIsPause = false;
         mIsGame = true;
     }
 
-    public bool IsRun()
-    {
+    public bool IsRun() {
         return !mIsPause && mIsGame;
     }
 
-    public void FrameLockLogic()
-    {
+    public void FrameLockLogic() {
         GameData.msgFrame.Update(GameData.lockStepLogic.mLogicFrame);
         GameData.towerMgr.Update();
         GameData.soldierMgr.Update();
@@ -32,36 +28,23 @@ public class BattleLogic
         //}
     }
 
-    public void UpdateRenderPosition(float interval)
-    {
-        //for (int i = 0; i < GameData.listBullet.Count; i++)
-        //{
-        //    GameData.listBullet[i].UpdateRenderPosition(interval);
-        //}
-        //for (int i = 0; i < GameData.listSoldier.Count; i++)
-        //{
-        //    GameData.listSoldier[i].UpdateRenderPosition(interval);
-        //}
+    public void UpdateRenderPosition(float interpolation) {
+        if (interpolation < 0) {
+            interpolation = 0;
+        }
+        if (interpolation > 1) {
+            interpolation = 1;
+        }
+        GameData.soldierMgr.UpdateRenderPosition(interpolation);
+        GameData.bulletMgr.UpdateRenderPosition(interpolation);
     }
 
-    public void StopBattle()
-    {
+    public void StopBattle() {
         mIsGame = false;
         mLogicFrame = GameData.lockStepLogic.mLogicFrame;
-        if (mIsPause)
+        if (mIsPause) {
             return;
-        //for (int i = GameData.listTower.Count - 1; i >= 0; i--)
-        //{
-        //    GameData.listTower[i].KillSelf();
-        //}
-        //for (int i = GameData.listBullet.Count - 1; i >= 0; i--)
-        //{
-        //    GameData.listBullet[i].KillSelf();
-        //}
-        //for (int i = GameData.listSoldier.Count - 1; i >= 0; i--)
-        //{
-        //    GameData.listSoldier[i].KillSelf();
-        //}
+        }
         mIsPause = true;
     }
 }

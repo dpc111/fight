@@ -16,13 +16,13 @@ public class GameData {
     public static Fix timeFrame = Fix.FromRaw(409); // 273
     public static Fix timeCur = Fix.fix0;
 
-    public static void Init()
-    {
+    public static void Init() {
         ConfigMgr.Init();
         ResFactory.Init();
         TowerFactory.Init();
         SoldierFactory.Init();
         BulletFactory.Init();
+        SkillFactory.Init();
         udpNet.Start();
         msgFrame.Init();
         battleLogic.Init();
@@ -36,24 +36,22 @@ public class GameData {
         Test();
     }
 
-    public static void Test()
-    {
-        TowerFactory.Create(1001, new FixVector3((Fix)30, (Fix)0, (Fix)30));
-        UnitBase soldier = SoldierFactory.Create(2001, new FixVector3((Fix)10, (Fix)0, (Fix)40));
-        soldier.mTransform.MoveToTarget(new FixVector2((Fix)100, (Fix)50));
+    public static void Test() {
+        TowerFactory.Create(1001, new FixVector3(30, 0, 30));
+        UnitBase soldier = SoldierFactory.Create(2001, new FixVector3(10, 0, 40));
+        soldier.mTransform.MoveTarget(new FixVector3(100, 0, 50));
     }
 
-    public static void Stop()
-    {
+    public static void Stop() {
         udpNet.Stop();
         battleLogic.StopBattle();
         msgFrame.Release();
     }
 
-    public static void UpdateLogic()
-    {
-        if (!battleLogic.IsRun())
+    public static void UpdateLogic() {
+        if (!battleLogic.IsRun()) {
             return;
+        }
         udpNet.MainProcess();
         lockStepLogic.UpdateLogic();
     }

@@ -1,0 +1,9 @@
+{
+      "4001" : {
+         "Id" : "4001",
+         "Type" : 1,
+         "MoveType" : 2,
+         "BulletId" : 3001,
+         "SoldierId" : 2001
+      }
+}

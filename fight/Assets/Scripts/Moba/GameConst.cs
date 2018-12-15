@@ -29,39 +29,49 @@ public class GameConst {
     public static Fix XMax = (Fix)100;
     public static Fix ZMax = (Fix)100;
 
-    public static int TowerAttackNumMax = 10;
+    public static int SkillUnitTarMax = 10;
+
+    public static int CampLeft = 1;
+    public static int CampRight = 2;
+    public static FixVector3 CampLeftDir = new FixVector3(1, 0, 0);
+    public static FixVector3 CampRightDir = new FixVector3(-1, 0, 0);
 }
 
-public enum UnitAttrType
-{
+public enum UnitAttrType {
     None = 0,
     Hp,
     Armor,
     MoveSpeed,
-    AttCd,
-    AttRange,
-    AttDamage,
+    AttackCd,
+    AttackRange,
+    AttackDamage,
+    AttackNum,
     Num
 }
 
-public enum TowerType
-{
-    Begin = 0,
-    Shoot,
-    Soldier,
-    End,
-}
-
-public enum BulletType
-{
+public enum BulletType {
     Begin = 0,
     Lock,
     Dir,
     End,
 }
 
-public enum BuffType
-{
+public enum SkillType {
+    Begin = 0,
+    Shoot,
+    CreateSoldier,
+    Aoe,
+    End,
+}
+
+public enum SkillMoveType {
+    Begin = 0,
+    Lock,
+    Dir,
+    End,
+}
+
+public enum BuffType {
     Cac,
     AddHp,
     AddMaxHp,
@@ -69,28 +79,24 @@ public enum BuffType
     SubMaxHp,
 }
 
-public enum BuffUpdateType
-{
+public enum BuffUpdateType {
     Once = 1,
     Loop
 }
 
-public enum BuffAddType
-{
+public enum BuffAddType {
     None = 1,
     Time,
     Layer,
     ResetTime,
 }
 
-public enum BuffRemoveType
-{
+public enum BuffRemoveType {
     All = 1,
     Layer,
 }
 
-public enum MoveType
-{
+public enum MoveType {
     Begin = 0,
     Walk,
     Lock,

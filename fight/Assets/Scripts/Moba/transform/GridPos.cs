@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridPos
-{
+public class GridPos {
     public static int blockNone = 1;
     public static int blockStatic = 2;
     public static int blockDynamic = 3;
@@ -23,8 +22,7 @@ public class GridPos
     public int g;
     public int h;
 
-    public GridPos(int x_, int z_, int index_)
-    {
+    public GridPos(int x_, int z_, int index_) {
         block = GridPos.blockNone;
         state = stateNone;
         posParent = null;
@@ -36,8 +34,7 @@ public class GridPos
         h = 0;
     }
 
-    public void Init(int runTime_)
-    {
+    public void Init(int runTime_) {
         if (block != GridPos.blockStatic)
             block = GridPos.blockNone;
         runTime = runTime_;
@@ -48,8 +45,7 @@ public class GridPos
         h = 0;
     }
 
-    public int GetValue()
-    {
+    public int GetValue() {
         return f;
     }
 }

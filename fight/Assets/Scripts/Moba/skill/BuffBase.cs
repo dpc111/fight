@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuffBase 
-{
+public class BuffBase {
     public int mId;
     public int mType;
     public BuffUpdateType mUpdateType = BuffUpdateType.Once;
@@ -19,32 +18,29 @@ public class BuffBase
     public Fix mTimeAdd = Fix.fix0;
     public Fix mTimeLast = Fix.fix0;
 
-    public virtual void Init(int type)
-    {
+    public virtual void Init(int type) {
 
     }
 
-    public virtual void Start()
-    {
+    public virtual void Start() {
 
     }
 
-    public virtual void End()
-    {
+    public virtual void End() {
 
     }
 
-    public virtual void Update()
-    {
-        if (mTime <= Fix.fix0)
+    public virtual void Update() {
+        if (mTime <= Fix.fix0) {
             return;
-        if (GameData.timeCur - mTimeAdd <= mTime)
+        }
+        if (GameData.timeCur - mTimeAdd <= mTime) {
             return;
+        }
         End();
     }
 
-    public virtual void Refresh()
-    {
+    public virtual void Refresh() {
 
     }
 }

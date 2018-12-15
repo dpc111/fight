@@ -4,55 +4,50 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class SoldierCfg : UnitCfg
-{
-    public int id = 0;
-    public int type = 0;
-    public int bullet_id = 0;
+public class SoldierCfg : UnitCfg {
+    public int Id = 0;
+    public int Type = 0;
 }
 
-public class SoldierFactory
-{
+public class SoldierFactory {
     public static Dictionary<int, SoldierCfg> soldierCfgs = new Dictionary<int, SoldierCfg>();
 
-    public static void Init()
-    {
+    public static void Init() {
         JToken cfgs = ConfigMgr.GetJObject("soldier");
-        if (cfgs == null)
+        if (cfgs == null) {
             return;
-        foreach (JToken cfgt in cfgs.Values())
-        {
+        }
+        foreach (JToken cfgt in cfgs.Values()) {
             JObject cfg = cfgt.ToObject<JObject>();
             SoldierCfg soldier = new SoldierCfg();
-            soldier.hp = (Fix)(int)cfg["hp"];
-            soldier.armor = Fix.fix0;
-            soldier.moveType = (int)cfg["move_type"];
-            soldier.moveSpeed = (Fix)(int)cfg["move_speed"];
-            soldier.attCd = (Fix)(int)cfg["attack_cd"];
-            soldier.attRange = (Fix)(int)cfg["attack_range"];
-            soldier.attDamage = (Fix)(int)cfg["attack_damage"];
-            soldier.blockRange = (Fix)(int)cfg["block_range"];
-            soldier.prefab = (string)cfg["prefab"];
-
-            soldier.id = (int)cfg["id"];
-            soldier.type = (int)cfg["type"];
-            soldier.bullet_id = (int)cfg["bullet_id"];
-            soldierCfgs[soldier.id] = soldier;
+            soldier.Hp = (Fix)(int)cfg["Hp"];
+            soldier.Armor = Fix.fix0;
+            soldier.MoveSpeed = (Fix)(int)cfg["MoveSpeed"];
+            soldier.AttackCd = (Fix)(int)cfg["AttackCd"];
+            soldier.AttackRange = (Fix)(int)cfg["AttackRange"];
+            soldier.AttackDamage = (Fix)(int)cfg["AttackDamage"];
+            soldier.AttackNum = (Fix)(int)cfg["AttackNum"];
+            soldier.BlockRange = (Fix)(int)cfg["BlockRange"];
+            soldier.Prefab = (string)cfg["Prefab"];
+            soldier.SkillId = (int)cfg["SkillId"];
+            soldier.Id = (int)cfg["Id"];
+            soldier.Type = (int)cfg["Type"];
+            soldierCfgs[soldier.Id] = soldier;
         }
     }
 
-    public static SoldierCfg GetCfg(int id)
-    {
-        if (!soldierCfgs.ContainsKey(id))
+    public static SoldierCfg GetCfg(int id) {
+        if (!soldierCfgs.ContainsKey(id)) {
             return null;
+        }
         return soldierCfgs[id];
     }
 
-    public static SoldierBase Create(int id, FixVector3 pos)
-    {
+    public static SoldierBase Create(int id, FixVector3 pos) {
         SoldierCfg cfg = GetCfg(id);
-        if (cfg == null)
+        if (cfg == null) {
             return null;
+        }
         SoldierBase soldier = new SoldierBase();
         soldier.Init(cfg, pos);
         GameData.soldierMgr.Add(soldier);

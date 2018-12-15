@@ -1,15 +1,16 @@
 {
       "2001" : {
-         "id" : "2001",
-         "type" : 1,
-         "hp" : 100,
-         "attack_cd" : 2,
-         "attack_range" : 10,
-         "attack_damage" : 10,
-         "block_range" : 2,
-         "move_type" : 1,
-         "move_speed" : 8,
-         "prefab" : "plant",
-         "bullet_id" : 3001
+         "Id" : "2001",
+         "Type" : 1,
+         "Hp" : 100,
+         "AttackCd" : 2,
+         "AttackRange" : 10,
+         "AttackDamage" : 10,
+         "AttackNum" : 1,
+         "BlockRange" : 2,
+         "MoveType" : 1,
+         "MoveSpeed" : 8,
+         "Prefab" : "plant",
+         "SkillId" : 4001
       }
 }

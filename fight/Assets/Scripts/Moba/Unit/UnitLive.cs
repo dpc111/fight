@@ -2,44 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitLive : UnitBase 
-{
-    public Fix mTimeNextAtt = Fix.fix0;
+public class UnitLive : UnitBase {
+    SkillBase mSkill = null;
 
-    public override void Init(UnitCfg cfg, FixVector3 pos)
-    {
+    public override void Init(UnitCfg cfg, FixVector3 pos) {
         base.Init(cfg, pos);
-        mTimeNextAtt = GameData.timeCur + mAttr.GetAttr(UnitAttrType.AttCd);
+        mSkill = SkillFactory.Create(cfg.SkillId, this);
     }
 
-    public override void Update()
-    {
+    public override void Update() {
         base.Update();
-        if (AttackCheck())
-        {
-            if (Attack())
-            {
-                AttackOver();
-            }
+        if (mSkill != null) {
+            mSkill.Update();
         }
-    }
-
-    public virtual bool Attack()
-    {
-        return true;
-    }
-
-    public bool AttackCheck()
-    {
-        if (GameData.timeCur < mTimeNextAtt)
-        {    
-            return false;
-        }
-        return true;
-    }
-
-    public void AttackOver()
-    {
-        mTimeNextAtt = GameData.timeCur + mAttr.GetAttr(UnitAttrType.AttCd);
     }
 }

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AStar
-{
+public class AStar {
     public static int findPathLen = 500;
     public static int objectBlockLen = 50;
 
@@ -18,8 +17,7 @@ public class AStar
     public GridPos[] mGrids;
     public GridPos[] mPath;
 
-    public void Init(Fix xLen, Fix zLen, Fix width)
-    {
+    public void Init(Fix xLen, Fix zLen, Fix width) {
         mX = (int)(xLen / width);
         mZ = (int)(zLen / width);
         mTotal = mX * mZ;
@@ -30,23 +28,19 @@ public class AStar
         mOpenGrids = new MinHeap(mX * mZ + 1);
         mGrids = new GridPos[mTotal];
         mPath = new GridPos[mTotal];
-        for (int kz = 0; kz < mZ; kz++)
-        {
-            for (int kx = 0; kx < mX; kx++)
-            {
+        for (int kz = 0; kz < mZ; kz++) {
+            for (int kx = 0; kx < mX; kx++) {
                 int index = kz * mX + kx;
                 mGrids[index] = new GridPos(kx, kz, index);
-                mGrids[index].posCenter = new FixVector2((Fix)(kx*mWidth) + width/(Fix)2, (Fix)(kz*mWidth) + width/(Fix)2);
-                if (kx >= 50 && kx <= 55 && kz >= 5 && kz <= 100)
-                {
+                mGrids[index].posCenter = new FixVector2((Fix)(kx * mWidth) + width / (Fix)2, (Fix)(kz * mWidth) + width / (Fix)2);
+                if (kx >= 50 && kx <= 55 && kz >= 5 && kz <= 100) {
                     mGrids[index].block = GridPos.blockStatic;
                 }
             }
         }
     }
 
-    public int ToGridIndex(FixVector2 v)
-    {
+    public int ToGridIndex(FixVector2 v) {
         int x = (int)(v.x / mWidth);
         int y = (int)(v.y / mWidth);
         if (x < 0)
@@ -61,16 +55,14 @@ public class AStar
         return index;
     }
 
-    public FixVector2 ToCenterPos(int index)
-    {
+    public FixVector2 ToCenterPos(int index) {
         GridPos gridPos = GetGridPos(index);
         if (gridPos == null)
             return new FixVector2(Fix.fix0, Fix.fix0);
         return gridPos.posCenter;
     }
 
-    public GridPos GetGridPos(int index)
-    {
+    public GridPos GetGridPos(int index) {
         if (index < 0 || index >= mTotal)
             return null;
         GridPos pos = mGrids[index];
@@ -79,16 +71,14 @@ public class AStar
         return pos;
     }
 
-    public GridPos GetGridPos(int x, int z)
-    {
+    public GridPos GetGridPos(int x, int z) {
         if (x < 0 || x >= mX || z < 0 || z >= mZ)
             return null;
         int index = z * mX + x;
         return GetGridPos(index);
     }
 
-    public void GetAround(GridPos pos, ref GridPos[] arounds)
-    {
+    public void GetAround(GridPos pos, ref GridPos[] arounds) {
         if (pos == null)
             return;
         arounds[0] = GetGridPos(pos.x - 1, pos.z - 1);
@@ -98,11 +88,10 @@ public class AStar
         arounds[4] = GetGridPos(pos.x, pos.z + 1);
         arounds[5] = GetGridPos(pos.x + 1, pos.z - 1);
         arounds[6] = GetGridPos(pos.x + 1, pos.z);
-        arounds[7] = GetGridPos(pos.x + 1, pos.z + 1);        
+        arounds[7] = GetGridPos(pos.x + 1, pos.z + 1);
     }
 
-    public void OptAround(GridPos around, GridPos cur, GridPos end)
-    {
+    public void OptAround(GridPos around, GridPos cur, GridPos end) {
         int step = 0;
         if (Mathf.Abs(around.x - cur.x) == Mathf.Abs(around.z - cur.z))
             step = 14;
@@ -115,30 +104,26 @@ public class AStar
         int h = devMin * 14 + (devMax - devMin) * 10;
         int g = cur.g + step;
         int f = g + h;
-        if (around.f == 0 || around.f > f)
-        {
+        if (around.f == 0 || around.f > f) {
             //重新排序???
             around.g = g;
             around.h = h;
             around.f = f;
             around.posParent = cur;
-            if (around.state != GridPos.stateOpen)
-            {
+            if (around.state != GridPos.stateOpen) {
                 around.state = GridPos.stateOpen;
                 mOpenGrids.Push(around);
             }
         }
     }
 
-    public void CheckPathDir(GridPos posEnd, ref int[] path, ref int pathLen)
-    {
+    public void CheckPathDir(GridPos posEnd, ref int[] path, ref int pathLen) {
         if (posEnd == null)
             return;
 
         int index = 0;
         GridPos posPath = posEnd;
-        while (posPath != null)
-        {
+        while (posPath != null) {
             mPath[index] = posPath;
             posPath = posPath.posParent;
             index++;
@@ -152,18 +137,15 @@ public class AStar
         GridPos posCur = mPath[--index];
         GridPos posNext = null;
         path[checkLen] = posCur.index;
-        while (index > 0)
-        {
+        while (index > 0) {
             posNext = mPath[--index];
             devX1 = posNext.x - posCur.x;
             devZ1 = posNext.z - posCur.z;
-            if (devX == 0 && devZ == 0)
-            {
+            if (devX == 0 && devZ == 0) {
                 devX = devX1;
                 devZ = devZ1;
             }
-            if (devX != devX1 || devZ != devZ1)
-            {
+            if (devX != devX1 || devZ != devZ1) {
                 checkLen++;
             }
             devX = devX1;
@@ -175,8 +157,7 @@ public class AStar
         pathLen = checkLen + 1;
     }
 
-    public bool FindPath(int start, int end, ref int[] path, ref int pathLen)
-    {
+    public bool FindPath(int start, int end, ref int[] path, ref int pathLen) {
         mRunTime++;
         if (start < 0 || start >= mTotal || end < 0 || end >= mTotal)
             return false;
@@ -197,30 +178,22 @@ public class AStar
         GridPos[] arounds = new GridPos[8];
         GridPos posFindEnd = null;
 
-        while (true)
-        {
+        while (true) {
             GridPos posCur = (GridPos)mOpenGrids.Pop();
-            if (posCur == null)
-            { break; }
-            if (posCur.state != GridPos.stateOpen)
-            { break; }
+            if (posCur == null) { break; }
+            if (posCur.state != GridPos.stateOpen) { break; }
             GetAround(posCur, ref arounds);
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 GridPos posA = arounds[i];
-                if (posA == null)
-                { continue; }
-                if (posA.index == posEnd.index)
-                {
+                if (posA == null) { continue; }
+                if (posA.index == posEnd.index) {
                     posA.posParent = posCur;
                     posA.state = GridPos.stateClose;
                     posFindEnd = posA;
                     break;
                 }
-                if (posA.state == GridPos.stateClose)
-                { continue; }
-                if (posA.block != GridPos.blockNone)
-                { continue; }
+                if (posA.state == GridPos.stateClose) { continue; }
+                if (posA.block != GridPos.blockNone) { continue; }
                 OptAround(posA, posCur, posEnd);
             }
             posCur.state = GridPos.stateClose;
@@ -235,10 +208,8 @@ public class AStar
         return true;
     }
 
-    public void SetBlockDynamic(ref int[] blocks, int len)
-    {
-        for (int i = 0; i < len; i++)
-        {
+    public void SetBlockDynamic(ref int[] blocks, int len) {
+        for (int i = 0; i < len; i++) {
             GridPos pos = GetGridPos(blocks[i]);
             if (pos == null)
                 break;
@@ -247,10 +218,8 @@ public class AStar
         }
     }
 
-    public void ResetBlockDynamic()
-    {
-        for (int i = 0; i < mTotal; i++)
-        {
+    public void ResetBlockDynamic() {
+        for (int i = 0; i < mTotal; i++) {
             GridPos pos = mGrids[i];
             if (pos.block == GridPos.blockDynamic)
                 pos.block = GridPos.blockNone;
