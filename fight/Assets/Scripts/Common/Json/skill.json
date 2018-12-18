@@ -4,6 +4,20 @@
          "Type" : 1,
          "MoveType" : 2,
          "BulletId" : 3001,
-         "SoldierId" : 2001
+         "SoldierId" : 0
+      },
+      "4002" : {
+         "Id" : "4002",
+         "Type" : 1,
+         "MoveType" : 1,
+         "BulletId" : 3002,
+         "SoldierId" : 0
+      },
+      "4003" : {
+         "Id" : "4003",
+         "Type" : 2,
+         "MoveType" : 1,
+         "BulletId" : 0,
+         "SoldierId" : 2002
       }
 }

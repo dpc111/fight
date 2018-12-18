@@ -1,12 +1,10 @@
-﻿namespace Net
-{
+﻿namespace Net {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Threading;
 
-    public class UdpConst
-    {
+    public class UdpConst {
         public const int udpTypeReqSeq = 1;
         public const int udpTypeSynAck = 2;
         public const int udpTypeData = 3;

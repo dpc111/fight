@@ -34,7 +34,7 @@ public class TransformBase {
     }
 
     public void Update() {
-        mBlock.Update();
+        //mBlock.Update();
         if (!Move || mMoveCur == null) {
             return;
         }
@@ -42,9 +42,13 @@ public class TransformBase {
     }
 
     public void MoveTarget(FixVector3 target) {
+        MoveTarget(target, Fix.fix0);
+    }
+
+    public void MoveTarget(FixVector3 target, Fix overLen) {
         Move = true;
         mMoveCur = mMoveTarget;
-        mMoveTarget.Move(new FixVector2(target.x, target.z));
+        mMoveTarget.Move(new FixVector2(target.x, target.z), overLen);
     }
 
     public void MoveDir(FixVector3 dir) {

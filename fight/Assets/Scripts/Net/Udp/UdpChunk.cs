@@ -1,5 +1,4 @@
-﻿namespace Net
-{
+﻿namespace Net {
     using System;
     using System.Collections;
     using System.Collections.Generic;

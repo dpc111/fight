@@ -10,14 +10,16 @@ public class UnitMgrBase<T> where T : UnitBase {
     }
 
     public virtual void Add(T unit) {
-        if (mUnits.Contains(unit))
+        if (mUnits.Contains(unit)) {
             return;
+        }
         mUnits.Add(unit);
     }
 
     public virtual void Remove(T unit) {
-        if (!mUnits.Contains(unit))
+        if (!mUnits.Contains(unit)) {
             return;
+        }
         mUnits.Remove(unit);
     }
 
@@ -36,10 +38,10 @@ public class UnitMgrBase<T> where T : UnitBase {
         }
     }
 
-    public virtual void UpdateRenderPosition(float interpolation) {
+    public virtual void UpdateRender(float interpolation) {
         for (int i = 0; i < mUnits.Count; i++) {
             T unit = mUnits[i];
-            unit.mUnitUnity.UpdateRenderPosition(interpolation);
+            unit.mUnitUnity.UpdateRender(interpolation);
         }
     }
 

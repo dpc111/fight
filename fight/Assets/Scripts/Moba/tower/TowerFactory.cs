@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 public class TowerCfg : UnitCfg {
     public int Id = 0;
-    public int Type = 0;
+    public Fix CreateCd = Fix.fix0;
 }
 
 public class TowerFactory {
@@ -31,7 +31,7 @@ public class TowerFactory {
             tower.Prefab = (string)cfg["Prefab"];
             tower.SkillId = (int)cfg["SkillId"];
             tower.Id = (int)cfg["Id"];
-            tower.Type = (int)cfg["Type"];
+            tower.CreateCd = (Fix)(int)cfg["CreateCd"];
             towerCfgs[tower.Id] = tower;
         }
     }

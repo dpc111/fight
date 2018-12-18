@@ -2,13 +2,13 @@
       "3001" : {
          "Id" : "3001",
          "Type" : 2,
-         "MoveSpeed" : 3,
+         "MoveSpeed" : 10,
          "Prefab" : "Bullet"
       },
       "3002" : {
          "Id" : "3002",
          "Type" : 1,
          "MoveSpeed" : 15,
-         "Prefab" : "Bullet1"
+         "Prefab" : "Bullet"
       }
 }

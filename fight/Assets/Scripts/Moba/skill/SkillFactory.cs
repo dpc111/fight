@@ -43,7 +43,7 @@ public class SkillFactory {
     public static SkillBase Create(int id, UnitBase unit) {
         SkillCfg cfg = GetCfg(id);
         if (cfg == null) {
-            Debug.LogError("11" + id);
+            Debug.LogError(id);
             return null;
         }
         SkillBase skill = null;
@@ -55,7 +55,6 @@ public class SkillFactory {
             skill = new SkillAoe();
         }
         if (skill == null) {
-            Debug.LogError("11");
             return null;
         }
         skill.Init(cfg, unit);

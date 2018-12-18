@@ -8,6 +8,7 @@ public class TransformBlock {
     public int[] mBlockDynamic = new int[AStar.objectBlockLen];
     public int mBlockLen = 0;
     public Fix mBlockRange = Fix.fix0;
+    public int mBoxLen = 0;
     public Fix BlockRange { get { return mBlockRange; } set { mBlockRange = value; } }
 
     public void Init(TransformBase tran, Fix blockRange) {
@@ -21,26 +22,20 @@ public class TransformBlock {
         SetBlockDynamic();
     }
 
-    public void Update() {
-        SetBlockDynamic();
-        GameData.transformMgr.mAstar.SetBlockDynamic(ref mBlockDynamic, mBlockLen);
-    }
-
     public void SetBlockShap() {
         Fix w = GameData.transformMgr.mAstar.mWidth;
         Fix x = Fix.fix0;
         Fix y = Fix.fix0;
         int xNum = GameData.transformMgr.mAstar.mX;
         int n = (int)(mBlockRange / w);
-        int index = 0;
         mBlockLen = 0;
-        for (int i = -n - 1; i <= n; ++i) {
-            for (int j = -n - 1; j <= n; ++j) {
-                x = (i + (Fix)1 / (Fix)2) * w;
-                y = (j + (Fix)1 / (Fix)2) * w;
+        mBoxLen = n;
+        for (int i = -n - 1; i <= n + 1; ++i) {
+            for (int j = -n - 1; j <= n + 1; ++j) {
+                x = i * w;
+                y = j * w;
                 if (x * x + y * y <= mBlockRange * mBlockRange) {
-                    index = j * xNum + i;
-                    mBlockShape[mBlockLen] = index;
+                    mBlockShape[mBlockLen] = j * xNum + i;
                     mBlockLen++;
                 }
             }
@@ -55,5 +50,14 @@ public class TransformBlock {
         for (int i = 0; i < mBlockLen; i++) {
             mBlockDynamic[i] = indexCur + mBlockShape[i];
         }
+    }
+
+    public bool DynamicHasIndex(int index) {
+        for (int i = 0; i < mBlockLen; i++) {
+            if (mBlockDynamic[i] == index) {
+                return true;
+            }
+        }
+        return false;
     }
 }

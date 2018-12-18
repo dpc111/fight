@@ -21,12 +21,12 @@ public class LockStepLogic {
         float deltaTime = UnityEngine.Time.deltaTime;
         mTotalTime += deltaTime;
         while (mTotalTime > mNextGameTime && GameData.msgFrame.CheckFrame(mLogicFrame)) {
-            GameData.battleLogic.FrameLockLogic();
+            GameData.battleLogic.UpdateFrame();
             mNextGameTime += mFrameLen;
             mLogicFrame += 1;
             GameData.timeCur += GameData.timeFrame;
             //test
-            if (mLogicFrame == 300) {
+            if (mLogicFrame == 1000) {
                 GameData.udpNet.DisconnectToServer();
                 return;
             }
@@ -38,6 +38,6 @@ public class LockStepLogic {
             //GameData.udpNet.Send(1, msg);
         }
         mFrameInterval = (mFrameLen - (mNextGameTime - mTotalTime)) / mFrameLen;
-        GameData.battleLogic.UpdateRenderPosition(mFrameInterval);
+        GameData.battleLogic.UpdateRender(mFrameInterval);
     }
 }

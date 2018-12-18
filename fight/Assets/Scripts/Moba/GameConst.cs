@@ -2,28 +2,6 @@
 using System.Collections.Generic;
 
 public class GameConst {
-    public const int UnitAttrBegin = 0;
-    public const int UnitAttrBlockR = 1;
-    public const int UnitAttrSpeed = 1;
-    public const int UnitAttrBlood = 1;
-    public const int UnitAttrCd = 1;
-    public const int UnitAttrDamage = 1;
-    public const int UnitAttrDamageRange = 1;
-    public const int UnitAttrEnd = 1;
-
-    public const int GroupNull = 0;
-    public const int GroupTeamSingle = 1;
-    public const int GroupTeamMul = 2;
-    public const int GroupEnemySingle = 3;
-    public const int GroupEnemyMul = 4;
-
-    public const int ObjTypeNull = 0;
-    public const int ObjTypeTower = 1;
-    public const int ObjTypeSoldier = 2;
-    public const int ObjTypeBullet = 3;
-    public const int ObjTypeMagicStand = 4;
-    public const int ObjTypeMagicGrizzly = 5;
-
     public const int SkillCellSize = 5;
 
     public static Fix XMax = (Fix)100;
@@ -31,6 +9,7 @@ public class GameConst {
 
     public static int SkillUnitTarMax = 10;
 
+    public static int CampNone = 0;
     public static int CampLeft = 1;
     public static int CampRight = 2;
     public static FixVector3 CampLeftDir = new FixVector3(1, 0, 0);

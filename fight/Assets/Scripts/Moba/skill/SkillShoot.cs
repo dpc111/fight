@@ -24,15 +24,19 @@ public class SkillShoot : SkillBase {
     private void ShootLock() {
         int tarNum = (int)mUnitTri.GetAttr(UnitAttrType.AttackNum);
         if (tarNum < 0 || tarNum > GameConst.SkillUnitTarMax) {
+            Debug.LogError("");
             return;
         }
         int enemyNum = FightTool.FindEnemySoldierList(mUnitTri, ref mUnitTarList, tarNum);
+        if (enemyNum <= 0) {
+            enemyNum = FightTool.FindEnemyTowerList(mUnitTri, ref mUnitTarList, tarNum);
+        }
         if (enemyNum <= 0) {
             return;
         }
         for (int i = 0; i < enemyNum; i++) {
             UnitBase enemy = mUnitTarList[i];
-            BulletBase bullet = BulletFactory.Create(mCfg.BulletId, mUnitTri.mTransform.Pos + new FixVector3(2, 5, 0));
+            BulletBase bullet = BulletFactory.Create(mCfg.BulletId, mUnitTri.mTransform.Pos);
             bullet.mUnitTri = mUnitTri;
             bullet.mUnitTar = enemy;
             bullet.Camp = mUnitTri.Camp;
@@ -41,5 +45,4 @@ public class SkillShoot : SkillBase {
             bullet.mTransform.MoveLock(enemy.mTransform);
         }
     }
-
 }

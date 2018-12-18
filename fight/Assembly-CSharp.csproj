@@ -242,10 +242,11 @@
      <Compile Include="Assets\Scripts\Moba\msg\MsgCallback.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgFrame.cs" />
      <Compile Include="Assets\Scripts\Moba\msg\MsgType.cs" />
+     <Compile Include="Assets\Scripts\Moba\player\CampMgr.cs" />
      <Compile Include="Assets\Scripts\Moba\player\Card.cs" />
      <Compile Include="Assets\Scripts\Moba\player\CardMgr.cs" />
      <Compile Include="Assets\Scripts\Moba\player\Player.cs" />
-     <Compile Include="Assets\Scripts\Moba\player\PlayerInfo.cs" />
+     <Compile Include="Assets\Scripts\Moba\player\PlayerData.cs" />
      <Compile Include="Assets\Scripts\Moba\res\Prefabs.cs" />
      <Compile Include="Assets\Scripts\Moba\res\ResBase.cs" />
      <Compile Include="Assets\Scripts\Moba\res\ResFactory.cs" />
@@ -283,6 +284,7 @@
      <Compile Include="Assets\Scripts\Moba\Unit\UnitUnity.cs" />
      <Compile Include="Assets\Scripts\Moba\view\PlayerOp.cs" />
      <Compile Include="Assets\Scripts\Net\App.cs" />
+     <Compile Include="Assets\Scripts\Net\Common\ProtoBufTool.cs" />
      <Compile Include="Assets\Scripts\Net\Config.cs" />
      <Compile Include="Assets\Scripts\Net\Event.cs" />
      <Compile Include="Assets\Scripts\Net\Message.cs" />

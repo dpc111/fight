@@ -15,7 +15,6 @@ public class GridPos {
     public int block;
     public int state;
     public int index;
-    public int runTime = 0;
     public int x;
     public int z;
     public int f;
@@ -34,10 +33,10 @@ public class GridPos {
         h = 0;
     }
 
-    public void Init(int runTime_) {
-        if (block != GridPos.blockStatic)
+    public void Init() {
+        if (block != GridPos.blockStatic) {
             block = GridPos.blockNone;
-        runTime = runTime_;
+        }
         state = stateNone;
         posParent = null;
         f = 0;

@@ -8,6 +8,7 @@ public class GameData {
     public static MsgFrame msgFrame = new MsgFrame();
     public static BattleLogic battleLogic = new BattleLogic();
     public static LockStepLogic lockStepLogic = new LockStepLogic();
+    public static CampMgr campMgr = new CampMgr();
     public static TowerMgr towerMgr = new TowerMgr();
     public static SoldierMgr soldierMgr = new SoldierMgr();
     public static BulletMgr bulletMgr = new BulletMgr();
@@ -27,6 +28,7 @@ public class GameData {
         msgFrame.Init();
         battleLogic.Init();
         lockStepLogic.Init();
+        campMgr.Init();
         towerMgr.Init();
         soldierMgr.Init();
         bulletMgr.Init();
@@ -37,9 +39,9 @@ public class GameData {
     }
 
     public static void Test() {
-        TowerFactory.Create(1001, new FixVector3(30, 0, 30));
-        UnitBase soldier = SoldierFactory.Create(2001, new FixVector3(10, 0, 40));
-        soldier.mTransform.MoveTarget(new FixVector3(100, 0, 50));
+        campMgr.SelfCamp = 1;
+        campMgr.CreatePlayer(111, 1);
+        campMgr.CreatePlayer(222, 2);
     }
 
     public static void Stop() {

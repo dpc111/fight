@@ -26,7 +26,7 @@ public class UnitBase {
     public int Camp { get { return mCamp; } set { mCamp = value; } }
 
     public virtual void Init(UnitCfg cfg, FixVector3 pos) {
-        mAttr.Init();
+        mAttr.Init(this);
         mTransform.Init(pos, cfg.BlockRange, cfg.MoveSpeed);
         GameData.transformMgr.Add(mTransform);
         mUnitUnity.Init(this, cfg);

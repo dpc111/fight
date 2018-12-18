@@ -14,7 +14,11 @@ public class UnitUnity {
     public void Init(UnitBase unit, UnitCfg cfg) {
         mUnit = unit;
         mGameObj = ResFactory.prefabs.Create(cfg.Prefab);
+        if (mGameObj == null) {
+            Debug.LogError(cfg.Prefab);
+        }
         mGameObj.transform.localPosition = mUnit.mTransform.Pos.ToVector3();
+        mGameObj.SetActive(true);
     }
 
     public void Destory() {
@@ -30,7 +34,7 @@ public class UnitUnity {
         }
 
     }
-    public void UpdateRenderPosition(float interpolation) {
+    public void UpdateRender(float interpolation) {
         if (mUnit.Kill || !mUnit.mTransform.Move) {
             return;
         }

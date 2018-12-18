@@ -33,21 +33,25 @@ public class MinHeap {
         int pos1 = mCur;
         while (true) {
             int pos2 = pos1 / 2;
-            if (pos2 <= 0)
+            if (pos2 <= 0) {
                 break;
+            }
             if (mData[pos2].GetValue() > mData[pos1].GetValue()) {
                 Exchange(pos2, pos1);
                 pos1 = pos2;
-                if (pos1 <= 1)
+                if (pos1 <= 1) {
                     break;
-            } else
+                }
+            } else {
                 break;
+            }
         }
     }
 
     public GridPos Pop() {
-        if (mCur <= 0)
+        if (mCur <= 0) {
             return null;
+        }
         GridPos value = mData[1];
         if (mCur <= 1) {
             mData[1] = null;

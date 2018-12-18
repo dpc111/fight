@@ -1,5 +1,4 @@
-﻿namespace Net
-{
+﻿namespace Net {
     using System;
     using System.Reflection;
     using System.Collections.Generic;
@@ -11,13 +10,12 @@
     using System.Runtime.InteropServices;
     using UnityEngine;
 
-    public class UdpNet
-    {
+    public class UdpNet {
         public Rudp rudp;
 
         public Socket clientSocket;
         public static string clientIp = "0.0.0.0";
-        public static int clientPort = 6000;
+        public static int clientPort = 6001;
 
         public EndPoint serverPoint;
         public static string serverIp = "139.199.82.153";
@@ -28,8 +26,7 @@
         public object msgCallBackObj = null;
         public MethodInfo msgCallBack = null;
 
-        public void Start()
-        {
+        public void Start() {
             UdpMsg.Init();
             rudp = new Rudp();
             rudp.Init(NetTool.GetMilSec());
@@ -41,39 +38,31 @@
             ConnectToServer(111);
         }
 
-        public void Stop()
-        {
+        public void Stop() {
             DisconnectToServer();
-            if (rudp != null)
-            {
+            if (rudp != null) {
                 rudp = null;
             }
-            if (clientSocket != null)
-            {
+            if (clientSocket != null) {
                 clientSocket.Close();
                 clientSocket = null;
             }
-            if (serverPoint != null)
-            {
+            if (serverPoint != null) {
                 serverPoint = null;
             }
-            if (netThread != null)
-            {
+            if (netThread != null) {
                 netThread.Abort();
                 netThread = null;
             }
-            if (msgCallBackObj != null)
-            {
+            if (msgCallBackObj != null) {
                 msgCallBackObj = null;
             }
-            if (msgCallBack != null)
-            {
+            if (msgCallBack != null) {
                 msgCallBack = null;
             }
         }
 
-        public void ConnectToServer(int uid)
-        {
+        public void ConnectToServer(int uid) {
             if (rudp == null)
                 return;
             UdpChunk c = new UdpChunk();
@@ -84,8 +73,7 @@
             rudp.SendChunkForce(c);
         }
 
-        public void DisconnectToServer()
-        {
+        public void DisconnectToServer() {
             if (rudp == null)
                 return;
             UdpChunk c = new UdpChunk();
@@ -96,20 +84,18 @@
             rudp.SendChunkForce(c);
         }
 
-        public void RegisterMsgCallback(object obj, string name)
-        {
+        public void RegisterMsgCallback(object obj, string name) {
             msgCallBackObj = obj;
             msgCallBack = obj.GetType().GetMethod(name);
         }
 
-        public void Send(int msgid, object obj)
-        {
+        public void Send(int msgid, object obj) {
             UdpChunk c = new UdpChunk();
             int offset = 0;
             NetTool.Int32ToBytes(ref c.buff, offset, msgid);
             offset += 4;
-            int size = Marshal.SizeOf(obj);  
-            IntPtr ptr = Marshal.AllocHGlobal(size);
+            int size = Marshal.SizeOf(obj);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(obj, ptr, false);
             Marshal.Copy(ptr, c.buff, offset, size);
             offset += size;
@@ -120,8 +106,7 @@
             Monitor.Exit(rudp);
         }
 
-        public void Send(object obj)
-        {
+        public void Send(object obj) {
             UdpChunk c = new UdpChunk();
             int offset = 0;
             NetTool.Int32ToBytes(ref c.buff, offset, UdpMsg.MsgId(obj.GetType()));
@@ -138,43 +123,35 @@
             Monitor.Exit(rudp);
         }
 
-        public void MainProcess()
-        {
-            while (true)
-            {
+        public void MainProcess() {
+            while (true) {
                 Monitor.Enter(rudp);
                 UdpChunk c = rudp.RecvBuffOut();
                 Monitor.Exit(rudp);
-                if (c == null)
-                {
+                if (c == null) {
                     break;
                 }
-                if (c.size < 4)
-                {
+                if (c.size < 4) {
                     break;
                 }
                 int offset = 0;
                 int frame = NetTool.BytesToInt32(ref c.buff, 0);
                 offset += 4;
-                if (msgCallBackObj != null && msgCallBack != null)
-                {
+                if (msgCallBackObj != null && msgCallBack != null) {
                     msgCallBack.Invoke(msgCallBackObj, new object[] { frame, 0, null });
                 }
-                while (c.size - offset > 8)
-                {
+                while (c.size - offset > 8) {
                     int uid = NetTool.BytesToInt32(ref c.buff, offset);
                     offset += 4;
                     int msgid = NetTool.BytesToInt32(ref c.buff, offset);
                     offset += 4;
                     Type type = UdpMsg.MsgType(msgid);
-                    if (type == null)
-                    {
+                    if (type == null) {
                         Debug.Log("");
                         break;
                     }
                     int sizeObj = Marshal.SizeOf(type);
-                    if (sizeObj > c.size - offset)
-                    {
+                    if (sizeObj > c.size - offset) {
                         Debug.Log("");
                         break;
                     }
@@ -183,8 +160,7 @@
                     offset += sizeObj;
                     object obj = Marshal.PtrToStructure(ptr, type);
                     Marshal.FreeHGlobal(ptr);
-                    if (msgCallBackObj != null && msgCallBack != null)
-                    {
+                    if (msgCallBackObj != null && msgCallBack != null) {
                         msgCallBack.Invoke(msgCallBackObj, new object[] { frame, uid, obj });
                     }
                 }
@@ -194,34 +170,26 @@
             Monitor.Exit(rudp);
         }
 
-        private void NetProcess()
-        {
+        private void NetProcess() {
             byte[] sendBuff = new byte[1024];
             byte[] recvBuff = new byte[1024];
-            while (true)
-            {
-                do
-                {
-                    if (clientSocket == null)
-                    {
+            while (true) {
+                do {
+                    if (clientSocket == null) {
                         break;
                     }
-                    if (!clientSocket.Poll(0, SelectMode.SelectRead))
-                    {
+                    if (!clientSocket.Poll(0, SelectMode.SelectRead)) {
                         break;
                     }
                     int len = clientSocket.ReceiveFrom(recvBuff, ref serverPoint);
-                    if (len <= 0)
-                    {
+                    if (len <= 0) {
                         break;
                     }
-                    if (len < UdpConst.udpHeadByteAll)
-                    {
+                    if (len < UdpConst.udpHeadByteAll) {
                         break;
                     }
                     int size = NetTool.BytesToInt8(ref recvBuff, 0);
-                    if (len < size + UdpConst.udpHeadByteAll)
-                    {
+                    if (len < size + UdpConst.udpHeadByteAll) {
                         break;
                     }
                     UdpChunk c = new UdpChunk();
@@ -234,21 +202,17 @@
                     rudp.RecvBuffIn(c);
                     Monitor.Exit(rudp);
                 } while (false);
-                do
-                {
-                    if (clientSocket == null)
-                    {
+                do {
+                    if (clientSocket == null) {
                         break;
                     }
                     Monitor.Enter(rudp);
                     UdpChunk c = rudp.SendBuffOut();
                     Monitor.Exit(rudp);
-                    if (c == null)
-                    {
+                    if (c == null) {
                         break;
                     }
-                    if (!clientSocket.Poll(0, SelectMode.SelectWrite))
-                    {
+                    if (!clientSocket.Poll(0, SelectMode.SelectWrite)) {
                         Monitor.Enter(rudp);
                         rudp.SendChunkForce(c);
                         Monitor.Exit(rudp);
@@ -261,8 +225,7 @@
                     Array.Copy(c.buff, 0, sendBuff, 10, c.size);
                     int dataLen = c.size + UdpConst.udpHeadByteAll;
                     int len = clientSocket.SendTo(sendBuff, dataLen, SocketFlags.None, serverPoint);
-                    if (len < dataLen)
-                    {
+                    if (len < dataLen) {
                         Monitor.Enter(rudp);
                         rudp.SendChunkForce(c);
                         Monitor.Exit(rudp);

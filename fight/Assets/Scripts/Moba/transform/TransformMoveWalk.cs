@@ -10,6 +10,7 @@ public class TransformMoveTarget : TransformMoveBase {
     public FixVector2 mPosTarget = new FixVector2();
     public FixVector2 mPosStart = new FixVector2();
     public FixVector2 mPosEnd = new FixVector2();
+    public Fix mOverLen = Fix.fix0;
     public Fix mTimeMove = Fix.fix0;
     public Fix mTimePass = Fix.fix0;
 
@@ -25,17 +26,27 @@ public class TransformMoveTarget : TransformMoveBase {
             return;
         }
         mTransform.mPos = mPosStart + (mPosEnd - mPosStart) * timeScale;
+        FixVector2 pos = mPosStart + (mPosEnd - mPosStart) * timeScale;
+        if (GameData.transformMgr.CheckHit(mTransform, pos)) {
+            Move(mPosTarget, mOverLen);
+            Debug.LogError("try again");
+            return;
+        }
+        mTransform.mPos = pos;
     }
 
-    public void Move(FixVector2 target) {
+    public void Move(FixVector2 target, Fix overLen) {
         mPathLen = 0;
         mPathIndex = 0;
         mPosTarget = target;
+        mOverLen = overLen;
         int begin = GameData.transformMgr.mAstar.ToGridIndex(mTransform.mPos);
         int end = GameData.transformMgr.mAstar.ToGridIndex(mPosTarget);
-        bool ok = GameData.transformMgr.mAstar.FindPath(begin, end, ref mPath, ref mPathLen);
+        GameData.transformMgr.FindPathReset(mTransform);
+        bool ok = GameData.transformMgr.mAstar.FindPath(begin, end, ref mPath, ref mPathLen, mOverLen);
         if (!ok) {
             mTransform.Move = false;
+            GameData.transformMgr.mAstar.TestShowBlock();
             return;
         }
         SetNextStep();

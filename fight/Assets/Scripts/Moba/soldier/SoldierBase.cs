@@ -15,9 +15,11 @@ public class SoldierBase : UnitLive {
         if (mUnitTar == null || mUnitTar.Kill) {
             mUnitTar = FightTool.FindEnemyUnitNearest(this);
             if (mUnitTar == null) {
+                Kill = true;
                 return;
             }
-            mTransform.MoveLock(mUnitTar.mTransform);
+            //mTransform.MoveLock(mUnitTar.mTransform);
+            mTransform.MoveTarget(mUnitTar.mTransform.Pos, GetAttr(UnitAttrType.AttackRange));
         }
     }
 

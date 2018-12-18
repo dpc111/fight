@@ -1,14 +1,26 @@
 {
       "1001" : {
          "Id" : "1001",
-         "Type" : 1,
          "Hp" : 100,
-         "AttackCd" : 2,
-         "AttackRange" : 10,
+         "AttackCd" : 3,
+         "AttackRange" : 0,
          "AttackDamage" : 10,
          "AttackNum" : 1,
          "BlockRange" : 2,
          "Prefab" : "Elongata",
-         "SkillId" : 4001
+         "SkillId" : 4001,
+         "CreateCd" : 4
+      },
+      "1002" : {
+         "Id" : "1002",
+         "Hp" : 100,
+         "AttackCd" : 4,
+         "AttackRange" : 0,
+         "AttackDamage" : 10,
+         "AttackNum" : 0,
+         "BlockRange" : 2,
+         "Prefab" : "plant",
+         "SkillId" : 4003,
+         "CreateCd" : 3
       }
 }
