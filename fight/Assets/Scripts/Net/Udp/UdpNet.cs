@@ -18,7 +18,7 @@
         public static int clientPort = 6001;
 
         public EndPoint serverPoint;
-        public static string serverIp = "139.199.82.153";
+        public static string serverIp = "192.168.31.129";
         public static int serverPort = 7002;
 
         public Thread netThread;
@@ -63,8 +63,9 @@
         }
 
         public void ConnectToServer(int uid) {
-            if (rudp == null)
+            if (rudp == null) {
                 return;
+            }
             UdpChunk c = new UdpChunk();
             c.size = (byte)0;
             c.type = UdpConst.udpTypeConnect;
@@ -74,8 +75,9 @@
         }
 
         public void DisconnectToServer() {
-            if (rudp == null)
+            if (rudp == null) {
                 return;
+            }
             UdpChunk c = new UdpChunk();
             c.size = (byte)0;
             c.type = UdpConst.udpTypeDisconnect;

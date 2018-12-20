@@ -7,6 +7,10 @@ using Newtonsoft.Json.Linq;
 public class BulletCfg : UnitCfg {
     public int Id = 0;
     public int Type = 0;
+    public int CheckHitType = 0;
+    public int CheckHitCamp = 0;
+    public int CheckHitUnitType = 0;
+    public int HitDestroy = 0;
 }
 
 public class BulletFactory {
@@ -30,6 +34,10 @@ public class BulletFactory {
             bullet.Prefab = (string)cfg["Prefab"];
             bullet.Id = (int)cfg["Id"];
             bullet.Type = (int)cfg["Type"];
+            bullet.CheckHitType = (int)cfg["CheckHitType"];
+            bullet.CheckHitCamp = (int)cfg["CheckHitCamp"];
+            bullet.CheckHitUnitType = (int)cfg["CheckHitUnitType"];
+            bullet.HitDestroy = (int)cfg["HitDestroy"];
             bulletCfgs[bullet.Id] = bullet;
         }
     }

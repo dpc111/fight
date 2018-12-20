@@ -48,4 +48,93 @@ public class UnitMgrBase<T> where T : UnitBase {
     public List<T> GetList() {
         return mUnits;
     }
+
+    public T FindRandomInAttackRange(UnitBase unit, int camp = 0) {
+        for (int i = 1; i < mUnits.Count; i++) {
+            T u = mUnits[i];
+            if (u.Kill) {
+                continue;
+            }
+            if (camp != 0 && camp != u.Camp) {
+                continue;
+            }
+            if (FightTool.IsInAttackRange(unit, u)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public T FindNearest(UnitBase unit, int camp = 0) {
+        T nearestUnit = null;
+        Fix nearestSqrDis = Fix.fix0;
+        for (int i = 0; i < mUnits.Count; i++) {
+            T u = mUnits[i];
+            if (u.Kill) {
+                continue;
+            }
+            if (camp != 0 && camp != u.Camp) {
+                continue;
+            }
+            Fix sqrDis = FightTool.SqrDistance(unit, u);
+            if (nearestUnit == null) {
+                nearestUnit = u;
+                nearestSqrDis = sqrDis;
+            }
+            if (sqrDis < nearestSqrDis) {
+                nearestUnit = u;
+                nearestSqrDis = sqrDis;
+            }
+        }
+        return nearestUnit;
+    }
+
+    public T FindNearestInAttackRange(UnitBase unit, int camp = 0) {
+        T nearestUnit = null;
+        Fix nearestSqrDis = Fix.fix0;
+        for (int i = 0; i < mUnits.Count; i++) {
+            T u = mUnits[i];
+            if (u.Kill) {
+                continue;
+            }
+            if (camp != 0 && camp != u.Camp) {
+                continue;
+            }
+            if (!FightTool.IsInAttackRange(unit, u)) {
+                continue;
+            }
+            Fix sqrDis = FightTool.SqrDistance(unit, u);
+            if (nearestUnit == null) {
+                nearestUnit = u;
+                nearestSqrDis = sqrDis;
+            }
+            if (sqrDis < nearestSqrDis) {
+                nearestUnit = u;
+                nearestSqrDis = sqrDis;
+            }
+        }
+        return nearestUnit;
+    }
+
+    public int FindListInAttackRange(UnitBase unit, ref UnitBase[] list, int num, int camp = 0) {
+        int index = 0;
+        for (int i = 0; i < mUnits.Count; i++) {
+            T u = mUnits[i];
+            if (u.Kill) {
+                continue;
+            }
+            if (camp != 0 && camp != u.Camp) {
+                continue;
+            }
+            if (!FightTool.IsInAttackRange(unit, u)) {
+                continue;
+            }
+            list[index] = u;
+            index++;
+            if (index >= num) {
+                return index;
+            }
+        }
+        return index;
+    }
 }

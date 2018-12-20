@@ -7,6 +7,10 @@ using Newtonsoft.Json.Linq;
 public class SkillCfg {
     public int Id = 0;
     public int Type = 0;
+    public int CampGroupType = 0;
+    public int UnitType = 0;
+    public int SkillRangeType = 0;
+    public int SkillTargetGroup = 0;
     public int MoveType = 0;
     public int BulletId = 0;
     public int SoldierId = 0;
@@ -25,6 +29,10 @@ public class SkillFactory {
             SkillCfg skill = new SkillCfg();
             skill.Id = (int)cfg["Id"];
             skill.Type = (int)cfg["Type"];
+            skill.CampGroupType = (int)cfg["CampGroupType"];
+            skill.UnitType = (int)cfg["UnitType"];
+            skill.SkillRangeType = (int)cfg["SkillRangeType"];
+            skill.SkillTargetGroup = (int)cfg["SkillTargetGroup"];
             skill.MoveType = (int)cfg["MoveType"];
             skill.BulletId = (int)cfg["BulletId"];
             skill.SoldierId = (int)cfg["SoldierId"];

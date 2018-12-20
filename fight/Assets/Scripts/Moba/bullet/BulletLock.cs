@@ -11,9 +11,5 @@ public class BulletLock : BulletBase {
             }
             return;
         }
-        if (FightTool.IsHit(this, mUnitTar)) {
-            OnHit(mUnitTar);
-            return;
-        }
     }
 }

@@ -13,7 +13,7 @@ public class SoldierBase : UnitLive {
     public override void Update() {
         base.Update();
         if (mUnitTar == null || mUnitTar.Kill) {
-            mUnitTar = FightTool.FindEnemyUnitNearest(this);
+            //mUnitTar = FightTool.FindEnemyUnitNearest(this);
             if (mUnitTar == null) {
                 Kill = true;
                 return;

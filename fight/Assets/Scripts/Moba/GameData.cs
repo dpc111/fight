@@ -12,6 +12,7 @@ public class GameData {
     public static TowerMgr towerMgr = new TowerMgr();
     public static SoldierMgr soldierMgr = new SoldierMgr();
     public static BulletMgr bulletMgr = new BulletMgr();
+    public static LiveMgr liveMgr = new LiveMgr();
     public static TransformMgr transformMgr = new TransformMgr();
     public static FixRandom fixRandom = new FixRandom(1000);
     public static Fix timeFrame = Fix.FromRaw(409); // 273

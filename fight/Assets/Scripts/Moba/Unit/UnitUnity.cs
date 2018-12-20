@@ -34,11 +34,13 @@ public class UnitUnity {
         }
 
     }
+
     public void UpdateRender(float interpolation) {
         if (mUnit.Kill || !mUnit.mTransform.Move) {
             return;
         }
         mGameObj.transform.localPosition = Vector3.Lerp(mLastPos.ToVector3(), mNextPos.ToVector3(), interpolation);
+        mGameObj.transform.forward = mUnit.mTransform.Dir.ToVector3();
     }
 
     public void PlayAnimation(string name) {

@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletMgr : UnitMgrBase<BulletBase> {
-
+public class BulletPath : BulletBase {
+    
 }
