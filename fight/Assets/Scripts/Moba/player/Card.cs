@@ -19,12 +19,12 @@ public class Card {
     }
 
     public bool IsCoolDown() {
-        return mTimeNext <= GameData.timeCur;
+        return mTimeNext <= GameApp.timeCur;
     }
 
     public void Reset() {
-        mTimeLast = GameData.timeCur;
-        mTimeNext = GameData.timeCur + mCd;
+        mTimeLast = GameApp.timeCur;
+        mTimeNext = GameApp.timeCur + mCd;
     }
 
     public void Use() {

@@ -18,7 +18,7 @@ public class TransformMoveTarget : TransformMoveBase {
         if (mTimeMove == Fix.fix0) {
             return;
         }
-        mTimePass += GameData.timeFrame;
+        mTimePass += GameApp.timeFrame;
         Fix timeScale = mTimePass / mTimeMove;
         if (timeScale >= (Fix)1) {
             mTransform.mPos = mPosEnd;
@@ -27,7 +27,7 @@ public class TransformMoveTarget : TransformMoveBase {
         }
         mTransform.mPos = mPosStart + (mPosEnd - mPosStart) * timeScale;
         FixVector2 pos = mPosStart + (mPosEnd - mPosStart) * timeScale;
-        if (GameData.transformMgr.CheckHit(mTransform, pos)) {
+        if (GameApp.transformMgr.CheckHit(mTransform, pos)) {
             Move(mPosTarget, mOverLen);
             Debug.LogError("try again");
             return;
@@ -40,13 +40,13 @@ public class TransformMoveTarget : TransformMoveBase {
         mPathIndex = 0;
         mPosTarget = target;
         mOverLen = overLen;
-        int begin = GameData.transformMgr.mAstar.ToGridIndex(mTransform.mPos);
-        int end = GameData.transformMgr.mAstar.ToGridIndex(mPosTarget);
-        GameData.transformMgr.FindPathReset(mTransform);
-        bool ok = GameData.transformMgr.mAstar.FindPath(begin, end, ref mPath, ref mPathLen, mOverLen);
+        int begin = GameApp.transformMgr.mAstar.ToGridIndex(mTransform.mPos);
+        int end = GameApp.transformMgr.mAstar.ToGridIndex(mPosTarget);
+        GameApp.transformMgr.FindPathReset(mTransform);
+        bool ok = GameApp.transformMgr.mAstar.FindPath(begin, end, ref mPath, ref mPathLen, mOverLen);
         if (!ok) {
             mTransform.Move = false;
-            GameData.transformMgr.mAstar.TestShowBlock();
+            GameApp.transformMgr.mAstar.TestShowBlock();
             return;
         }
         SetNextStep();
@@ -60,13 +60,13 @@ public class TransformMoveTarget : TransformMoveBase {
             mTransform.Move = false;
             return;
         }
-        mPosStart = GameData.transformMgr.mAstar.ToCenterPos(mPath[mPathIndex]);
+        mPosStart = GameApp.transformMgr.mAstar.ToCenterPos(mPath[mPathIndex]);
         ++mPathIndex;
         if (mPathIndex >= mPathLen) {
             mTransform.Move = false;
             return;
         }
-        mPosEnd = GameData.transformMgr.mAstar.ToCenterPos(mPath[mPathIndex]);
+        mPosEnd = GameApp.transformMgr.mAstar.ToCenterPos(mPath[mPathIndex]);
         mTimeMove = FixVector2.Distance(mPosStart, mPosEnd) / mTransform.mSpeed;
         mTimePass = Fix.fix0;
         mTransform.mPos = mPosStart;

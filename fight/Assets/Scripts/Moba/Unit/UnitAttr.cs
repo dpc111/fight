@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class UnitAttr {
     public UnitBase mUnit = null;
-    public Fix[] mAttrCfg = new Fix[(int)UnitAttrType.Num];
-    public Fix[] mAttrOrg = new Fix[(int)UnitAttrType.Num];
-    public Fix[] mAttrCur = new Fix[(int)UnitAttrType.Num];
+    public Fix[] mAttrCfg = new Fix[GameDefine.AttrTypeNum];
+    public Fix[] mAttrOrg = new Fix[GameDefine.AttrTypeNum];
+    public Fix[] mAttrCur = new Fix[GameDefine.AttrTypeNum];
 
     public void Init(UnitBase unit) {
         mUnit = unit;
-        for (int i = 0; i < (int)UnitAttrType.Num; i++) {
+        for (int i = 0; i < GameDefine.AttrTypeNum; i++) {
             mAttrCfg[i] = Fix.fix0;
             mAttrOrg[i] = Fix.fix0;
             mAttrCur[i] = Fix.fix0;
@@ -18,45 +18,45 @@ public class UnitAttr {
     }
 
     public void ResetAttr() {
-        for (int i = 0; i < (int)UnitAttrType.Num; i++) {
+        for (int i = 0; i < GameDefine.AttrTypeNum; i++) {
             mAttrCur[i] = mAttrOrg[i];
         }
     }
 
-    public Fix GetAttr(UnitAttrType attr) {
-        if (attr < UnitAttrType.None || attr >= UnitAttrType.Num) {
+    public Fix GetAttr(int attr) {
+        if (attr < GameDefine.AttrTypeNone || attr >= GameDefine.AttrTypeNum) {
             return Fix.fix0;
         }
-        return mAttrCur[(int)attr];
+        return mAttrCur[attr];
     }
 
-    public void SetAttr(UnitAttrType attr, Fix value) {
-        if (attr < UnitAttrType.None || attr >= UnitAttrType.Num) {
+    public void SetAttr(int attr, Fix value) {
+        if (attr < GameDefine.AttrTypeNone || attr >= GameDefine.AttrTypeNum) {
             return;
         }
-        mAttrCur[(int)attr] = value;
+        mAttrCur[attr] = value;
     }
 
-    public void AddAttr(UnitAttrType attr, Fix value) {
-        if (attr < UnitAttrType.None || attr >= UnitAttrType.Num) {
+    public void AddAttr(int attr, Fix value) {
+        if (attr < GameDefine.AttrTypeNone || attr >= GameDefine.AttrTypeNum) {
             return;
         }
-        mAttrCur[(int)attr] += value;
-        if (mAttrCur[(int)attr] < Fix.fix0) {
-            mAttrCur[(int)attr] = Fix.fix0;
+        mAttrCur[attr] += value;
+        if (mAttrCur[attr] < Fix.fix0) {
+            mAttrCur[attr] = Fix.fix0;
         }
-        OnAddAttr(attr, mAttrCur[(int)attr]);
+        OnAddAttr(attr, mAttrCur[attr]);
     }
 
-    public void MulAttr(UnitAttrType attr, Fix value) {
-        if (attr < UnitAttrType.None || attr >= UnitAttrType.Num) {
+    public void MulAttr(int attr, Fix value) {
+        if (attr < GameDefine.AttrTypeNone || attr >= GameDefine.AttrTypeNum) {
             return;
         }
-        mAttrCur[(int)attr] *= value;
+        mAttrCur[attr] *= value;
     }
 
-    public void OnAddAttr(UnitAttrType attr, Fix value) {
-        if (attr == UnitAttrType.Hp) {
+    public void OnAddAttr(int attr, Fix value) {
+        if (attr == GameDefine.AttrTypeHp) {
             if (value <= Fix.fix0) {
                 mUnit.Kill = true;
             }

@@ -37,7 +37,6 @@ public class SkillFactory {
             skill.BulletId = (int)cfg["BulletId"];
             skill.SoldierId = (int)cfg["SoldierId"];
             skillCfgs[skill.Id] = skill;
-            Debug.Log(skill.Id);
         }
     }
 
@@ -55,11 +54,11 @@ public class SkillFactory {
             return null;
         }
         SkillBase skill = null;
-        if (cfg.Type == (int)SkillType.Shoot) {
+        if (cfg.Type == GameDefine.SkillTypeShoot) {
             skill = new SkillShoot();
-        } else if (cfg.Type == (int)SkillType.CreateSoldier) {
+        } else if (cfg.Type == GameDefine.SkillTypeCreateSoldier) {
             skill = new SkillCreateSoldier();
-        } else if (cfg.Type == (int)SkillType.Aoe) {
+        } else if (cfg.Type == GameDefine.SkillTypeAoe) {
             skill = new SkillAoe();
         }
         if (skill == null) {

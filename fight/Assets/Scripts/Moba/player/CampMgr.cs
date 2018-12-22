@@ -40,7 +40,7 @@ public class CampMgr {
     public int PlayerCamp(int uid) {
         Player player = GetCampPlayer(uid);
         if (player == null) {
-            return GameConst.CampNone;
+            return GameDefine.CampNone;
         }
         return player.mCamp;
     }

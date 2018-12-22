@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LockStepLogic {
+public class LockStep {
     float mTotalTime = 0;
     float mNextGameTime = 0;
     float mFrameLen = 0;
@@ -10,7 +10,7 @@ public class LockStepLogic {
     public int mLogicFrame = 1;
 
     public void Init() {
-        mFrameLen = (float)GameData.timeFrame;
+        mFrameLen = (float)GameApp.timeFrame;
         mTotalTime = 0;
         mNextGameTime = 0;
         mFrameInterval = 0;
@@ -20,14 +20,14 @@ public class LockStepLogic {
     public void UpdateLogic() {
         float deltaTime = UnityEngine.Time.deltaTime;
         mTotalTime += deltaTime;
-        while (mTotalTime > mNextGameTime && GameData.msgFrame.CheckFrame(mLogicFrame)) {
-            GameData.battleLogic.UpdateFrame();
+        while (mTotalTime > mNextGameTime && GameApp.msgFrame.CheckFrame(mLogicFrame)) {
+            GameApp.battleLogic.UpdateFrame();
             mNextGameTime += mFrameLen;
             mLogicFrame += 1;
-            GameData.timeCur += GameData.timeFrame;
+            GameApp.timeCur += GameApp.timeFrame;
             //test
             if (mLogicFrame == 1000) {
-                GameData.udpNet.DisconnectToServer();
+                GameApp.udpNet.DisconnectToServer();
                 return;
             }
             //MsgCreateTower msg = new MsgCreateTower();
@@ -38,6 +38,6 @@ public class LockStepLogic {
             //GameData.udpNet.Send(1, msg);
         }
         mFrameInterval = (mFrameLen - (mNextGameTime - mTotalTime)) / mFrameLen;
-        GameData.battleLogic.UpdateRender(mFrameInterval);
+        GameApp.battleLogic.UpdateRender(mFrameInterval);
     }
 }

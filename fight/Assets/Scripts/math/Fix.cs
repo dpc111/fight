@@ -16,13 +16,12 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     public static readonly Fix fixRad2Deg = pi * (Fix)2 / (Fix)360;
     public static readonly Fix fixDeg2Rad = (Fix)360 / (pi * (Fix)2);
     public readonly long rawValue;
-    
+    public long RawValue { get { return rawValue; } }    
+
     Fix(long value)
     {
         rawValue = value;
     }
-
-    public long RawValue { get { return rawValue; } }
 
     public Fix(int value)
     {
@@ -141,7 +140,7 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
 
     public static Fix operator ++(Fix x) 
     {
-        return x + one;
+        return x + Fix.fix1;
     }
 
     public static Fix operator *(Fix x, Fix y)
@@ -589,6 +588,10 @@ public struct FixVector3
     public static Fix Mod(FixVector3 a)
     {
         return Fix.Sqrt(SqrMod(a));
+    }
+
+    public static Fix SqrDistance(FixVector3 a, FixVector3 b) {
+        return SqrMod(a - b);
     }
 
     public static Fix Distance(FixVector3 a, FixVector3 b)

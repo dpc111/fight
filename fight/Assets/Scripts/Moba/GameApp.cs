@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class GameData {
+public class GameApp {
     public static Net.UdpNet udpNet = new Net.UdpNet();
     public static MsgFrame msgFrame = new MsgFrame();
-    public static BattleLogic battleLogic = new BattleLogic();
-    public static LockStepLogic lockStepLogic = new LockStepLogic();
+    public static GameLogic battleLogic = new GameLogic();
+    public static LockStep lockStepLogic = new LockStep();
     public static CampMgr campMgr = new CampMgr();
-    public static TowerMgr towerMgr = new TowerMgr();
-    public static SoldierMgr soldierMgr = new SoldierMgr();
-    public static BulletMgr bulletMgr = new BulletMgr();
-    public static LiveMgr liveMgr = new LiveMgr();
+    public static UnitMgr towerMgr = new UnitMgr();
+    public static UnitMgr soldierMgr = new UnitMgr();
+    public static UnitMgr bulletMgr = new UnitMgr();
+    public static UnitMgr liveMgr = new UnitMgr();
     public static TransformMgr transformMgr = new TransformMgr();
     public static FixRandom fixRandom = new FixRandom(1000);
     public static Fix timeFrame = Fix.FromRaw(409); // 273

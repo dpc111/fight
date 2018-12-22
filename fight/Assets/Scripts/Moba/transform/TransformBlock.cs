@@ -23,10 +23,10 @@ public class TransformBlock {
     }
 
     public void SetBlockShap() {
-        Fix w = GameData.transformMgr.mAstar.mWidth;
+        Fix w = GameApp.transformMgr.mAstar.mWidth;
         Fix x = Fix.fix0;
         Fix y = Fix.fix0;
-        int xNum = GameData.transformMgr.mAstar.mX;
+        int xNum = GameApp.transformMgr.mAstar.mX;
         int n = (int)(mBlockRange / w);
         mBlockLen = 0;
         mBoxLen = n;
@@ -46,7 +46,7 @@ public class TransformBlock {
         if (mBlockLen == 0) {
             return;
         }
-        int indexCur = GameData.transformMgr.mAstar.ToGridIndex(mTransform.mPos);
+        int indexCur = GameApp.transformMgr.mAstar.ToGridIndex(mTransform.mPos);
         for (int i = 0; i < mBlockLen; i++) {
             mBlockDynamic[i] = indexCur + mBlockShape[i];
         }

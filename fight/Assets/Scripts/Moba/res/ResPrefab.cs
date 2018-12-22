@@ -9,7 +9,15 @@ public class ResPrefab : ResBase<GameObject> {
             return null;
         }
         GameObject obj = GameObject.Instantiate(prefab) as GameObject;
-        obj.SetActive(false);
+        return obj;
+    }
+
+    public GameObject Create(string name, Vector3 pos, Quaternion rol) {
+         GameObject prefab = Get(name);
+        if (prefab == null) {
+            return null;
+        }
+        GameObject obj = GameObject.Instantiate(prefab, pos, rol) as GameObject;
         return obj;
     }
 

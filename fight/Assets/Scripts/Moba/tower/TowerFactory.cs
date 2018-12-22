@@ -53,7 +53,7 @@ public class TowerFactory {
             return null;
         }
         tower.Init(cfg, pos);
-        GameData.towerMgr.Add(tower);
+        GameApp.towerMgr.Add(tower);
         return tower;
     }
 }

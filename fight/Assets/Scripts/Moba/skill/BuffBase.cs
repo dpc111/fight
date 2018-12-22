@@ -5,9 +5,9 @@ using UnityEngine;
 public class BuffBase {
     public int mId;
     public int mType;
-    public BuffUpdateType mUpdateType = BuffUpdateType.Once;
-    public BuffAddType mAddType = BuffAddType.Layer;
-    public BuffRemoveType mRemoveType = BuffRemoveType.All;
+    public int mUpdateType = GameDefine.BuffUpdateTypeOnce;
+    public int mAddType = GameDefine.BuffAddTypeLayer;
+    public int mRemoveType = GameDefine.BuffRemoveTypeAll;
     public int mMaxLayer = 0;
     public Fix mTime = Fix.fix0;
     public Fix mCd = Fix.fix0;
@@ -34,7 +34,7 @@ public class BuffBase {
         if (mTime <= Fix.fix0) {
             return;
         }
-        if (GameData.timeCur - mTimeAdd <= mTime) {
+        if (GameApp.timeCur - mTimeAdd <= mTime) {
             return;
         }
         End();

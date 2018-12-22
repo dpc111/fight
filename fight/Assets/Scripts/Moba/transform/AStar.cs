@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -82,6 +83,18 @@ public class AStar {
 
     public GridPos GetGridPos(FixVector2 pos) {
         return GetGridPos(ToGridIndex(pos));
+    }
+
+    public bool IsBlock(int x, int y) {
+        GridPos pos = GetGridPos(x, y);
+        if (pos == null) {
+            Debug.Log("");
+            return true;
+        }
+        if (pos.block != GridPos.blockNone) {
+            return true;
+        }
+        return false;
     }
 
     public void GetAround(GridPos pos, ref GridPos[] arounds) {
@@ -169,6 +182,50 @@ public class AStar {
         pathLen = checkLen + 1;
     }
 
+    public void FliterPath(ref int[] path, ref int pathLen) {
+        if (pathLen <= 2) {
+            return;
+        }
+        int i = 0;
+        int j = pathLen - 1;
+        while (j - i > 1) {
+            while (j - i > 1) {
+                bool connect = true;
+                GridPos posi = GetGridPos(path[i]);
+                GridPos posj = GetGridPos(path[j]);
+                Fix diffx = (Fix)(posj.x - posi.x);
+                Fix diffz = (Fix)(posj.z - posi.z);
+                Fix steps = Fix.Sqrt(diffx * diffx + diffz * diffz);
+                Fix stepx = diffx / steps;
+                Fix stepz = diffz / steps;
+                for (Fix k = Fix.fix1; k < steps - Fix.fix1; k++) {
+                    Fix tempx = posi.x + stepx * k;
+                    Fix tempz = posi.z + stepz * k;
+                    //Debug.Log((float)steps + " " + (int)(steps - Fix.fix1) + " " + (float)(k+1) + " " +  (float)k + " " + (float)tempx + " " + (float)tempz);
+                    if (IsBlock((int)tempx, (int)tempz) ||
+                        IsBlock((int)(tempx), (int)(tempz + 1)) ||
+                        IsBlock((int)(tempx + 1), (int)(tempz)) ||
+                        IsBlock((int)(tempx + 1), (int)(tempz + 1))) {
+                        connect = false;
+                        //Debug.LogError("");
+                        break;
+                    }
+                }
+                if (connect) {
+                    int removeLen = j - i - 1;
+                    //Array.Copy(path, i + 1, path, j, pathLen - j);
+                    Array.Copy(path, j, path, i + 1, pathLen - j);
+                    pathLen -= removeLen;
+                    break;
+                } else {
+                    j--;
+                }
+            }
+            i++;
+            j = pathLen - 1;
+        }
+    }
+
     public bool FindPath(int start, int end, ref int[] path, ref int pathLen) {
         return FindPath(start, end, ref path, ref pathLen, Fix.fix0);
     }
@@ -240,6 +297,10 @@ public class AStar {
         if (posFindEnd == null) {
             return false;
         }
+
+        //TestShowArray(ref path, pathLen);
+        FliterPath(ref path, ref pathLen);
+        //TestShowArray(ref path, pathLen);
         return true;
     }
 
@@ -271,5 +332,13 @@ public class AStar {
             }
         }
         Debug.Log(blocks);
+    }
+
+    public void TestShowArray(ref int[] arr, int num) {
+        string str = "";
+        for (int i = 0; i < num; i++) {
+            str += " " + arr[i];
+        }
+        Debug.LogError(str);
     }
 }

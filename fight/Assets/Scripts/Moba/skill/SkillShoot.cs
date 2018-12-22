@@ -8,9 +8,9 @@ public class SkillShoot : SkillBase {
         bullet.mUnitTri = mUnitTri;
         bullet.mUnitTar = null;
         bullet.Camp = mUnitTri.Camp;
-        Fix damage = mUnitTri.GetAttr(UnitAttrType.AttackDamage);
-        bullet.mAttr.SetAttr(UnitAttrType.AttackDamage, damage);
-        bullet.mTransform.MoveDir(FightTool.CampDir(bullet.Camp));
+        Fix damage = mUnitTri.GetAttr(GameDefine.AttrTypeAttackDamage);
+        bullet.mAttr.SetAttr(GameDefine.AttrTypeAttackDamage, damage);
+        bullet.mTransform.MoveDir(GameTool.CampDir(bullet.Camp));
     }
 
     public override void Trigger(UnitBase tar) {
@@ -18,8 +18,8 @@ public class SkillShoot : SkillBase {
         bullet.mUnitTri = mUnitTri;
         bullet.mUnitTar = tar;
         bullet.Camp = mUnitTri.Camp;
-        Fix damage = mUnitTri.GetAttr(UnitAttrType.AttackDamage);
-        bullet.mAttr.SetAttr(UnitAttrType.AttackDamage, damage);
+        Fix damage = mUnitTri.GetAttr(GameDefine.AttrTypeAttackDamage);
+        bullet.mAttr.SetAttr(GameDefine.AttrTypeAttackDamage, damage);
         bullet.mTransform.MoveLock(tar.mTransform);
     }
 }

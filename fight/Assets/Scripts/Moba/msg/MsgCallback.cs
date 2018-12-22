@@ -28,13 +28,13 @@ public class MsgCallback {
     }
 
     public void MsgCreateTower(int uid, MsgCreateTower msg) {
-        Debug.Log(msg.type + "," + msg.posX + "," + msg.posY + " frame " + GameData.lockStepLogic.mLogicFrame);
+        Debug.Log(msg.type + "," + msg.posX + "," + msg.posY + " frame " + GameApp.lockStepLogic.mLogicFrame);
     }
 
     public void MsgCreateUnit(int uid, MsgCreateUnit msg) {
         int index = msg.index;
         FixVector3 pos = new FixVector3(Fix.FromRaw(msg.pos.x), Fix.FromRaw(msg.pos.y), Fix.FromRaw(msg.pos.z));
-        Player player = GameData.campMgr.GetPlayer(uid);
+        Player player = GameApp.campMgr.GetPlayer(uid);
         Debug.Log(uid);
         if (player == null) {
             Debug.LogError(uid);
@@ -54,7 +54,7 @@ public class MsgCallback {
         if (!player.CardIsCoolDown(index)) {
             return;
         }
-        if (!FightTool.CanCreateUnit(pos, blockRange)) {
+        if (!GameTool.CanCreateUnit(pos, blockRange)) {
             return;
         }
         player.CardUse(index);

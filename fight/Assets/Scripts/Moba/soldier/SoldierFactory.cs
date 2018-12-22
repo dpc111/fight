@@ -50,8 +50,8 @@ public class SoldierFactory {
         }
         SoldierBase soldier = new SoldierBase();
         soldier.Init(cfg, pos);
-        GameData.soldierMgr.Add(soldier);
-        GameData.liveMgr.Add(soldier);
+        GameApp.soldierMgr.Add(soldier);
+        GameApp.liveMgr.Add(soldier);
         return soldier;
     }
 }

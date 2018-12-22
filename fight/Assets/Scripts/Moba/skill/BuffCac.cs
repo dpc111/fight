@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BuffCac : BuffBase {
-    public UnitAttrType mAddAttr;
+    public int mAddAttr;
     public Fix mAddValue;
-    public UnitAttrType mMulAttr;
+    public int mMulAttr;
     public Fix mMulValue;
-    public UnitAttrType mAddCdAttr;
+    public int mAddCdAttr;
     public Fix mAddCdValue;
 
     public override void Init(int type) {
@@ -15,10 +15,10 @@ public class BuffCac : BuffBase {
     }
 
     public override void Start() {
-        if (mAddAttr != UnitAttrType.None) {
+        if (mAddAttr != GameDefine.AttrTypeNone) {
             mUnitTar.mAttr.AddAttr(mAddAttr, mAddValue);
         }
-        if (mMulAttr != UnitAttrType.None) {
+        if (mMulAttr != GameDefine.AttrTypeNone) {
             mUnitTar.mAttr.MulAttr(mMulAttr, mMulValue + 1);
         }
     }
@@ -29,21 +29,21 @@ public class BuffCac : BuffBase {
 
     public override void Update() {
         base.Update();
-        if (mTimeLast - GameData.timeCur < mCd) {
+        if (mTimeLast - GameApp.timeCur < mCd) {
             return;
         }
-        mTimeLast = GameData.timeCur;
-        if (mAddCdAttr != UnitAttrType.None) {
+        mTimeLast = GameApp.timeCur;
+        if (mAddCdAttr != GameDefine.AttrTypeNone) {
             mUnitTar.mAttr.AddAttr(mAddCdAttr, mAddCdValue);
         }
     }
 
     public override void Refresh() {
         base.Refresh();
-        if (mAddAttr != UnitAttrType.None) {
+        if (mAddAttr != GameDefine.AttrTypeNone) {
             mUnitTar.mAttr.AddAttr(mAddAttr, mAddValue);
         }
-        if (mMulAttr != UnitAttrType.None) {
+        if (mMulAttr != GameDefine.AttrTypeNone) {
             mUnitTar.mAttr.MulAttr(mMulAttr, mMulValue + 1);
         }
     }

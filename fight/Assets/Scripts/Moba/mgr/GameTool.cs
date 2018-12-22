@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightTool {
+public class GameTool {
     public static bool IsSameCamp(UnitBase u1, UnitBase u2) {
         if (u1 == null || u2 == null) {
             return false;
@@ -14,15 +14,15 @@ public class FightTool {
     }
 
     public static int CampOther(int camp) {
-        if (camp == GameConst.CampLeft) {
-            return GameConst.CampRight;
+        if (camp == GameDefine.CampLeft) {
+            return GameDefine.CampRight;
         } else {
-            return GameConst.CampLeft;
+            return GameDefine.CampLeft;
         }
     }
 
     public static FixVector3 CampDir(int camp) {
-        if (camp == GameConst.CampLeft) {
+        if (camp == GameDefine.CampLeft) {
             return GameConst.CampLeftDir;
         } else {
             return GameConst.CampRightDir;
@@ -32,7 +32,7 @@ public class FightTool {
     public static bool IsInAttackRange(UnitBase u1, UnitBase u2) {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
-        Fix attackRange = u1.mAttr.GetAttr(UnitAttrType.AttackRange);
+        Fix attackRange = u1.mAttr.GetAttr(GameDefine.AttrTypeAttackRange);
         if (Fix.Abs(pos1.x - pos2.x) > attackRange || Fix.Abs(pos1.z - pos2.z) > attackRange) {
             return false;
         }
@@ -42,7 +42,7 @@ public class FightTool {
         return true;
     }
 
-    public static bool IsHit(UnitBase u1, UnitBase u2) {
+    public static bool IsHit2(UnitBase u1, UnitBase u2) {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
         Fix blockRange = u2.mTransform.mBlock.BlockRange;
@@ -55,7 +55,7 @@ public class FightTool {
         return true;
     }
 
-    public static bool IsHit(UnitBase u, FixVector3 pos, Fix blockRange) {
+    public static bool IsHit12(UnitBase u, FixVector3 pos, Fix blockRange) {
         FixVector3 pos1 = u.mTransform.Pos;
         Fix len = blockRange + u.mTransform.mBlock.BlockRange;
         if (Fix.Abs(pos1.x - pos.x) > len || Fix.Abs(pos1.z - pos.z) > len) {
@@ -67,14 +67,26 @@ public class FightTool {
         return true;
     }
 
-    public static bool IsHitNextFrame(UnitBase u1, UnitBase u2) {
+    public static bool IsHit2(UnitBase u1, UnitBase u2, Fix blockRange) {
+        FixVector3 pos1 = u1.mTransform.Pos;
+        FixVector3 pos2 = u2.mTransform.Pos;
+        if (Fix.Abs(pos1.x - pos2.x) > blockRange || Fix.Abs(pos1.z - pos2.z) > blockRange) {
+            return false;
+        }
+        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > blockRange * blockRange) {
+            return false;
+        }
+        return true;
+    }
+
+    public static bool IsHit2NextFrame(UnitBase u1, UnitBase u2) {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
         if (u1.mTransform.Move) {
-            pos1 += u1.mTransform.Dir * u1.mTransform.Speed * GameData.timeFrame;
+            pos1 += u1.mTransform.Dir * u1.mTransform.Speed * GameApp.timeFrame;
         }
         if (u2.mTransform.Move) {
-            pos2 += u2.mTransform.Dir * u2.mTransform.Speed * GameData.timeFrame;
+            pos2 += u2.mTransform.Dir * u2.mTransform.Speed * GameApp.timeFrame;
         }
         Fix blockRange = u2.mTransform.mBlock.BlockRange;
         if (Fix.Abs(pos1.x - pos2.x) > blockRange || Fix.Abs(pos1.z - pos2.z) > blockRange) {
@@ -86,12 +98,38 @@ public class FightTool {
         return true;
     }
 
-    public static bool IsHitEnter(UnitBase u1, UnitBase u2) {
-        return !IsHit(u1, u2) && IsHitNextFrame(u1, u2);
+    public static bool IsHit2NextFrame(UnitBase u1, UnitBase u2, Fix blockRange) {
+        FixVector3 pos1 = u1.mTransform.Pos;
+        FixVector3 pos2 = u2.mTransform.Pos;
+        if (u1.mTransform.Move) {
+            pos1 += u1.mTransform.Dir * u1.mTransform.Speed * GameApp.timeFrame;
+        }
+        if (u2.mTransform.Move) {
+            pos2 += u2.mTransform.Dir * u2.mTransform.Speed * GameApp.timeFrame;
+        }
+        if (Fix.Abs(pos1.x - pos2.x) > blockRange || Fix.Abs(pos1.z - pos2.z) > blockRange) {
+            return false;
+        }
+        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > blockRange * blockRange) {
+            return false;
+        }
+        return true;
     }
 
-    public static bool IsHitExit(UnitBase u1, UnitBase u2) {
-        return IsHit(u1, u2) && !IsHitNextFrame(u1, u2);
+    public static bool IsHit2Enter(UnitBase u1, UnitBase u2) {
+        return !IsHit2(u1, u2) && IsHit2NextFrame(u1, u2);
+    }
+
+    public static bool IsHit2Exit(UnitBase u1, UnitBase u2) {
+        return IsHit2(u1, u2) && !IsHit2NextFrame(u1, u2);
+    }
+
+    public static bool IsHit2Enter(UnitBase u1, UnitBase u2, Fix blockRange) {
+        return !IsHit2(u1, u2, blockRange) && IsHit2NextFrame(u1, u2, blockRange);
+    }
+
+    public static bool IsHit2Exit(UnitBase u1, UnitBase u2, Fix blockRange) {
+        return IsHit2(u1, u2, blockRange) && !IsHit2NextFrame(u1, u2, blockRange);
     }
 
     public static bool IsOutOfWorld(UnitBase u) {
@@ -110,14 +148,21 @@ public class FightTool {
     }
 
     public static bool CanCreateUnit(FixVector3 pos, Fix blockRange) {
-        List<UnitBase> list = GameData.liveMgr.GetList();
+        List<UnitBase> list = GameApp.liveMgr.GetList();
         for (int i = 0; i < list.Count; i++) {
             UnitBase u = list[i];
-            if (IsHit(u, pos, blockRange)) {
+            if (IsHit12(u, pos, blockRange)) {
                 return false;
             }
         }
         return true;
+    }
+
+    public static int WhichPosNearer(FixVector3 pos, FixVector3 pos1, FixVector3 pos2) {
+        if (FixVector3.SqrDistance(pos, pos2) < FixVector3.SqrDistance(pos, pos1)) {
+            return 1;
+        }
+        return 2;
     }
 
     //public static UnitBase FindEnemySoldier(UnitBase unit) {

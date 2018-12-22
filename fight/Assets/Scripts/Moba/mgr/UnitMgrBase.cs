@@ -38,10 +38,13 @@ public class UnitMgrBase<T> where T : UnitBase {
         }
     }
 
-    public virtual void UpdateRender(float interpolation) {
+    public virtual void UpdateRender(float interpolation, bool IsUpdateForward = true) {
         for (int i = 0; i < mUnits.Count; i++) {
             T unit = mUnits[i];
-            unit.mUnitUnity.UpdateRender(interpolation);
+            if (unit.Kill) {
+                continue;
+            }
+            unit.mUnitUnity.UpdateRender(interpolation, IsUpdateForward);
         }
     }
 
@@ -58,7 +61,7 @@ public class UnitMgrBase<T> where T : UnitBase {
             if (camp != 0 && camp != u.Camp) {
                 continue;
             }
-            if (FightTool.IsInAttackRange(unit, u)) {
+            if (GameTool.IsInAttackRange(unit, u)) {
                 return u;
             }
         }
@@ -76,7 +79,7 @@ public class UnitMgrBase<T> where T : UnitBase {
             if (camp != 0 && camp != u.Camp) {
                 continue;
             }
-            Fix sqrDis = FightTool.SqrDistance(unit, u);
+            Fix sqrDis = GameTool.SqrDistance(unit, u);
             if (nearestUnit == null) {
                 nearestUnit = u;
                 nearestSqrDis = sqrDis;
@@ -100,10 +103,10 @@ public class UnitMgrBase<T> where T : UnitBase {
             if (camp != 0 && camp != u.Camp) {
                 continue;
             }
-            if (!FightTool.IsInAttackRange(unit, u)) {
+            if (!GameTool.IsInAttackRange(unit, u)) {
                 continue;
             }
-            Fix sqrDis = FightTool.SqrDistance(unit, u);
+            Fix sqrDis = GameTool.SqrDistance(unit, u);
             if (nearestUnit == null) {
                 nearestUnit = u;
                 nearestSqrDis = sqrDis;
@@ -126,7 +129,7 @@ public class UnitMgrBase<T> where T : UnitBase {
             if (camp != 0 && camp != u.Camp) {
                 continue;
             }
-            if (!FightTool.IsInAttackRange(unit, u)) {
+            if (!GameTool.IsInAttackRange(unit, u)) {
                 continue;
             }
             list[index] = u;

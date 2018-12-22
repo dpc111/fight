@@ -8,12 +8,12 @@ public class UnitLive : UnitBase {
     public override void Init(UnitCfg cfg, FixVector3 pos) {
         base.Init(cfg, pos);
         mSkill = SkillFactory.Create(cfg.SkillId, this);
-        GameData.liveMgr.Add(this);
+        GameApp.liveMgr.Add(this);
     }
 
     public override void Destory() {
         base.Destory();
-        GameData.liveMgr.Remove(this);
+        GameApp.liveMgr.Remove(this);
     }
 
     public override void Update() {

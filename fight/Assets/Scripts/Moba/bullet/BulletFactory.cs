@@ -28,7 +28,7 @@ public class BulletFactory {
             bullet.Armor = Fix.fix0;
             bullet.MoveSpeed = (Fix)(int)cfg["MoveSpeed"];
             bullet.AttackCd = Fix.fix0;
-            bullet.AttackRange = Fix.fix0;
+            bullet.AttackRange = (Fix)(int)cfg["AttackRange"];
             bullet.AttackDamage = Fix.fix0;
             bullet.BlockRange = Fix.fix0;
             bullet.Prefab = (string)cfg["Prefab"];
@@ -55,16 +55,18 @@ public class BulletFactory {
             return null;
         }
         BulletBase bullet = null;
-        if (cfg.Type == (int)BulletType.Lock) {
+        if (cfg.Type == GameDefine.BulletTypeLock) {
             bullet = new BulletLock();
-        } else if (cfg.Type == (int)BulletType.Dir) {
+        } else if (cfg.Type == GameDefine.BulletTypeDir) {
             bullet = new BulletDir();
+        } else if (cfg.Type == GameDefine.BulletTypePath) {
+            bullet = new BulletPathBase();
         }
         if (bullet == null) {
             return null;
         }
         bullet.Init(cfg, pos);
-        GameData.bulletMgr.Add(bullet);
+        GameApp.bulletMgr.Add(bullet);
         return bullet;
     }
 }

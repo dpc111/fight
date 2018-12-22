@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-public class BattleLogic {
+public class GameLogic {
     public static int mLogicFrame = 0;
     public bool mIsPause = true;
     public bool mIsGame = false;
@@ -16,11 +16,11 @@ public class BattleLogic {
     }
 
     public void UpdateFrame() {
-        GameData.msgFrame.Update(GameData.lockStepLogic.mLogicFrame);
-        GameData.towerMgr.Update();
-        GameData.soldierMgr.Update();
-        GameData.bulletMgr.Update();
-        GameData.transformMgr.Update();
+        GameApp.msgFrame.Update(GameApp.lockStepLogic.mLogicFrame);
+        GameApp.towerMgr.Update();
+        GameApp.soldierMgr.Update();
+        GameApp.bulletMgr.Update();
+        GameApp.transformMgr.Update();
     }
 
     public void UpdateRender(float interpolation) {
@@ -30,13 +30,13 @@ public class BattleLogic {
         if (interpolation > 1) {
             interpolation = 1;
         }
-        GameData.soldierMgr.UpdateRender(interpolation);
-        GameData.bulletMgr.UpdateRender(interpolation);
+        GameApp.soldierMgr.UpdateRender(interpolation);
+        GameApp.bulletMgr.UpdateRender(interpolation, false);
     }
 
     public void StopBattle() {
         mIsGame = false;
-        mLogicFrame = GameData.lockStepLogic.mLogicFrame;
+        mLogicFrame = GameApp.lockStepLogic.mLogicFrame;
         if (mIsPause) {
             return;
         }

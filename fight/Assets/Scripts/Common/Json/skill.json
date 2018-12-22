@@ -2,10 +2,10 @@
       "4001" : {
          "Id" : "4001",
          "Type" : 1,
-         "SkillTargetGroup" : 2,
+         "SkillTargetGroup" : 1,
          "CampGroupType" : 2,
-         "UnitType" : 2,
-         "SkillRangeType" : 2,
+         "UnitType" : 4,
+         "SkillRangeType" : 3,
          "MoveType" : 2,
          "BulletId" : 3001,
          "SoldierId" : 0

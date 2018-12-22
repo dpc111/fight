@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightApp : MonoBehaviour {
-
+public class GameHandle : MonoBehaviour {
 	void Start () {
-        GameData.Init();
+        GameApp.Init();
 	}
 	
 	void Update () {
-        GameData.UpdateLogic();
+        GameApp.UpdateLogic();
 	}
 }

@@ -13,13 +13,12 @@ public class SoldierBase : UnitLive {
     public override void Update() {
         base.Update();
         if (mUnitTar == null || mUnitTar.Kill) {
-            //mUnitTar = FightTool.FindEnemyUnitNearest(this);
+            mUnitTar = GameApp.liveMgr.FindNearest(this, GameTool.CampOther(Camp));
             if (mUnitTar == null) {
                 Kill = true;
                 return;
             }
-            //mTransform.MoveLock(mUnitTar.mTransform);
-            mTransform.MoveTarget(mUnitTar.mTransform.Pos, GetAttr(UnitAttrType.AttackRange));
+            mTransform.MoveTarget(mUnitTar.mTransform.Pos, GetAttr(GameDefine.AttrTypeAttackRange));
         }
     }
 

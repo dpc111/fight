@@ -27,17 +27,17 @@ public class UnitBase {
 
     public virtual void Init(UnitCfg cfg, FixVector3 pos) {
         mAttr.Init(this);
-        mTransform.Init(pos, cfg.BlockRange, cfg.MoveSpeed);
-        GameData.transformMgr.Add(mTransform);
+        mTransform.Init(this, pos, cfg.BlockRange, cfg.MoveSpeed);
+        GameApp.transformMgr.Add(mTransform);
         mUnitUnity.Init(this, cfg);
         mBuffMgr.Init(this);
-        mAttr.SetAttr(UnitAttrType.Hp, cfg.Hp);
-        mAttr.SetAttr(UnitAttrType.Armor, cfg.Armor);
-        mAttr.SetAttr(UnitAttrType.MoveSpeed, cfg.MoveSpeed);
-        mAttr.SetAttr(UnitAttrType.AttackCd, cfg.AttackCd);
-        mAttr.SetAttr(UnitAttrType.AttackRange, cfg.AttackRange);
-        mAttr.SetAttr(UnitAttrType.AttackDamage, cfg.AttackDamage);
-        mAttr.SetAttr(UnitAttrType.AttackNum, cfg.AttackNum);
+        mAttr.SetAttr(GameDefine.AttrTypeHp, cfg.Hp);
+        mAttr.SetAttr(GameDefine.AttrTypeArmor, cfg.Armor);
+        mAttr.SetAttr(GameDefine.AttrTypeMoveSpeed, cfg.MoveSpeed);
+        mAttr.SetAttr(GameDefine.AttrTypeAttackCd, cfg.AttackCd);
+        mAttr.SetAttr(GameDefine.AttrTypeAttackRange, cfg.AttackRange);
+        mAttr.SetAttr(GameDefine.AttrTypeAttackDamage, cfg.AttackDamage);
+        mAttr.SetAttr(GameDefine.AttrTypeAttackNum, cfg.AttackNum);
         Kill = false;
     }
 
@@ -45,7 +45,7 @@ public class UnitBase {
         mUnitUnity.Destory();
         mUnitUnity = null;
         mAttr = null;
-        GameData.transformMgr.Remove(mTransform);
+        GameApp.transformMgr.Remove(mTransform);
         mTransform = null;
         mBuffMgr = null;
     }
@@ -58,10 +58,18 @@ public class UnitBase {
             mBuffMgr.Update();
         }
         mUnitUnity.Update();
-        if (FightTool.IsOutOfWorld(this)) {
+        if (GameTool.IsOutOfWorld(this)) {
             Kill = true;
             return;
         }
+    }
+
+    public virtual void OnMoveStart() {
+
+    }
+
+    public virtual void OnMoveStop() {
+
     }
 
     public bool CanBeAttack() {
@@ -71,7 +79,7 @@ public class UnitBase {
         return true;
     }
 
-    public Fix GetAttr(UnitAttrType type) {
+    public Fix GetAttr(int type) {
         return mAttr.GetAttr(type);
     }
 }

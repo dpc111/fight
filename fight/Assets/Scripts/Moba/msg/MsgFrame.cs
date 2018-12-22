@@ -12,7 +12,7 @@ public class MsgFrame {
         listFrame.Clear();
         minFrame = 0;
         maxFrame = 0;
-        GameData.udpNet.RegisterMsgCallback(this, "OnRecv");
+        GameApp.udpNet.RegisterMsgCallback(this, "OnRecv");
     }
 
     public void Release() {

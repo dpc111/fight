@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TransformMoveDir : TransformMoveBase {
     public override void Update() {
-        mTransform.mPos += mTransform.mDir * mTransform.mSpeed * GameData.timeFrame;
+        mTransform.mPos += mTransform.mDir * mTransform.mSpeed * GameApp.timeFrame;
     }
 
     public void Move(FixVector2 dir) {

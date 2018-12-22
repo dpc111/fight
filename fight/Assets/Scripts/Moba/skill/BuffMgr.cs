@@ -59,11 +59,11 @@ public class BuffMgr {
     }
 
     public void Refresh(BuffBase buff) {
-        if (buff.mType == (int)BuffType.Cac) {
+        if (buff.mType == GameDefine.BuffTypeCac) {
             mUnit.mAttr.ResetAttr();
             for (int i = 0; i < mTarBuffs.Count; i++) {
                 BuffBase b = mTarBuffs[i];
-                if (b.mType != (int)BuffType.Cac) {
+                if (b.mType != GameDefine.BuffTypeCac) {
                     continue;
                 }
                 b.Refresh();

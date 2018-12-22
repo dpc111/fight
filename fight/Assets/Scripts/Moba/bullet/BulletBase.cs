@@ -6,12 +6,10 @@ public class BulletBase : UnitBase {
     public BulletCfg mCfg = null;
     public UnitBase mUnitTri = null;
     public UnitBase mUnitTar = null;
-    public int mBulletType = (int)BulletType.Begin;
 
     public virtual void Init(BulletCfg cfg, FixVector3 pos) {
         base.Init(cfg, pos);
         mCfg = cfg;
-        mBulletType = cfg.Type;
     }
 
     public override void Update() {
@@ -20,61 +18,74 @@ public class BulletBase : UnitBase {
     }
 
     public virtual void OnHit(UnitBase unitHit) {
-        Fix damage = mAttr.GetAttr(UnitAttrType.AttackDamage);
-        unitHit.mAttr.AddAttr(UnitAttrType.Hp, -damage);
+        Fix damage = mAttr.GetAttr(GameDefine.AttrTypeAttackDamage);
+        unitHit.mAttr.AddAttr(GameDefine.AttrTypeHp, -damage);
         if (mCfg.HitDestroy == 1) {
             Kill = true;
         }
     }
 
     public void HitCheck() {
-        if (mCfg.CheckHitType == FightConst.BulletHitCheckNone) {
+        if (mCfg.CheckHitType == GameDefine.BulletHitCheckNone) {
             return;
-        } else if (mCfg.CheckHitType == FightConst.BulletHitCheckTarget) {
-            if (mUnitTar == null) {
+        } else if (mCfg.CheckHitType == GameDefine.BulletHitCheckTarget) {
+            if (mUnitTar == null || mUnitTar.Kill) {
                 return;
             }
-            if (!FightTool.IsHit(this, mUnitTar)) {
+            if (!GameTool.IsHit2(this, mUnitTar)) {
                 return;
             }
             OnHit(mUnitTar);
-        } else if (mCfg.CheckHitCamp == FightConst.BulletHitCheckAll) {
+        } else if (mCfg.CheckHitType == GameDefine.BulletHitCheckAll) {
             int camp = 0;
-            if (mCfg.CheckHitCamp == FightConst.CampGroupTypeSelf) {
+            if (mCfg.CheckHitCamp == GameDefine.CampGroupTypeSelf) {
                 camp = Camp;
-            } else if (mCfg.CheckHitCamp == FightConst.CampGroupTypeEnemy) {
-                camp = FightTool.CampOther(Camp);
-            } else if (mCfg.CheckHitCamp == FightConst.CampGroupTypeAll) {
+            } else if (mCfg.CheckHitCamp == GameDefine.CampGroupTypeEnemy) {
+                camp = GameTool.CampOther(Camp);
+            } else if (mCfg.CheckHitCamp == GameDefine.CampGroupTypeAll) {
                 camp = 0;
             }
             if (mCfg.HitDestroy == 1) {
                 List<UnitBase> unitList = null;
-                if (mCfg.CheckHitUnitType == FightConst.UnitTypeTower) {
-                    unitList = GameData.towerMgr.GetList();
-                } else if (mCfg.CheckHitType == FightConst.UnitTypeSoldier) {
-                    unitList = GameData.soldierMgr.GetList();
-                } else if (mCfg.CheckHitType == FightConst.UnitTypeLive) {
-                    unitList = GameData.liveMgr.GetList();
+                if (mCfg.CheckHitUnitType == GameDefine.UnitTypeTower) {
+                    unitList = GameApp.towerMgr.GetList();
+                } else if (mCfg.CheckHitUnitType == GameDefine.UnitTypeSoldier) {
+                    unitList = GameApp.soldierMgr.GetList();
+                } else if (mCfg.CheckHitUnitType == GameDefine.UnitTypeLive) {
+                    unitList = GameApp.liveMgr.GetList();
                 }
                 for (int i = 0; i < unitList.Count; i++) {
                     UnitBase u = unitList[i];
-                    if (FightTool.IsHit(u, this)) {
+                    if (u.Kill) {
+                        continue;
+                    }
+                    if (camp != 0 && camp != u.Camp) {
+                        continue;
+                    }
+                    if (GameTool.IsHit2(this, u)) {
                         OnHit(u);
-                        return;
+                        break;
                     }
                 }
             } else {
                 List<UnitBase> unitList = null;
-                if (mCfg.CheckHitUnitType == FightConst.UnitTypeTower) {
-                    unitList = GameData.towerMgr.GetList();
-                } else if (mCfg.CheckHitType == FightConst.UnitTypeSoldier) {
-                    unitList = GameData.soldierMgr.GetList();
-                } else if (mCfg.CheckHitType == FightConst.UnitTypeLive) {
-                    unitList = GameData.liveMgr.GetList();
+                if (mCfg.CheckHitUnitType == GameDefine.UnitTypeTower) {
+                    unitList = GameApp.towerMgr.GetList();
+                } else if (mCfg.CheckHitUnitType == GameDefine.UnitTypeSoldier) {
+                    unitList = GameApp.soldierMgr.GetList();
+                } else if (mCfg.CheckHitUnitType == GameDefine.UnitTypeLive) {
+                    unitList = GameApp.liveMgr.GetList();
                 }
+                Fix attackRange = GetAttr(GameDefine.AttrTypeAttackRange);
                 for (int i = 0; i < unitList.Count; i++) {
                     UnitBase u = unitList[i];
-                    if (FightTool.IsHitEnter(u, this)) {
+                    if (u.Kill) {
+                        continue;
+                    }
+                    if (camp != 0 && camp != u.Camp) {
+                        continue;
+                    }
+                    if (GameTool.IsHit2Enter(u, this, attackRange)) {
                         OnHit(u);
                     }
                 }

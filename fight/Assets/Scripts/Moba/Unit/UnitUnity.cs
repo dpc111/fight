@@ -13,12 +13,12 @@ public class UnitUnity {
 
     public void Init(UnitBase unit, UnitCfg cfg) {
         mUnit = unit;
-        mGameObj = ResFactory.prefabs.Create(cfg.Prefab);
+        mGameObj = ResFactory.prefabs.Create(cfg.Prefab, mUnit.mTransform.Pos.ToVector3(), Quaternion.identity);
         if (mGameObj == null) {
             Debug.LogError(cfg.Prefab);
         }
-        mGameObj.transform.localPosition = mUnit.mTransform.Pos.ToVector3();
-        mGameObj.SetActive(true);
+        //mGameObj.transform.localPosition = mUnit.mTransform.Pos.ToVector3();
+        //mGameObj.SetActive(true);
     }
 
     public void Destory() {
@@ -29,18 +29,20 @@ public class UnitUnity {
     public void Update() {
         if (mUnit.mTransform.Move) {
             mLastPos = mUnit.mTransform.Pos;
-            mNextPos = mLastPos + mUnit.mTransform.Dir * mUnit.mTransform.Speed * GameData.timeFrame;
+            mNextPos = mLastPos + mUnit.mTransform.Dir * mUnit.mTransform.Speed * GameApp.timeFrame;
             mGameObj.transform.localPosition = mUnit.mTransform.Pos.ToVector3();
         }
 
     }
 
-    public void UpdateRender(float interpolation) {
+    public void UpdateRender(float interpolation, bool IsUpdateForward) {
         if (mUnit.Kill || !mUnit.mTransform.Move) {
             return;
         }
         mGameObj.transform.localPosition = Vector3.Lerp(mLastPos.ToVector3(), mNextPos.ToVector3(), interpolation);
-        mGameObj.transform.forward = mUnit.mTransform.Dir.ToVector3();
+        if (IsUpdateForward) {
+            mGameObj.transform.forward = mUnit.mTransform.Dir.ToVector3();
+        }
     }
 
     public void PlayAnimation(string name) {
