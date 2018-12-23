@@ -53,9 +53,202 @@ ModelImporter:
     7400016: idle2
     7400018: ALLANIMS
     7400020: dance
+    7400022: idle //// slime
+    7400024: move //// slime
+    7400026: attack1 //// slime
+    7400028: attack2 //// slime
+    7400030: hiphop //// slime
+    7400032: hit1 //// slime
+    7400034: hit2 //// slime
+    7400036: die //// slime
+    7400038: idle2 //// slime
+    7400040: ALLANIMS //// slime
+    7400042: dance //// slime
+    7400044: idle //// Dummy01
+    7400046: move //// Dummy01
+    7400048: attack1 //// Dummy01
+    7400050: attack2 //// Dummy01
+    7400052: hiphop //// Dummy01
+    7400054: hit1 //// Dummy01
+    7400056: hit2 //// Dummy01
+    7400058: die //// Dummy01
+    7400060: idle2 //// Dummy01
+    7400062: ALLANIMS //// Dummy01
+    7400064: dance //// Dummy01
+    7400066: idle //// bone01
+    7400068: move //// bone01
+    7400070: attack1 //// bone01
+    7400072: attack2 //// bone01
+    7400074: hiphop //// bone01
+    7400076: hit1 //// bone01
+    7400078: hit2 //// bone01
+    7400080: die //// bone01
+    7400082: idle2 //// bone01
+    7400084: ALLANIMS //// bone01
+    7400086: dance //// bone01
+    7400088: idle //// bone02
+    7400090: move //// bone02
+    7400092: attack1 //// bone02
+    7400094: attack2 //// bone02
+    7400096: hiphop //// bone02
+    7400098: hit1 //// bone02
+    7400100: hit2 //// bone02
+    7400102: die //// bone02
+    7400104: idle2 //// bone02
+    7400106: ALLANIMS //// bone02
+    7400108: dance //// bone02
+    7400110: idle //// bone03
+    7400112: move //// bone03
+    7400114: attack1 //// bone03
+    7400116: attack2 //// bone03
+    7400118: hiphop //// bone03
+    7400120: hit1 //// bone03
+    7400122: hit2 //// bone03
+    7400124: die //// bone03
+    7400126: idle2 //// bone03
+    7400128: ALLANIMS //// bone03
+    7400130: dance //// bone03
+    7400132: idle //// bone04
+    7400134: move //// bone04
+    7400136: attack1 //// bone04
+    7400138: attack2 //// bone04
+    7400140: hiphop //// bone04
+    7400142: hit1 //// bone04
+    7400144: hit2 //// bone04
+    7400146: die //// bone04
+    7400148: idle2 //// bone04
+    7400150: ALLANIMS //// bone04
+    7400152: dance //// bone04
+    7400154: idle //// bone05
+    7400156: move //// bone05
+    7400158: attack1 //// bone05
+    7400160: attack2 //// bone05
+    7400162: hiphop //// bone05
+    7400164: hit1 //// bone05
+    7400166: hit2 //// bone05
+    7400168: die //// bone05
+    7400170: idle2 //// bone05
+    7400172: ALLANIMS //// bone05
+    7400174: dance //// bone05
+    7400176: idle //// bone06
+    7400178: move //// bone06
+    7400180: attack1 //// bone06
+    7400182: attack2 //// bone06
+    7400184: hiphop //// bone06
+    7400186: hit1 //// bone06
+    7400188: hit2 //// bone06
+    7400190: die //// bone06
+    7400192: idle2 //// bone06
+    7400194: ALLANIMS //// bone06
+    7400196: dance //// bone06
+    7400198: idle //// bone07
+    7400200: move //// bone07
+    7400202: attack1 //// bone07
+    7400204: attack2 //// bone07
+    7400206: hiphop //// bone07
+    7400208: hit1 //// bone07
+    7400210: hit2 //// bone07
+    7400212: die //// bone07
+    7400214: idle2 //// bone07
+    7400216: ALLANIMS //// bone07
+    7400218: dance //// bone07
+    7400220: idle //// bone08
+    7400222: move //// bone08
+    7400224: attack1 //// bone08
+    7400226: attack2 //// bone08
+    7400228: hiphop //// bone08
+    7400230: hit1 //// bone08
+    7400232: hit2 //// bone08
+    7400234: die //// bone08
+    7400236: idle2 //// bone08
+    7400238: ALLANIMS //// bone08
+    7400240: dance //// bone08
+    7400242: idle //// bone09
+    7400244: move //// bone09
+    7400246: attack1 //// bone09
+    7400248: attack2 //// bone09
+    7400250: hiphop //// bone09
+    7400252: hit1 //// bone09
+    7400254: hit2 //// bone09
+    7400256: die //// bone09
+    7400258: idle2 //// bone09
+    7400260: ALLANIMS //// bone09
+    7400262: dance //// bone09
+    7400264: idle //// bone10
+    7400266: move //// bone10
+    7400268: attack1 //// bone10
+    7400270: attack2 //// bone10
+    7400272: hiphop //// bone10
+    7400274: hit1 //// bone10
+    7400276: hit2 //// bone10
+    7400278: die //// bone10
+    7400280: idle2 //// bone10
+    7400282: ALLANIMS //// bone10
+    7400284: dance //// bone10
+    7400286: idle //// bone11
+    7400288: move //// bone11
+    7400290: attack1 //// bone11
+    7400292: attack2 //// bone11
+    7400294: hiphop //// bone11
+    7400296: hit1 //// bone11
+    7400298: hit2 //// bone11
+    7400300: die //// bone11
+    7400302: idle2 //// bone11
+    7400304: ALLANIMS //// bone11
+    7400306: dance //// bone11
+    7400308: idle //// bone12
+    7400310: move //// bone12
+    7400312: attack1 //// bone12
+    7400314: attack2 //// bone12
+    7400316: hiphop //// bone12
+    7400318: hit1 //// bone12
+    7400320: hit2 //// bone12
+    7400322: die //// bone12
+    7400324: idle2 //// bone12
+    7400326: ALLANIMS //// bone12
+    7400328: dance //// bone12
+    7400330: idle //// bone13
+    7400332: move //// bone13
+    7400334: attack1 //// bone13
+    7400336: attack2 //// bone13
+    7400338: hiphop //// bone13
+    7400340: hit1 //// bone13
+    7400342: hit2 //// bone13
+    7400344: die //// bone13
+    7400346: idle2 //// bone13
+    7400348: ALLANIMS //// bone13
+    7400350: dance //// bone13
+    7400352: idle //// slime_eye
+    7400354: move //// slime_eye
+    7400356: attack1 //// slime_eye
+    7400358: attack2 //// slime_eye
+    7400360: hiphop //// slime_eye
+    7400362: hit1 //// slime_eye
+    7400364: hit2 //// slime_eye
+    7400366: die //// slime_eye
+    7400368: idle2 //// slime_eye
+    7400370: ALLANIMS //// slime_eye
+    7400372: dance //// slime_eye
     9500000: //RootNode
     11100000: //RootNode
+    11100002: bone01
+    11100004: bone02
+    11100006: bone03
+    11100008: bone04
+    11100010: bone05
+    11100012: bone06
+    11100014: bone07
+    11100016: bone08
+    11100018: bone09
+    11100020: bone10
+    11100022: bone11
+    11100024: bone12
+    11100026: bone13
+    11100028: Dummy01
+    11100030: slime
+    11100032: slime_eye
     13700000: slime
+    13700002: bone01
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -68,7 +261,7 @@ ModelImporter:
     materialSearch: 1
     materialLocation: 0
   animations:
-    legacyGenerateAnimations: 4
+    legacyGenerateAnimations: 2
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
