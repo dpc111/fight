@@ -5,9 +5,20 @@ using UnityEngine;
 public class UnitLive : UnitBase {
     SkillBase mSkill = null;
 
+    public override bool Kill {
+        get {
+            return base.Kill;
+        }
+        set {
+            State = GameDefine.UnitStateDeath;
+            base.Kill = value;
+        }
+    }
+
     public override void Init(UnitCfg cfg, FixVector3 pos) {
         base.Init(cfg, pos);
         mSkill = SkillFactory.Create(cfg.SkillId, this);
+        State = GameDefine.UnitStateBorn;
         GameApp.liveMgr.Add(this);
     }
 
@@ -21,5 +32,20 @@ public class UnitLive : UnitBase {
         if (mSkill != null) {
             mSkill.Update();
         }
+    }
+
+    public override void OnMoveStart() {
+        base.OnMoveStart();
+        State = GameDefine.UnitStateWalk;
+    }
+
+    public override void OnMoveStop() {
+        base.OnMoveStop();
+        State = GameDefine.UnitStateIdle;
+    }
+
+    public override void OnBeAttack(Fix damage) {
+        base.OnBeAttack(damage);
+        State = GameDefine.UnitStateBeAttack;
     }
 }

@@ -44,7 +44,7 @@ public class UnitMgrBase<T> where T : UnitBase {
             if (unit.Kill) {
                 continue;
             }
-            unit.mUnitUnity.UpdateRender(interpolation, IsUpdateForward);
+            unit.UpdateRender(interpolation, IsUpdateForward);
         }
     }
 

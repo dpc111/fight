@@ -3,60 +3,64 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitUnity {
-    public UnitBase mUnit = null;
-    public GameObject mGameObj;
+    public GameObject mGameObj = null;
+    public UnitAnimator mAnimator = null;
     public FixVector3 mLastPos = new FixVector3(Fix.fix0, Fix.fix0, Fix.fix0);
     public FixVector3 mNextPos = new FixVector3(Fix.fix0, Fix.fix0, Fix.fix0);
     FixVector3 mRot;
     FixVector3 mScale;
+    public bool mIsKill = false;
+    public virtual bool Kill { get { return mIsKill; } set { mIsKill = value; } }
+    public int mState = GameDefine.UnitStateNone;
+    public virtual int State {
+        get {
+            return mState;
+        }
+        set {
+            mState = value;
+            if (mAnimator == null) {
+                return;
+            }
+            //mAnimator.SetState(mState);
+        }
+    }
 
-
-    public void Init(UnitBase unit, UnitCfg cfg) {
-        mUnit = unit;
-        mGameObj = ResFactory.prefabs.Create(cfg.Prefab, mUnit.mTransform.Pos.ToVector3(), Quaternion.identity);
+    public virtual void Init(UnitCfg cfg) {
+        mGameObj = ResFactory.prefabs.Create(cfg.Prefab);
         if (mGameObj == null) {
             Debug.LogError(cfg.Prefab);
         }
-        //mGameObj.transform.localPosition = mUnit.mTransform.Pos.ToVector3();
-        //mGameObj.SetActive(true);
+        mGameObj.transform.localPosition = GetTransform().Pos.ToVector3();
+        mAnimator = new UnitAnimator();
+        mAnimator.Init(mGameObj);
     }
 
-    public void Destory() {
+    public virtual void Destory() {
         ResFactory.prefabs.Destory(mGameObj);
     }
 
-
-    public void Update() {
-        if (mUnit.mTransform.Move) {
-            mLastPos = mUnit.mTransform.Pos;
-            mNextPos = mLastPos + mUnit.mTransform.Dir * mUnit.mTransform.Speed * GameApp.timeFrame;
-            mGameObj.transform.localPosition = mUnit.mTransform.Pos.ToVector3();
+    public virtual void Update() {
+        TransformBase transform = GetTransform();
+        if (transform.Move) {
+            mLastPos = transform.Pos;
+            mNextPos = mLastPos + transform.Dir * transform.Speed * GameApp.timeFrame;
+            mGameObj.transform.localPosition = transform.Pos.ToVector3();
         }
+    }
 
+    public virtual TransformBase GetTransform() {
+        return null;
     }
 
     public void UpdateRender(float interpolation, bool IsUpdateForward) {
-        if (mUnit.Kill || !mUnit.mTransform.Move) {
+        TransformBase transform = GetTransform();
+        if (Kill || transform.Move) {
             return;
         }
         mGameObj.transform.localPosition = Vector3.Lerp(mLastPos.ToVector3(), mNextPos.ToVector3(), interpolation);
-        if (IsUpdateForward) {
-            mGameObj.transform.forward = mUnit.mTransform.Dir.ToVector3();
+        if (IsUpdateForward && transform.Dir.ToVector3() != Vector3.zero) {
+            mGameObj.transform.forward = transform.Dir.ToVector3();
         }
-    }
-
-    public void PlayAnimation(string name) {
-
-    }
-
-    public void PlayAnimationQueue(string name) {
-
-    }
-
-    public void StopAnimation() {
-        Animation animation = mGameObj.transform.GetComponent<Animation>();
-        if (animation != null)
-            animation.Stop();
     }
 
     public void SetScale(FixVector3 value) {
@@ -80,19 +84,6 @@ public class UnitUnity {
 
     public void SetVisible(bool value) {
         mGameObj.SetActive(value);
-    }
-
-    public void DestroyGameObject() {
-        GameObject.Destroy(mGameObj);
-        mGameObj.transform.localPosition = new Vector3(10000, 10000, 0);
-    }
-
-    public void SetGameObjectName(string name) {
-        mGameObj.name = name;
-    }
-
-    public string GetGameOjectName() {
-        return mGameObj.name;
     }
 
     public void SetGameObjectPosition(FixVector3 position) {

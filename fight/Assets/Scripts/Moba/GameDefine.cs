@@ -68,4 +68,12 @@ public class GameDefine {
 	public const int AttrTypeAttackDamage          = 6;             // 
 	public const int AttrTypeAttackNum             = 7;             // 
 	public const int AttrTypeNum                   = 8;             // 
+	//UnitState
+	public const int UnitStateNone                 = 1;             // 无
+	public const int UnitStateBorn                 = 2;             // 出生
+	public const int UnitStateIdle                 = 3;             // 闲着
+	public const int UnitStateWalk                 = 4;             // 行进
+	public const int UnitStateAttack               = 5;             // 攻击
+	public const int UnitStateBeAttack             = 6;             // 受攻击
+	public const int UnitStateDeath                = 7;             // 死亡
 }

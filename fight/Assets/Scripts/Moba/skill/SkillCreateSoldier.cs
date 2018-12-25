@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillCreateSoldier : SkillBase {
-    public override void Trigger() {
-        base.Trigger();
+    public override void Trigger(UnitBase tar) {
+        base.Trigger(tar);
         SoldierBase soldier = SoldierFactory.Create(mCfg.SoldierId, 
             mUnitTri.mTransform.Pos + (new FixVector3(mUnitTri.mTransform.mBlock.mBlockRange, Fix.fix0, Fix.fix0) * GameTool.CampDir(mUnitTri.Camp).x));
         Fix damage = mUnitTri.GetAttr(GameDefine.AttrTypeAttackDamage);

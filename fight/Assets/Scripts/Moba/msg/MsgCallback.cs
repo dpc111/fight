@@ -34,6 +34,14 @@ public class MsgCallback {
     public void MsgCreateUnit(int uid, MsgCreateUnit msg) {
         int index = msg.index;
         FixVector3 pos = new FixVector3(Fix.FromRaw(msg.pos.x), Fix.FromRaw(msg.pos.y), Fix.FromRaw(msg.pos.z));
+        // test
+        if ((int)pos.x < 50) {
+            Debug.Log("11111111111");
+            uid = 111;
+        } else {
+            Debug.Log("22222222222");
+            uid = 222;
+        }
         Player player = GameApp.campMgr.GetPlayer(uid);
         Debug.Log(uid);
         if (player == null) {

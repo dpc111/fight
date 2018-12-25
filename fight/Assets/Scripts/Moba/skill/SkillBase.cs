@@ -22,12 +22,10 @@ public class SkillBase {
 
     }
 
-    public virtual void Trigger() {
-
-    }
-
     public virtual void Trigger(UnitBase tar) {
-
+        if (mUnitTri != null) {
+            mUnitTri.State = GameDefine.UnitStateAttack;
+        }
     }
 
     public virtual void End() {
@@ -64,7 +62,7 @@ public class SkillBase {
         }
         /////////////////////////////////////////////////////////////////////////////////
         if (mCfg.SkillTargetGroup == GameDefine.SkillTargetGroupNone) {
-            Trigger();
+            Trigger(null);
         /////////////////////////////////////////////////////////////////////////////////
         } else if (mCfg.SkillTargetGroup == GameDefine.SkillTargetGroupNearestOne) {
             if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeHitRange) {

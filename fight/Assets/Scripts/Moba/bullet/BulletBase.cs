@@ -19,7 +19,7 @@ public class BulletBase : UnitBase {
 
     public virtual void OnHit(UnitBase unitHit) {
         Fix damage = mAttr.GetAttr(GameDefine.AttrTypeAttackDamage);
-        unitHit.mAttr.AddAttr(GameDefine.AttrTypeHp, -damage);
+        unitHit.OnBeAttack(damage);
         if (mCfg.HitDestroy == 1) {
             Kill = true;
         }
