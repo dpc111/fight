@@ -48,6 +48,16 @@ public class UnitMgrBase<T> where T : UnitBase {
         }
     }
 
+    public virtual void UpdateAnimator() {
+        for (int i = 0; i < mUnits.Count; i++) {
+            T unit = mUnits[i];
+            if (unit.Kill) {
+                continue;
+            }
+            unit.UpdateAnimator();
+        }
+    }
+
     public List<T> GetList() {
         return mUnits;
     }

@@ -6,8 +6,8 @@ public class SoldierBase : UnitLive {
     public UnitBase mUnitTri = null;
     public UnitBase mUnitTar = null;
 
-    public virtual void Init(SoldierCfg cfg, FixVector3 pos) {
-        base.Init(cfg, pos);
+    public virtual void Init(SoldierCfg cfg, UnitProperty pro) {
+        base.Init(cfg, pro);
     }
 
     public override void Update() {

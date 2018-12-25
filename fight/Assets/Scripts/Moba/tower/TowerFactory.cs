@@ -43,7 +43,7 @@ public class TowerFactory {
         return towerCfgs[id];
     }
 
-    public static TowerBase Create(int id, FixVector3 pos) {
+    public static TowerBase Create(int id, UnitProperty pro) {
         TowerCfg cfg = GetCfg(id);
         if (cfg == null) {
             return null;
@@ -52,7 +52,7 @@ public class TowerFactory {
         if (tower == null) {
             return null;
         }
-        tower.Init(cfg, pos);
+        tower.Init(cfg, pro);
         GameApp.towerMgr.Add(tower);
         return tower;
     }

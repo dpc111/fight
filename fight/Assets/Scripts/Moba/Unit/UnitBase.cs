@@ -15,17 +15,20 @@ public class UnitCfg {
     public int SkillId = 0;
 }
 
+public class UnitProperty {
+    public int Camp = 0;
+    public FixVector3 Pos = new FixVector3();
+    public FixVector3 Rol = new FixVector3();
+}
+
 public class UnitBase : UnitUnity {
     public UnitAttr mAttr = new UnitAttr();
     public TransformBase mTransform = new TransformBase();
     public BuffMgr mBuffMgr = new BuffMgr();
     public int Camp { get; set; }
 
-    public virtual void Init(UnitCfg cfg, FixVector3 pos) {
+    public virtual void Init(UnitCfg cfg, UnitProperty pro) {
         mAttr.Init(this);
-        mTransform.Init(this, pos, cfg.BlockRange, cfg.MoveSpeed);
-        GameApp.transformMgr.Add(mTransform);
-        mBuffMgr.Init(this);
         mAttr.SetAttr(GameDefine.AttrTypeHp, cfg.Hp);
         mAttr.SetAttr(GameDefine.AttrTypeArmor, cfg.Armor);
         mAttr.SetAttr(GameDefine.AttrTypeMoveSpeed, cfg.MoveSpeed);
@@ -33,8 +36,12 @@ public class UnitBase : UnitUnity {
         mAttr.SetAttr(GameDefine.AttrTypeAttackRange, cfg.AttackRange);
         mAttr.SetAttr(GameDefine.AttrTypeAttackDamage, cfg.AttackDamage);
         mAttr.SetAttr(GameDefine.AttrTypeAttackNum, cfg.AttackNum);
-        Kill = false;
+        mTransform.Init(this, pro.Pos, pro.Rol, cfg.BlockRange, cfg.MoveSpeed);
+        GameApp.transformMgr.Add(mTransform);
+        mBuffMgr.Init(this);
+        Camp = pro.Camp;
         base.Init(cfg);
+        Kill = false;
     }
 
     public override void Destory() {
@@ -49,12 +56,12 @@ public class UnitBase : UnitUnity {
         if (Kill) {
             return;
         }
-        if (mBuffMgr != null) {
-            mBuffMgr.Update();
-        }
         if (GameTool.IsOutOfWorld(this)) {
             Kill = true;
             return;
+        }
+        if (mBuffMgr != null) {
+            mBuffMgr.Update();
         }
         base.Update();
     }

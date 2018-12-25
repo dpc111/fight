@@ -6,18 +6,22 @@ public class SkillShoot : SkillBase {
     public override void Trigger(UnitBase tar) {
         base.Trigger(tar);
         if (tar == null) {
-            BulletBase bullet = BulletFactory.Create(mCfg.BulletId, mUnitTri.mTransform.Pos + new FixVector3(2, 5, 0));
+            UnitProperty pro = new UnitProperty();
+            pro.Camp = mUnitTri.Camp;
+            pro.Pos = mUnitTri.mTransform.Pos + new FixVector3(2, 5, 0);
+            BulletBase bullet = BulletFactory.Create(mCfg.BulletId, pro);
             bullet.mUnitTri = mUnitTri;
             bullet.mUnitTar = null;
-            bullet.Camp = mUnitTri.Camp;
             Fix damage = mUnitTri.GetAttr(GameDefine.AttrTypeAttackDamage);
             bullet.mAttr.SetAttr(GameDefine.AttrTypeAttackDamage, damage);
             bullet.mTransform.MoveDir(GameTool.CampDir(bullet.Camp));
         } else {
-            BulletBase bullet = BulletFactory.Create(mCfg.BulletId, mUnitTri.mTransform.Pos);
+            UnitProperty pro = new UnitProperty();
+            pro.Camp = mUnitTri.Camp;
+            pro.Pos = mUnitTri.mTransform.Pos;
+            BulletBase bullet = BulletFactory.Create(mCfg.BulletId, pro);
             bullet.mUnitTri = mUnitTri;
             bullet.mUnitTar = tar;
-            bullet.Camp = mUnitTri.Camp;
             Fix damage = mUnitTri.GetAttr(GameDefine.AttrTypeAttackDamage);
             bullet.mAttr.SetAttr(GameDefine.AttrTypeAttackDamage, damage);
             bullet.mTransform.MoveLock(tar.mTransform);

@@ -10,13 +10,15 @@ public class UnitLive : UnitBase {
             return base.Kill;
         }
         set {
-            State = GameDefine.UnitStateDeath;
+            if (value) {
+                State = GameDefine.UnitStateDeath;
+            }
             base.Kill = value;
         }
     }
 
-    public override void Init(UnitCfg cfg, FixVector3 pos) {
-        base.Init(cfg, pos);
+    public override void Init(UnitCfg cfg, UnitProperty pro) {
+        base.Init(cfg, pro);
         mSkill = SkillFactory.Create(cfg.SkillId, this);
         State = GameDefine.UnitStateBorn;
         GameApp.liveMgr.Add(this);

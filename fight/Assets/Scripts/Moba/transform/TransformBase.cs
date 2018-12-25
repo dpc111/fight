@@ -21,6 +21,7 @@ public class TransformBase {
     public Fix Speed { get { return mSpeed; } set { mSpeed = value; } }
     public FixVector3 Pos { get { mGPos.x = mPos.x; mGPos.z = mPos.y; return mGPos; } }
     public FixVector3 Dir { get { mGDir.x = mDir.x; mGDir.z = mDir.y; return mGDir; } }
+    public FixVector3 Rol { get; set; }
     public bool Move { 
         get { 
             return mIsMove; 
@@ -39,7 +40,7 @@ public class TransformBase {
     }
 
 
-    public virtual void Init(UnitBase unit, FixVector3 pos, Fix blockRange, Fix speed) {
+    public virtual void Init(UnitBase unit, FixVector3 pos, FixVector3 rol, Fix blockRange, Fix speed) {
         mPos = new FixVector2(pos.x, pos.z);
         mGPos = pos;
         mSpeed = speed;
@@ -51,6 +52,7 @@ public class TransformBase {
         mMoveLock.Init(this);
         mMoveDirTo.Init(this);
         mMoveCur = null;
+        Rol = rol;
     }
 
     public void Update() {

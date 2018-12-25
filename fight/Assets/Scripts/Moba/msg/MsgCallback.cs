@@ -66,7 +66,14 @@ public class MsgCallback {
             return;
         }
         player.CardUse(index);
-        TowerBase tower = TowerFactory.Create(unitId, pos);
-        tower.Camp = player.mCamp;
+        UnitProperty pro = new UnitProperty();
+        pro.Camp = player.mCamp;
+        pro.Pos = pos;
+        if (pro.Camp == GameDefine.CampLeft) {
+            pro.Rol = new FixVector3(0, 0, 0);
+        } else if (pro.Camp == GameDefine.CampRight) {
+            pro.Rol = new FixVector3(0, 180, 0);
+        }
+        TowerBase tower = TowerFactory.Create(unitId, pro);
     }
 }

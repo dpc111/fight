@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UnitUnity {
     public GameObject mGameObj = null;
-    public UnitAnimator mAnimator = null;
+    //public UnitAnimator mAnimator = null;
     public FixVector3 mLastPos = new FixVector3(Fix.fix0, Fix.fix0, Fix.fix0);
     public FixVector3 mNextPos = new FixVector3(Fix.fix0, Fix.fix0, Fix.fix0);
     FixVector3 mRot;
@@ -18,10 +18,10 @@ public class UnitUnity {
         }
         set {
             mState = value;
-            if (mAnimator == null) {
-                return;
+            UnitAnimator ani = mGameObj.GetComponent<UnitAnimator>();
+            if (ani != null) {
+                ani.SetState(mState);
             }
-            //mAnimator.SetState(mState);
         }
     }
 
@@ -31,8 +31,15 @@ public class UnitUnity {
             Debug.LogError(cfg.Prefab);
         }
         mGameObj.transform.localPosition = GetTransform().Pos.ToVector3();
-        mAnimator = new UnitAnimator();
-        mAnimator.Init(mGameObj);
+        if (GetTransform().Rol.ToVector3() != Vector3.zero) {
+            mGameObj.transform.Rotate(GetTransform().Rol.ToVector3());
+        }
+        mLastPos = GetTransform().Pos;
+        mNextPos = GetTransform().Pos;
+        //mAnimator = new UnitAnimator();
+        //mAnimator.Init(mGameObj);
+        mGameObj.AddComponent<UnitAnimator>();
+        State = GameDefine.UnitStateBorn;
     }
 
     public virtual void Destory() {
@@ -54,13 +61,17 @@ public class UnitUnity {
 
     public void UpdateRender(float interpolation, bool IsUpdateForward) {
         TransformBase transform = GetTransform();
-        if (Kill || transform.Move) {
+        if (Kill || !transform.Move) {
             return;
         }
         mGameObj.transform.localPosition = Vector3.Lerp(mLastPos.ToVector3(), mNextPos.ToVector3(), interpolation);
         if (IsUpdateForward && transform.Dir.ToVector3() != Vector3.zero) {
             mGameObj.transform.forward = transform.Dir.ToVector3();
         }
+    }
+
+    public void UpdateAnimator() {
+        //mAnimator.Update();
     }
 
     public void SetScale(FixVector3 value) {

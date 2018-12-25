@@ -18,7 +18,7 @@
         public static int clientPort = 6001;
 
         public EndPoint serverPoint;
-        public static string serverIp = "192.168.1.105";
+        public static string serverIp = "192.168.31.129";
         public static int serverPort = 7002;
 
         public Thread netThread;

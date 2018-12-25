@@ -43,13 +43,13 @@ public class SoldierFactory {
         return soldierCfgs[id];
     }
 
-    public static SoldierBase Create(int id, FixVector3 pos) {
+    public static SoldierBase Create(int id, UnitProperty pro) {
         SoldierCfg cfg = GetCfg(id);
         if (cfg == null) {
             return null;
         }
         SoldierBase soldier = new SoldierBase();
-        soldier.Init(cfg, pos);
+        soldier.Init(cfg, pro);
         GameApp.soldierMgr.Add(soldier);
         GameApp.liveMgr.Add(soldier);
         return soldier;

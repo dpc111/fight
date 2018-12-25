@@ -2,24 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitAnimator {
+public class UnitAnimator : MonoBehaviour {
     public int mState = 0;
     public Animator mAnimator = null;
 
-    public void Init(GameObject obj) {
-        mAnimator = obj.GetComponent<Animator>();
+    void Start() {
+        mAnimator = GetComponent<Animator>();
         if (mAnimator == null) {
             return;
         }
     }
 
-	public void Update () {
+    //public void Init(GameObject obj) {
+    //    mAnimator = obj.GetComponent<Animator>();
+    //    if (mAnimator == null) {
+    //        return;
+    //    }
+    //    Debug.LogError("2");
+    //}
+
+	void Update () {
         if (mAnimator == null) {
             return;
         }
-		if (!mAnimator.IsInTransition(0)) {
+        if (!mAnimator.IsInTransition(0)) {
             AnimatorStateInfo info = mAnimator.GetCurrentAnimatorStateInfo(0);
+            if (info.fullPathHash == Animator.StringToHash("Base Layer.Walk") ||
+                info.fullPathHash == Animator.StringToHash("Base Layer.Attack") ||
+                info.fullPathHash == Animator.StringToHash("Base Layer.BeAttack")) {
+                SetState(GameDefine.UnitStateIdle);
+            }
         }
+        
 	}
 
     public void SetState(int state) {
@@ -27,7 +41,7 @@ public class UnitAnimator {
             return;
         }
         mState = state;
-        mAnimator.SetInteger("state", state);
+        mAnimator.SetInteger("State", state);
     }
 
 }

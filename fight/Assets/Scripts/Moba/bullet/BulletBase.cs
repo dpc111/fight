@@ -7,8 +7,8 @@ public class BulletBase : UnitBase {
     public UnitBase mUnitTri = null;
     public UnitBase mUnitTar = null;
 
-    public virtual void Init(BulletCfg cfg, FixVector3 pos) {
-        base.Init(cfg, pos);
+    public virtual void Init(BulletCfg cfg, UnitProperty pro) {
+        base.Init(cfg, pro);
         mCfg = cfg;
     }
 

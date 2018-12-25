@@ -49,7 +49,7 @@ public class BulletFactory {
         return bulletCfgs[id];
     }
 
-    public static BulletBase Create(int id, FixVector3 pos) {
+    public static BulletBase Create(int id, UnitProperty pro) {
         BulletCfg cfg = GetCfg(id);
         if (cfg == null) {
             return null;
@@ -65,7 +65,7 @@ public class BulletFactory {
         if (bullet == null) {
             return null;
         }
-        bullet.Init(cfg, pos);
+        bullet.Init(cfg, pro);
         GameApp.bulletMgr.Add(bullet);
         return bullet;
     }
