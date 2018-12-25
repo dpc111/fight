@@ -351,7 +351,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4372817272929534}
   - component: {fileID: 95475387431372380}
-  - component: {fileID: 114843356755134012}
   m_Layer: 0
   m_Name: Elongata
   m_TagString: Untagged
@@ -1589,7 +1588,7 @@ Animator:
   m_GameObject: {fileID: 1395663704061814}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 0a84e7512a821104d907910edcc429d1, type: 3}
-  m_Controller: {fileID: 22100000, guid: fadb7243cc066514180082e1351cceb4, type: 2}
+  m_Controller: {fileID: 22100000, guid: 3e7f503534ebc674eba6bb5a2c7d997f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1597,17 +1596,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114843356755134012
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1395663704061814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c62810ccff24c40bc49891ba10b59c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!137 &137153176188637052
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

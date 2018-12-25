@@ -261,7 +261,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4972828014139550}
   - component: {fileID: 95556849894785084}
-  - component: {fileID: 114532706334318484}
   m_Layer: 0
   m_Name: plant
   m_TagString: Untagged
@@ -1038,7 +1037,7 @@ Animator:
   m_GameObject: {fileID: 1474343615461056}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 4770b5dea1b57814da5a982f59d638be, type: 3}
-  m_Controller: {fileID: 22100000, guid: 4b32061fdd5571c409b932e0e4640bc2, type: 2}
+  m_Controller: {fileID: 22100000, guid: 3be587462b894c1478d377c2de2e2a98, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1046,17 +1045,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114532706334318484
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1474343615461056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c62810ccff24c40bc49891ba10b59c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!137 &137059111784379902
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

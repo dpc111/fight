@@ -203,7 +203,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4907177138574418}
   - component: {fileID: 95817028624971634}
-  - component: {fileID: 114827311637769082}
   m_Layer: 0
   m_Name: slime
   m_TagString: Untagged
@@ -558,7 +557,7 @@ Animator:
   m_GameObject: {fileID: 1758516648722770}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b5c7ea7a702c9704486f4543564b8999, type: 3}
-  m_Controller: {fileID: 22100000, guid: 2b08ae4e9fb991a44b8d2381be5e4d8b, type: 2}
+  m_Controller: {fileID: 22100000, guid: f68afc5872cde2d49bfdb09fb0830562, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -566,17 +565,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114827311637769082
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1758516648722770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c62810ccff24c40bc49891ba10b59c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!137 &137429195237060802
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
