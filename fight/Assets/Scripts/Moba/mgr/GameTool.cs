@@ -32,11 +32,11 @@ public class GameTool {
     public static bool IsInAttackRange(UnitBase u1, UnitBase u2) {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
-        Fix attackRange = u1.mAttr.GetAttr(GameDefine.AttrTypeAttackRange);
-        if (Fix.Abs(pos1.x - pos2.x) > attackRange || Fix.Abs(pos1.z - pos2.z) > attackRange) {
+        Fix len = u1.mAttr.GetAttr(GameDefine.AttrTypeAttackRange) + u2.mTransform.mBlock.BlockRange;
+        if (Fix.Abs(pos1.x - pos2.x) > len || Fix.Abs(pos1.z - pos2.z) > len) {
             return false;
         }
-        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > attackRange * attackRange) {
+        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > len * len) {
             return false;
         }
         return true;
@@ -50,6 +50,19 @@ public class GameTool {
             return false;
         }
         if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > blockRange * blockRange) {
+            return false;
+        }
+        return true;
+    }
+
+    public static bool IsHit12(UnitBase u1, Fix range, UnitBase u2) {
+        FixVector3 pos1 = u1.mTransform.Pos;
+        FixVector3 pos2 = u2.mTransform.Pos;
+        Fix len = range + u2.mTransform.mBlock.BlockRange;
+        if (Fix.Abs(pos1.x - pos2.x) > len || Fix.Abs(pos1.z - pos2.z) > len) {
+            return false;
+        }
+        if ((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.z - pos2.z) * (pos1.z - pos2.z) > len * len) {
             return false;
         }
         return true;

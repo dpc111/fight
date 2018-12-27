@@ -18,7 +18,8 @@ public class SoldierBase : UnitLive {
                 Kill = true;
                 return;
             }
-            mTransform.MoveTarget(mUnitTar.mTransform.Pos, GetAttr(GameDefine.AttrTypeAttackRange));
+            mTransform.MoveTarget(mUnitTar.mTransform.Pos, 
+                GetAttr(GameDefine.AttrTypeAttackRange) + mUnitTar.mTransform.mBlock.BlockRange);
         }
     }
 

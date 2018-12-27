@@ -25,14 +25,14 @@
       },
       "3003" : {
          "Id" : "3003",
-         "Type" : 1,
-         "AttackRange" : 5,
+         "Type" : 2,
+         "AttackRange" : 8,
          "MoveType" : 2,
-         "CheckHitType" : 2,
+         "CheckHitType" : 3,
          "CheckHitCamp" : 2,
          "CheckHitUnitType" : 4,
-         "HitDestroy" : 1,
-         "MoveSpeed" : 15,
-         "Prefab" : "Bullet"
+         "HitDestroy" : 0,
+         "MoveSpeed" : 6,
+         "Prefab" : "Bullet3003"
       }
 }

@@ -13,7 +13,7 @@ public class CardMgr {
         }
         mCardNum = 0;
         // test
-        Create(new int[] { 1001, 1002 }, 2);
+        Create(new int[] { 1001, 1002, 1003 }, 3);
     }
 
     public void Update() {

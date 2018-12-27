@@ -36,7 +36,7 @@ public class PlayerOp : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.E)) {
             Player player = GameApp.campMgr.GetSelfCampPlayer();
-            player.Data.CurIndex = 1;
+            player.Data.CurIndex = 3;
         }
 
         if (Input.GetKeyDown(KeyCode.R)) {

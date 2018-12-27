@@ -31,5 +31,16 @@
          "MoveType" : 1,
          "BulletId" : 0,
          "SoldierId" : 2002
+      },
+      "4004" : {
+         "Id" : "4004",
+         "Type" : 1,
+         "SkillTargetGroup" : 1,
+         "CampGroupType" : 2,
+         "UnitType" : 4,
+         "SkillRangeType" : 3,
+         "MoveType" : 1,
+         "BulletId" : 3003,
+         "SoldierId" : 0
       }
 }

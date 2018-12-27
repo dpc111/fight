@@ -11,7 +11,9 @@ public class ResFactory {
         prefabs.Load("Entity/", "Elongata");
         prefabs.Load("Entity/", "plant");
         prefabs.Load("Entity/", "slime");
+        prefabs.Load("Entity/", "minigolem");
         prefabs.Load("Bullet/", "Bullet");
+        prefabs.Load("Bullet/", "Bullet3003");
         sprites.Init();
     }
 }

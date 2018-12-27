@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AStar {
     public static int findPathLen = 500;
-    public static int objectBlockLen = 50;
+    public static int objectBlockLen = 100;
 
     public int mX;
     public int mZ;
