@@ -31,8 +31,8 @@ public class UnitUnity {
             Debug.LogError(cfg.Prefab);
         }
         mGameObj.transform.localPosition = GetTransform().Pos.ToVector3();
-        if (GetTransform().Rol.ToVector3() != Vector3.zero) {
-            mGameObj.transform.Rotate(GetTransform().Rol.ToVector3());
+        if (mGameObj.transform.forward != Vector3.zero && GetTransform().Dir.ToVector3() != Vector3.zero) {
+            mGameObj.transform.forward = GetTransform().Dir.ToVector3();
         }
         mLastPos = GetTransform().Pos;
         mNextPos = GetTransform().Pos;

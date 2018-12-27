@@ -18,7 +18,7 @@
          "Type" : 1,
          "Hp" : 30,
          "AttackCd" : 1,
-         "AttackRange" : 5,
+         "AttackRange" : 8,
          "AttackDamage" : 10,
          "AttackNum" : 1,
          "BlockRange" : 1,

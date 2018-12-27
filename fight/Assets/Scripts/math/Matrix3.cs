@@ -130,6 +130,20 @@ public class Matrix3
         return x * m1;
     }
 
+    public static FixVector3 operator *(Matrix3 m1, FixVector3 v) {
+        FixVector3 res = new FixVector3();
+        res.x= m1.data[0, 0] * v.x +
+                m1.data[0, 1] * v.y +
+                m1.data[0, 2] * v.z;
+        res.y = m1.data[1, 0] * v.x +
+                m1.data[1, 1] * v.y +
+                m1.data[1, 2] * v.z;
+        res.z = m1.data[2, 0] * v.x +
+                m1.data[2, 1] * v.y +
+                m1.data[2, 2] * v.z;
+        return res;
+    }
+
     // unity YXZ
     //X   
     //1       0       0
@@ -199,5 +213,37 @@ public class Matrix3
             Fix.fix0, Fix.fix0, Fix.fix1);
         res = my * (mx * mz);
         return res;
+    }
+
+    public static Matrix3 RollAxis(FixVector3 axis, Fix r) {
+        axis.Normalize();
+        Fix u = axis.x;
+        Fix v = axis.y;
+        Fix w = axis.z;
+        Matrix3 res = new Matrix3();
+        Fix sin = Fix.Sin(r);
+        Fix cos = Fix.Cos(r);
+        res.data[0, 0] = u * u + (1 - u * u) * cos;
+        res.data[0, 1] = u * v * (1 - cos) - w * sin;
+        res.data[0, 2] = u * w * (1 - cos) + v * sin;
+        res.data[1, 0] = u * v * (1 - cos) + w * sin;
+        res.data[1, 1] = v * v + (1 - v * v) * cos;
+        res.data[1, 2] = v * w * (1 - cos) - u * sin;
+        res.data[2, 0] = u * w * (1 - cos) - v * sin;
+        res.data[2, 1] = v * w * (1 - cos) + u * sin;
+        res.data[2, 2] = w * w + (1 - w * w) * cos;
+        return res;
+    }
+
+    public static Matrix3 RollVecToVec(FixVector3 v1, FixVector3 v2) {
+        FixVector3 axis = FixVector3.Cross(v1, v2);
+        axis.Normalize();
+        Fix angle = Fix.Acos((v1 * v2) / (FixVector3.Mod(v1) * FixVector3.Mod(v2)));
+        return Matrix3.RollAxis(axis, angle);
+    }
+
+    public static Matrix3 RollVecToVecAxisY(FixVector3 v1, FixVector3 v2) {
+        Fix angle = Fix.Acos((v1 * v2) / (FixVector3.Mod(v1) * FixVector3.Mod(v2)));
+        return Matrix3.RollAxis(GameConst.AixY, angle);
     }
 }

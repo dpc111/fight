@@ -445,8 +445,10 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     {
         bool isNegative = x < 0;
         x = Abs(x);
-        if (x > Fix.fix1)
-            throw new ArithmeticException("bad Asin arg");
+        if (x > Fix.fix1) {
+            //throw new ArithmeticException("bad Asin arg: " + x.rawValue + " " + (float)x);
+            x = Fix.fix1;
+        }
         Fix f1 = ((((Fix.FromRaw(145103 >> fractionalPlace) * x) -
             Fix.FromRaw(599880 >> fractionalPlace) * x) +
             Fix.FromRaw(1420468 >> fractionalPlace) * x) -
@@ -454,6 +456,11 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
             Fix.FromRaw(26353447 >> fractionalPlace);
         Fix f2 = fixPi / (Fix)2 - (Sqrt(Fix.fix1 - x) * f1);
         return isNegative ? -f2 : f2;
+    }
+
+    public static Fix Acos(Fix x) {
+        Fix a = fixPi / (Fix)2  - Asin(x);
+        return a;
     }
     #endregion
 
@@ -565,6 +572,10 @@ public struct FixVector3
         return new FixVector3(b.x * a, b.y * a, b.z * a);
     }
 
+    public static Fix operator *(FixVector3 a, FixVector3 b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
     public static FixVector3 operator /(FixVector3 a, Fix b)
     {
         return new FixVector3(a.x / b, a.y / b, a.z / b);
@@ -579,6 +590,14 @@ public struct FixVector3
     {
         return a.x != b.x || a.y != b.y || a.z != b.z;
     }
+
+    public static FixVector3 Cross(FixVector3 a, FixVector3 b) {
+        FixVector3 res = new FixVector3();
+        res.x = a.y * b.z - a.z * b.y;
+        res.y = a.z * b.x - a.x * b.z;
+        res.z = a.x * b.y - a.y * b.x;
+        return res;
+    }  
 
     public static Fix SqrMod(FixVector3 a)
     {
@@ -638,6 +657,10 @@ public struct FixVector3
     public static FixVector3 Lerp(FixVector3 a, FixVector3 b, Fix c)
     {
         return a * (1 - c) + b * c;
+    }
+
+    public static Fix Angle(FixVector3 a, FixVector3 b) {
+        return Fix.Acos((a * b) / (FixVector3.Mod(a) * FixVector3.Mod(b)));
     }
 
     public UnityEngine.Vector3 ToVector3()

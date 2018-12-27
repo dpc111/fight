@@ -8,7 +8,7 @@ public class SkillShoot : SkillBase {
         if (tar == null) {
             UnitProperty pro = new UnitProperty();
             pro.Camp = mUnitTri.Camp;
-            pro.Pos = mUnitTri.mTransform.Pos + new FixVector3(2, 5, 0);
+            pro.Pos = mUnitTri.mTransform.Pos + mUnitTri.mTransform.RolMat * (new FixVector3(2, 4, 0));
             BulletBase bullet = BulletFactory.Create(mCfg.BulletId, pro);
             bullet.mUnitTri = mUnitTri;
             bullet.mUnitTar = null;
@@ -18,7 +18,7 @@ public class SkillShoot : SkillBase {
         } else {
             UnitProperty pro = new UnitProperty();
             pro.Camp = mUnitTri.Camp;
-            pro.Pos = mUnitTri.mTransform.Pos;
+            pro.Pos = mUnitTri.mTransform.Pos + mUnitTri.mTransform.RolMat * (new FixVector3(1, 3, 0));
             BulletBase bullet = BulletFactory.Create(mCfg.BulletId, pro);
             bullet.mUnitTri = mUnitTri;
             bullet.mUnitTar = tar;

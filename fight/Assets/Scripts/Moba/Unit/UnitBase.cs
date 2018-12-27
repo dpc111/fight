@@ -18,7 +18,7 @@ public class UnitCfg {
 public class UnitProperty {
     public int Camp = 0;
     public FixVector3 Pos = new FixVector3();
-    public FixVector3 Rol = new FixVector3();
+    public FixVector3 Dir = new FixVector3();
 }
 
 public class UnitBase : UnitUnity {
@@ -36,7 +36,7 @@ public class UnitBase : UnitUnity {
         mAttr.SetAttr(GameDefine.AttrTypeAttackRange, cfg.AttackRange);
         mAttr.SetAttr(GameDefine.AttrTypeAttackDamage, cfg.AttackDamage);
         mAttr.SetAttr(GameDefine.AttrTypeAttackNum, cfg.AttackNum);
-        mTransform.Init(this, pro.Pos, pro.Rol, cfg.BlockRange, cfg.MoveSpeed);
+        mTransform.Init(this, pro.Pos, pro.Dir, cfg.BlockRange, cfg.MoveSpeed);
         GameApp.transformMgr.Add(mTransform);
         mBuffMgr.Init(this);
         Camp = pro.Camp;

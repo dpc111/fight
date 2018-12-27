@@ -36,14 +36,11 @@ public class MsgCallback {
         FixVector3 pos = new FixVector3(Fix.FromRaw(msg.pos.x), Fix.FromRaw(msg.pos.y), Fix.FromRaw(msg.pos.z));
         // test
         if ((int)pos.x < 50) {
-            Debug.Log("11111111111");
             uid = 111;
         } else {
-            Debug.Log("22222222222");
             uid = 222;
         }
         Player player = GameApp.campMgr.GetPlayer(uid);
-        Debug.Log(uid);
         if (player == null) {
             Debug.LogError(uid);
             return;
@@ -70,9 +67,9 @@ public class MsgCallback {
         pro.Camp = player.mCamp;
         pro.Pos = pos;
         if (pro.Camp == GameDefine.CampLeft) {
-            pro.Rol = new FixVector3(0, 0, 0);
+            pro.Dir = new FixVector3(1, 0, 0);
         } else if (pro.Camp == GameDefine.CampRight) {
-            pro.Rol = new FixVector3(0, 180, 0);
+            pro.Dir = new FixVector3(-1, 0, 0);
         }
         TowerBase tower = TowerFactory.Create(unitId, pro);
     }
