@@ -27,16 +27,22 @@ public class GUIImpl : MonoBehaviour {
 	
     public void OnClickButtonAddEntity1(GameObject button)
     {
-        SetCurEntityId(1);
+        //SetCurEntityId(1);
+        Player player = GameApp.campMgr.GetSelfCampPlayer();
+        player.Data.CurIndex = 1;
     }
 
     public void OnClickButtonAddEntity2(GameObject button)
     {
-        SetCurEntityId(2);
+        //SetCurEntityId(2);
+        Player player = GameApp.campMgr.GetSelfCampPlayer();
+        player.Data.CurIndex = 2;
     }
 
     public void OnClickButtonAddEntity3(GameObject button)
     {
-        SetCurEntityId(3);
+        //SetCurEntityId(3);
+        Player player = GameApp.campMgr.GetSelfCampPlayer();
+        player.Data.CurIndex = 3;
     }
 }

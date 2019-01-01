@@ -38,6 +38,7 @@ public class TransformBase {
             }
         } 
     }
+    public void SetMoveForce(bool isMove) { mIsMove = isMove; }
 
 
     public virtual void Init(UnitBase unit, FixVector3 pos, FixVector3 dir, Fix blockRange, Fix speed) {

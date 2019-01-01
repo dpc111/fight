@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BulletBase : UnitBase {
-    public BulletCfg mCfg = null;
-    public UnitBase mUnitTri = null;
-    public UnitBase mUnitTar = null;
+    public BulletCfg Cfg { get; set; }
+    public UnitBase UnitTri { get; set; }
+    public UnitBase UnitTar { get; set; }
+    public FixVector3 PosTar { get; set; }
 
     public virtual void Init(BulletCfg cfg, UnitProperty pro) {
         base.Init(cfg, pro);
-        mCfg = cfg;
+        Cfg = cfg;
     }
 
     public override void Update() {
@@ -17,41 +18,45 @@ public class BulletBase : UnitBase {
         HitCheck();
     }
 
+    public virtual void Move(FixVector3 vec) {
+
+    }
+
     public virtual void OnHit(UnitBase unitHit) {
         Fix damage = mAttr.GetAttr(GameDefine.AttrTypeAttackDamage);
         unitHit.OnBeAttack(damage);
-        if (mCfg.HitDestroy == 1) {
+        if (Cfg.HitDestroy == 1) {
             Kill = true;
         }
     }
 
     public void HitCheck() {
-        if (mCfg.CheckHitType == GameDefine.BulletHitCheckNone) {
+        if (Cfg.CheckHitType == GameDefine.BulletHitCheckNone) {
             return;
-        } else if (mCfg.CheckHitType == GameDefine.BulletHitCheckTarget) {
-            if (mUnitTar == null || mUnitTar.Kill) {
+        } else if (Cfg.CheckHitType == GameDefine.BulletHitCheckTarget) {
+            if (UnitTar == null || UnitTar.Kill) {
                 return;
             }
-            if (!GameTool.IsHit2(this, mUnitTar)) {
+            if (!GameTool.IsHit2(this, UnitTar)) {
                 return;
             }
-            OnHit(mUnitTar);
-        } else if (mCfg.CheckHitType == GameDefine.BulletHitCheckAll) {
+            OnHit(UnitTar);
+        } else if (Cfg.CheckHitType == GameDefine.BulletHitCheckAll) {
             int camp = 0;
-            if (mCfg.CheckHitCamp == GameDefine.CampGroupTypeSelf) {
+            if (Cfg.CheckHitCamp == GameDefine.CampGroupTypeSelf) {
                 camp = Camp;
-            } else if (mCfg.CheckHitCamp == GameDefine.CampGroupTypeEnemy) {
+            } else if (Cfg.CheckHitCamp == GameDefine.CampGroupTypeEnemy) {
                 camp = GameTool.CampOther(Camp);
-            } else if (mCfg.CheckHitCamp == GameDefine.CampGroupTypeAll) {
+            } else if (Cfg.CheckHitCamp == GameDefine.CampGroupTypeAll) {
                 camp = 0;
             }
-            if (mCfg.HitDestroy == 1) {
+            if (Cfg.HitDestroy == 1) {
                 List<UnitBase> unitList = null;
-                if (mCfg.CheckHitUnitType == GameDefine.UnitTypeTower) {
+                if (Cfg.CheckHitUnitType == GameDefine.UnitTypeTower) {
                     unitList = GameApp.towerMgr.GetList();
-                } else if (mCfg.CheckHitUnitType == GameDefine.UnitTypeSoldier) {
+                } else if (Cfg.CheckHitUnitType == GameDefine.UnitTypeSoldier) {
                     unitList = GameApp.soldierMgr.GetList();
-                } else if (mCfg.CheckHitUnitType == GameDefine.UnitTypeLive) {
+                } else if (Cfg.CheckHitUnitType == GameDefine.UnitTypeLive) {
                     unitList = GameApp.liveMgr.GetList();
                 }
                 for (int i = 0; i < unitList.Count; i++) {
@@ -69,11 +74,11 @@ public class BulletBase : UnitBase {
                 }
             } else {
                 List<UnitBase> unitList = null;
-                if (mCfg.CheckHitUnitType == GameDefine.UnitTypeTower) {
+                if (Cfg.CheckHitUnitType == GameDefine.UnitTypeTower) {
                     unitList = GameApp.towerMgr.GetList();
-                } else if (mCfg.CheckHitUnitType == GameDefine.UnitTypeSoldier) {
+                } else if (Cfg.CheckHitUnitType == GameDefine.UnitTypeSoldier) {
                     unitList = GameApp.soldierMgr.GetList();
-                } else if (mCfg.CheckHitUnitType == GameDefine.UnitTypeLive) {
+                } else if (Cfg.CheckHitUnitType == GameDefine.UnitTypeLive) {
                     unitList = GameApp.liveMgr.GetList();
                 }
                 Fix attackRange = GetAttr(GameDefine.AttrTypeAttackRange);

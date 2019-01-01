@@ -54,7 +54,7 @@
                 }
                 n = n.Previous;
             }
-            q.AddLast(c);
+            q.AddFirst(c);
             return true;
         }
 

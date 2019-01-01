@@ -7,13 +7,15 @@ using Newtonsoft.Json.Linq;
 public class SkillCfg {
     public int Id = 0;
     public int Type = 0;
-    public int CampGroupType = 0;
-    public int UnitType = 0;
-    public int SkillRangeType = 0;
-    public int SkillTargetGroup = 0;
-    public int MoveType = 0;
+    public int IsAutoRelease = 0;
+    public int SkillTar = 0;
+    public int SkillAutoFindTarDir = 0;
+    public int SkillAutoFindTarPos = 0;
+    public int SkillAutoFindTarUnit = 0;
+    public int CampGroup = 0;
     public int BulletId = 0;
     public int SoldierId = 0;
+    public int BuffId = 0;
 }
 
 public class SkillFactory {
@@ -29,13 +31,15 @@ public class SkillFactory {
             SkillCfg skill = new SkillCfg();
             skill.Id = (int)cfg["Id"];
             skill.Type = (int)cfg["Type"];
-            skill.CampGroupType = (int)cfg["CampGroupType"];
-            skill.UnitType = (int)cfg["UnitType"];
-            skill.SkillRangeType = (int)cfg["SkillRangeType"];
-            skill.SkillTargetGroup = (int)cfg["SkillTargetGroup"];
-            skill.MoveType = (int)cfg["MoveType"];
+            skill.IsAutoRelease = (int)cfg["IsAutoRelease"];
+            skill.SkillTar = (int)cfg["SkillTar"];
+            skill.SkillAutoFindTarDir = (int)cfg["SkillAutoFindTarDir"];
+            skill.SkillAutoFindTarPos = (int)cfg["SkillAutoFindTarPos"];
+            skill.SkillAutoFindTarUnit = (int)cfg["SkillAutoFindTarUnit"];
+            skill.CampGroup = (int)cfg["CampGroup"];
             skill.BulletId = (int)cfg["BulletId"];
             skill.SoldierId = (int)cfg["SoldierId"];
+            skill.BuffId = (int)cfg["BuffId"];
             skillCfgs[skill.Id] = skill;
         }
     }

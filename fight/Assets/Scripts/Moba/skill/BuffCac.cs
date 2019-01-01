@@ -10,8 +10,8 @@ public class BuffCac : BuffBase {
     public int mAddCdAttr;
     public Fix mAddCdValue;
 
-    public override void Init(int type) {
-        base.Init(type);
+    public override void Init(BuffCfg cfg) {
+        base.Init(cfg);
     }
 
     public override void Start() {
@@ -29,7 +29,7 @@ public class BuffCac : BuffBase {
 
     public override void Update() {
         base.Update();
-        if (mTimeLast - GameApp.timeCur < mCd) {
+        if (mTimeLast - GameApp.timeCur < mCfg.TimeCd) {
             return;
         }
         mTimeLast = GameApp.timeCur;

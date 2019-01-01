@@ -25,9 +25,9 @@ public class TransformMoveDirTo : TransformMoveBase {
         mTimeMove = FixVector2.Distance(mPosStart, mPosTarget) / mTransform.mSpeed;
         mTimePass = Fix.fix0;
         if (mTimeMove <= Fix.fix0) {
-            mTransform.Move = false;
-        } else {
-            mTransform.Move = true;
+            Debug.LogError((float)mTimeMove + " " + mPosStart.ToString() + " " + mPosTarget.ToString());
+            //mTransform.Move = false;
+            mTransform.SetMoveForce(false);
         }
     }
 }

@@ -12,6 +12,7 @@ public class UnitLive : UnitBase {
         set {
             if (value) {
                 State = GameDefine.UnitStateDeath;
+                mSkill.OnKill();
             }
             base.Kill = value;
         }

@@ -25,6 +25,7 @@ public class GameApp {
         SoldierFactory.Init();
         BulletFactory.Init();
         SkillFactory.Init();
+        BuffFactory.Init();
         udpNet.Start();
         msgFrame.Init();
         battleLogic.Init();
@@ -40,9 +41,13 @@ public class GameApp {
     }
 
     public static void Test() {
-        campMgr.SelfCamp = 1;
-        campMgr.CreatePlayer(111, 1);
-        campMgr.CreatePlayer(222, 2);
+        if (GameConst.Uid1 == GameConst.UidCur) {
+            campMgr.SelfCamp = 1;
+        } else {
+            campMgr.SelfCamp = 2;
+        }
+        campMgr.CreatePlayer(GameConst.Uid1, 1);
+        campMgr.CreatePlayer(GameConst.Uid2, 2);
     }
 
     public static void Stop() {

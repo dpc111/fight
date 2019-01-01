@@ -15,11 +15,11 @@ public class ConfigMgr {
     {
         jsonObjects.Clear();
         jsonArrays.Clear();
-        LoadObject("Assets/Scripts/Common/Json/tower.json", "tower");
-        LoadObject("Assets/Scripts/Common/Json/soldier.json", "soldier");
-        LoadObject("Assets/Scripts/Common/Json/bullet.json", "bullet");
-        LoadObject("Assets/Scripts/Common/Json/skill.json", "skill");
-        LoadObject("Assets/Scripts/Common/Json/buff.json", "buff");
+        LoadObject("Json/tower", "tower");
+        LoadObject("Json/soldier", "soldier");
+        LoadObject("Json/bullet", "bullet");
+        LoadObject("Json/skill", "skill");
+        LoadObject("Json/buff", "buff");
     }
 
     public static void LoadArray(string fileName, string jsonName)
@@ -41,9 +41,10 @@ public class ConfigMgr {
         {
             return;
         }
-        string fileData = File.ReadAllText(fileName, Encoding.UTF8);
+        //string fileData = File.ReadAllText(fileName, Encoding.UTF8);
+        var fileData = Resources.Load(fileName) as TextAsset;
         //string jsonData = "{" + jsonName + ":" + fileData + "}";
-        JObject jsonObj = JObject.Parse(fileData);
+        JObject jsonObj = JObject.Parse(fileData.text);
         jsonObjects[jsonName] = jsonObj;
     }
 

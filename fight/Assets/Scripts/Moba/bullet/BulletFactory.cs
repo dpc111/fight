@@ -59,8 +59,8 @@ public class BulletFactory {
             bullet = new BulletLock();
         } else if (cfg.Type == GameDefine.BulletTypeDir) {
             bullet = new BulletDir();
-        } else if (cfg.Type == GameDefine.BulletTypePath) {
-            bullet = new BulletPathBase();
+        } else if (cfg.Type == GameDefine.BulletTypePathBoomerang) {
+            bullet = new BulletPathBoomerang();
         }
         if (bullet == null) {
             return null;

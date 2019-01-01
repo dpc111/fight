@@ -10,7 +10,6 @@ public class SkillBase {
     public int mUnitTarListNum = 0;
     public Fix mTimeTriNextTime = Fix.fix0;
 
-
     public virtual void Init(SkillCfg cfg, UnitBase unitTri) {
         mCfg = cfg;
         mUnitTri = unitTri;
@@ -23,6 +22,12 @@ public class SkillBase {
     }
 
     public virtual void Trigger(UnitBase tar) {
+        if (mUnitTri != null) {
+            mUnitTri.State = GameDefine.UnitStateAttack;
+        }
+    }
+
+    public virtual void Trigger(FixVector3 vec) {
         if (mUnitTri != null) {
             mUnitTri.State = GameDefine.UnitStateAttack;
         }
@@ -52,128 +57,101 @@ public class SkillBase {
     }
 
     public virtual void TryTrigger() {
+        if (mCfg.IsAutoRelease == 0) {
+            return;
+        }
+        if (mCfg.SkillTar == GameDefine.SkillTarNone) {
+            Trigger(null);
+        } else if (mCfg.SkillTar == GameDefine.SkillTarDir) {
+            AutoFindDirTrigger();
+        } else if (mCfg.SkillTar == GameDefine.SkillTarPos) {
+            AutoFindPosTrigger();
+        } else if (mCfg.SkillTar == GameDefine.SkillTarUnitTower) {
+            AutoFindUnitTrigger(GameApp.towerMgr);
+        } else if (mCfg.SkillTar == GameDefine.SkillTarUnitSoldier) {
+            AutoFindUnitTrigger(GameApp.soldierMgr);
+        } else if (mCfg.SkillTar == GameDefine.SkillTarUnitLive) {
+            AutoFindUnitTrigger(GameApp.liveMgr);
+        }
+    }
+
+    public virtual void AutoFindDirTrigger() {
+        if (mCfg.SkillAutoFindTarDir == GameDefine.SkillAutoFindTarDirSelfDirX) {
+            FixVector3 dir = GameTool.CampDir(mUnitTri.Camp);
+            Trigger(dir);
+        } else if (mCfg.SkillAutoFindTarDir == GameDefine.SkillAutoFindTarDirEnemyDirX) {
+            FixVector3 dir = GameTool.CampDir(GameTool.CampOther(mUnitTri.Camp));
+            Trigger(dir);
+        } else if (mCfg.SkillAutoFindTarDir == GameDefine.SkillAutoFindTarDirNearestEnemyUnit) {
+            UnitBase unit = GameApp.liveMgr.FindNearestInAttackRange(mUnitTri, GameTool.CampOther(mUnitTri.Camp));
+            if (unit == null) {
+                return;
+            }
+            FixVector3 dir = FixVector3.Dir(mUnitTri.mTransform.Pos, unit.mTransform.Pos);
+            Trigger(dir);            
+        }
+    }
+    public virtual void AutoFindPosTrigger() {
+        if (mCfg.SkillAutoFindTarPos == GameDefine.SkillAutoFindTarPosEnmeyX) {
+            Fix len = mUnitTri.GetAttr(GameDefine.AttrTypeAttackRange);
+            FixVector3 pos = mUnitTri.mTransform.Pos + GameTool.CampDir(mUnitTri.Camp) * len;
+            GameTool.PosLimitIntoWorld(ref pos);
+            Trigger(pos);
+        } else if (mCfg.SkillAutoFindTarPos == GameDefine.SkillAutoFindTarPosNereastUnitTower) {
+            UnitBase unit = GameApp.towerMgr.FindNearestInAttackRange(mUnitTri, GameTool.CampOther(mUnitTri.Camp));
+            if (unit == null) {
+                return;
+            }
+            Trigger(unit.mTransform.Pos);
+        } else if (mCfg.SkillAutoFindTarPos == GameDefine.SkillAutoFindTarPosNereastUnitSoldier) {
+            UnitBase unit = GameApp.soldierMgr.FindNearestInAttackRange(mUnitTri, GameTool.CampOther(mUnitTri.Camp));
+            if (unit == null) {
+                return;
+            }
+            Trigger(unit.mTransform.Pos);
+        } else if (mCfg.SkillAutoFindTarPos == GameDefine.SkillAutoFindTarPosNereastUnitLive) {
+            UnitBase unit = GameApp.liveMgr.FindNearestInAttackRange(mUnitTri, GameTool.CampOther(mUnitTri.Camp));
+            if (unit == null) {
+                return;
+            }
+            Trigger(unit.mTransform.Pos);
+        }
+    }
+
+    public virtual void AutoFindUnitTrigger(UnitMgr mgr) {
         int camp = 0;
-        if (mCfg.CampGroupType == GameDefine.CampGroupTypeSelf) {
+        if (mCfg.CampGroup == GameDefine.CampGroupSelf) {
             camp = mUnitTri.Camp;
-        } else if (mCfg.CampGroupType == GameDefine.CampGroupTypeEnemy) {
+        } else if (mCfg.CampGroup == GameDefine.CampGroupEnemy) {
             camp = GameTool.CampOther(mUnitTri.Camp);
-        } else if (mCfg.CampGroupType == GameDefine.CampGroupTypeAll) {
+        } else if (mCfg.CampGroup == GameDefine.CampGroupAll) {
             camp = 0;
         }
-        /////////////////////////////////////////////////////////////////////////////////
-        if (mCfg.SkillTargetGroup == GameDefine.SkillTargetGroupNone) {
-            Trigger(null);
-        /////////////////////////////////////////////////////////////////////////////////
-        } else if (mCfg.SkillTargetGroup == GameDefine.SkillTargetGroupNearestOne) {
-            if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeHitRange) {
+        if (mCfg.SkillAutoFindTarUnit == GameDefine.SkillAutoFindTarUnitNearestOne) {
+            mUnitTar = mgr.FindNearestInAttackRange(mUnitTri, camp);
+            if (mUnitTar == null) {
                 return;
-            } else if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeAttackRange) {
-                if (mCfg.UnitType == GameDefine.UnitTypeTower) {
-                    mUnitTar = GameApp.towerMgr.FindNearestInAttackRange(mUnitTri, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeSoldier) {
-                    mUnitTar = GameApp.soldierMgr.FindNearestInAttackRange(mUnitTri, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeBullet) {
-                    mUnitTar = GameApp.bulletMgr.FindNearestInAttackRange(mUnitTri, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeLive) {
-                    mUnitTar = GameApp.liveMgr.FindNearestInAttackRange(mUnitTri, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeAll) {
-                }
-                if (mUnitTar == null) {
-                    return;
-                }
-                Trigger(mUnitTar);
-            } else if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeAll) {
-                if (mCfg.UnitType == GameDefine.UnitTypeTower) {
-                    mUnitTar = GameApp.towerMgr.FindNearest(mUnitTri, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeSoldier) {
-                    mUnitTar = GameApp.soldierMgr.FindNearest(mUnitTri, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeBullet) {
-                    mUnitTar = GameApp.bulletMgr.FindNearest(mUnitTri, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeLive) {
-                    mUnitTar = GameApp.liveMgr.FindNearest(mUnitTri, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeAll) {
-                }
-                if (mUnitTar == null) {
-                    return;
-                }
-                Trigger(mUnitTar);
             }
-        /////////////////////////////////////////////////////////////////////////////////
-        } else if (mCfg.SkillTargetGroup == GameDefine.SkillTargetGroupLimitNum) {
+            Trigger(mUnitTar);
+        } else if (mCfg.SkillAutoFindTarUnit == GameDefine.SkillAutoFindTarUnitRandomLimitNum) {
             int tarNum = (int)mUnitTri.GetAttr(GameDefine.AttrTypeAttackNum);
-            if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeHitRange) {
-            } else if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeAttackRange) {
-                if (mCfg.UnitType == GameDefine.UnitTypeTower) {
-                    mUnitTarListNum = GameApp.towerMgr.FindListInAttackRange(mUnitTar, ref mUnitTarList, tarNum, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeSoldier) {
-                    mUnitTarListNum = GameApp.soldierMgr.FindListInAttackRange(mUnitTar, ref mUnitTarList, tarNum, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeBullet) {
-                    mUnitTarListNum = GameApp.bulletMgr.FindListInAttackRange(mUnitTar, ref mUnitTarList, tarNum, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeLive) {
-                    mUnitTarListNum = GameApp.liveMgr.FindListInAttackRange(mUnitTar, ref mUnitTarList, tarNum, camp);
-                } else if (mCfg.UnitType == GameDefine.UnitTypeAll) {
-                }
-                for (int i = 0; i < mUnitTarListNum; i++) {
-                    Trigger(mUnitTarList[i]);
-                }
-            } else if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeAll) {
-                if (mCfg.UnitType == GameDefine.UnitTypeTower) {
-                } else if (mCfg.UnitType == GameDefine.UnitTypeSoldier) {
-                } else if (mCfg.UnitType == GameDefine.UnitTypeBullet) {
-                } else if (mCfg.UnitType == GameDefine.UnitTypeLive) {
-                } else if (mCfg.UnitType == GameDefine.UnitTypeAll) {
-                }
+            mUnitTarListNum = mgr.FindListInAttackRange(mUnitTar, ref mUnitTarList, tarNum, camp);
+            for (int i = 0; i < mUnitTarListNum; i++) {
+                Trigger(mUnitTarList[i]);
             }
-        /////////////////////////////////////////////////////////////////////////////////
-        } else if (mCfg.SkillTargetGroup == GameDefine.SkillTargetGroupAll) {
-            if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeHitRange) {
-            } else if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeAttackRange) {
-                List<UnitBase> unitList = null;
-                if (mCfg.UnitType == GameDefine.UnitTypeTower) {
-                    unitList = GameApp.towerMgr.GetList();
-                } else if (mCfg.UnitType == GameDefine.UnitTypeSoldier) {
-                    unitList = GameApp.soldierMgr.GetList();
-                } else if (mCfg.UnitType == GameDefine.UnitTypeBullet) {
-                    unitList = GameApp.bulletMgr.GetList();
-                } else if (mCfg.UnitType == GameDefine.UnitTypeLive) {
-                    unitList = GameApp.liveMgr.GetList();
-                } else if (mCfg.UnitType == GameDefine.UnitTypeAll) {
+        } else if (mCfg.SkillAutoFindTarUnit == GameDefine.SkillAutoFindTarUnitAll) {
+            List<UnitBase> list = mgr.GetList();
+            for (int i = 0; i < list.Count; i++) {
+                UnitBase u = list[i];
+                if (u.Kill || u == mUnitTri || (camp != 0 && camp != u.Camp)) {
+                    continue;
                 }
-                if (unitList == null) {
-                    return;
-                }
-                for (int i = 0; i < unitList.Count; i++) {
-                    UnitBase u = unitList[i];
-                    if (u.Kill || u == mUnitTri || (camp != 0 && camp != u.Camp)) {
-                        continue;
-                    }
-                    if (GameTool.IsInAttackRange(mUnitTri, u)) {
-                        Trigger(u);
-                    }
-                }
-            } else if (mCfg.SkillRangeType == GameDefine.SkillRangeTypeAll) {
-                List<UnitBase> unitList = null;
-                if (mCfg.UnitType == GameDefine.UnitTypeTower) {
-                    unitList = GameApp.towerMgr.GetList();
-                } else if (mCfg.UnitType == GameDefine.UnitTypeSoldier) {
-                    unitList = GameApp.soldierMgr.GetList();
-                } else if (mCfg.UnitType == GameDefine.UnitTypeBullet) {
-                    unitList = GameApp.bulletMgr.GetList();
-                } else if (mCfg.UnitType == GameDefine.UnitTypeLive) {
-                    unitList = GameApp.liveMgr.GetList();
-                } else if (mCfg.UnitType == GameDefine.UnitTypeAll) {
-                }
-                if (unitList == null) {
-                    return;
-                }
-                for (int i = 0; i < unitList.Count; i++) {
-                    UnitBase u = unitList[i];
-                    if (u.Kill || u == mUnitTri || (camp != 0 && camp != u.Camp)) {
-                        continue;
-                    }
-                    Trigger(u);
-                }
+                Trigger(u);
             }
         }
+    }
+
+    public virtual void OnKill() {
+
     }
 }

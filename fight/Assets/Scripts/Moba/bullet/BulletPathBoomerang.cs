@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BulletPathBoomerang : BulletPathBase {
-    public FixVector3 mBackPos;
-
     public override void OnMoveStop() {
         base.OnMoveStop();
-        if (mUnitTri == null) {
+        if (UnitTri == null || UnitTri.Kill) {
+            Kill = true;
             return;
         }
-        if (GameTool.WhichPosNearer(mTransform.Pos, mBackPos, mUnitTri.mTransform.Pos) == 1) {
-            mTransform.MoveDirTo(mTransform.Pos);
+        if (GameTool.WhichPosNearer(mTransform.Pos, PosTar, UnitTri.mTransform.Pos) == 1) {
+            mTransform.MoveDirTo(UnitTri.mTransform.Pos);
         } else {
             Kill = true;
+            return;
         }
     }
 
-    public void MoveTo(FixVector3 pos) {
-        mBackPos = pos;
-        mTransform.MoveDirTo(mBackPos);
+    public override void Move(FixVector3 vec) {
+        PosTar = vec;
+        mTransform.MoveDirTo(PosTar);
     }
 }

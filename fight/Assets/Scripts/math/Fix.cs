@@ -10,6 +10,7 @@ public partial struct Fix : IEquatable<Fix>, IComparable<Fix>
     public static readonly decimal mPrecision = (decimal)(new Fix(1L));
     public static readonly Fix fix1 = new Fix(one);
     public static readonly Fix fix0 = new Fix(0);
+    public static readonly Fix fix1000 = new Fix(1000);
     public static readonly Fix fixPi = new Fix(pi);
     public static readonly Fix fixPi2 = new Fix(pi2);
     public static readonly Fix fixPi180 = new Fix((long)72);
@@ -589,6 +590,12 @@ public struct FixVector3
     public static bool operator !=(FixVector3 a, FixVector3 b)
     {
         return a.x != b.x || a.y != b.y || a.z != b.z;
+    }
+
+    public static FixVector3 Dir(FixVector3 a, FixVector3 b) {
+        FixVector3 dir = b - a;
+        dir.Normalize();
+        return dir;
     }
 
     public static FixVector3 Cross(FixVector3 a, FixVector3 b) {

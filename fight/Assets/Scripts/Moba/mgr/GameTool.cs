@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameTool {
+    public static Fix CfgFix(int v) {
+        return (Fix)v / Fix.fix1000;
+    }
+
     public static bool IsSameCamp(UnitBase u1, UnitBase u2) {
         if (u1 == null || u2 == null) {
             return false;
@@ -153,6 +157,21 @@ public class GameTool {
         return false;
     }
 
+    public static void PosLimitIntoWorld(ref FixVector3 pos) {
+        if (pos.x < Fix.fix0) {
+            pos.x = Fix.fix0;
+        }
+        if (pos.z < Fix.fix0) {
+            pos.z = Fix.fix0;
+        }
+        if (pos.x > GameConst.XMax) {
+            pos.x = GameConst.XMax;
+        }
+        if (pos.z > GameConst.ZMax) {
+            pos.z = GameConst.ZMax;
+        }
+    }
+
     public static Fix SqrDistance(UnitBase u1, UnitBase u2) {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
@@ -172,7 +191,7 @@ public class GameTool {
     }
 
     public static int WhichPosNearer(FixVector3 pos, FixVector3 pos1, FixVector3 pos2) {
-        if (FixVector3.SqrDistance(pos, pos2) < FixVector3.SqrDistance(pos, pos1)) {
+        if (FixVector3.SqrDistance(pos, pos1) < FixVector3.SqrDistance(pos, pos2)) {
             return 1;
         }
         return 2;

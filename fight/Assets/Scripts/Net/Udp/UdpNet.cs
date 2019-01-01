@@ -18,7 +18,7 @@
         public static int clientPort = 6001;
 
         public EndPoint serverPoint;
-        public static string serverIp = "192.168.31.129";
+        public static string serverIp = "192.168.1.104";
         public static int serverPort = 7002;
 
         public Thread netThread;
@@ -35,7 +35,7 @@
             serverPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             netThread = new Thread(NetProcess);
             netThread.Start();
-            ConnectToServer(111);
+            ConnectToServer(GameConst.UidCur);
         }
 
         public void Stop() {
@@ -185,13 +185,16 @@
                     }
                     int len = clientSocket.ReceiveFrom(recvBuff, ref serverPoint);
                     if (len <= 0) {
+                        Debug.Log("111 " + len);
                         break;
                     }
                     if (len < UdpConst.udpHeadByteAll) {
+                        Debug.Log("222 " + len);
                         break;
                     }
                     int size = NetTool.BytesToInt8(ref recvBuff, 0);
                     if (len < size + UdpConst.udpHeadByteAll) {
+                        Debug.Log("333 " + len + " " + size);
                         break;
                     }
                     UdpChunk c = new UdpChunk();
