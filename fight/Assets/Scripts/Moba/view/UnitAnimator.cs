@@ -2,26 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitAnimator : MonoBehaviour {
-    public int mState = 0;
+public class UnitAnimator {
     public Animator mAnimator = null;
+    public int mState = 0;
 
-    void Start() {
-        mAnimator = GetComponent<Animator>();
+    public void Init(GameObject obj) {
+        mAnimator = obj.GetComponent<Animator>();
         if (mAnimator == null) {
             return;
         }
     }
 
-    //public void Init(GameObject obj) {
-    //    mAnimator = obj.GetComponent<Animator>();
-    //    if (mAnimator == null) {
-    //        return;
-    //    }
-    //    Debug.LogError("2");
-    //}
-
-	void Update () {
+	public void Update () {
         if (mAnimator == null) {
             return;
         }

@@ -8,7 +8,7 @@ public class TransformMoveLock : TransformMoveBase {
     public override void Update() {
         mTransform.mDir = mTransformLock.mPos - mTransform.mPos;
         mTransform.mDir.Normalize();
-        mTransform.mPos += mTransform.mDir * mTransform.mSpeed * GameApp.timeFrame;
+        mTransform.mPos += mTransform.mDir * mTransform.mSpeed * GameConst.TimeFrame;
     }
 
     public void Move(TransformBase tranLock) {

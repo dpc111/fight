@@ -32,6 +32,14 @@ public class CampMgr {
         return GetCampPlayer(SelfCamp);
     }
 
+    public bool IsSelfPlayer(int uid) {
+        return uid == GetSelfCampPlayer().mUid;
+    }
+
+    public bool IsSelfPlayer(Player player) {
+        return player.mUid == GetSelfCampPlayer().mUid;
+    }
+
     public void Add(Player player) {
         mPlayers[player.mUid] = player;
         mCamps[player.mCamp] = player;

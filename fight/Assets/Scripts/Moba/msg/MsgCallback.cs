@@ -7,7 +7,7 @@ using UnityEngine;
 public class MsgCallback {
     public void OnMsg(object[] param) {
         if (param.Length < 2) {
-            Debug.LogError("sssss " + param.Length);
+            Debug.LogError(param.Length);
             return;
         }
         string name = param[1].GetType().ToString();
@@ -42,17 +42,14 @@ public class MsgCallback {
         //}
         Player player = GameApp.campMgr.GetPlayer(uid);
         if (player == null) {
-            Debug.LogError(uid);
             return;
         }
         int unitId = player.CardUnitId(index);
         if (unitId == 0) {
-            Debug.LogError(index);
             return;
         }
         TowerCfg cfg = TowerFactory.GetCfg(unitId);
         if (cfg == null) {
-            Debug.LogError("");
             return;
         }
         Fix blockRange = cfg.BlockRange;
@@ -72,5 +69,6 @@ public class MsgCallback {
             pro.Dir = GameConst.CampRightDir;
         }
         TowerBase tower = TowerFactory.Create(unitId, pro);
+        UIApp.OnCreateTower(player, index);
     }
 }

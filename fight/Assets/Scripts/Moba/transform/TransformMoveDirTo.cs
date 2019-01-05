@@ -9,7 +9,7 @@ public class TransformMoveDirTo : TransformMoveBase {
     public Fix mTimePass = Fix.fix0;
 
     public override void Update() {
-        mTimePass += GameApp.timeFrame;
+        mTimePass += GameConst.TimeFrame;
         Fix timeScale = mTimePass / mTimeMove;
         if (timeScale >= (Fix)1) {
             mTransform.mPos = mPosTarget;

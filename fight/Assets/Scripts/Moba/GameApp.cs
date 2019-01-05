@@ -15,11 +15,11 @@ public class GameApp {
     public static UnitMgr liveMgr = new UnitMgr();
     public static TransformMgr transformMgr = new TransformMgr();
     public static FixRandom fixRandom = new FixRandom(1000);
-    public static Fix timeFrame = Fix.FromRaw(409); // 273
     public static Fix timeCur = Fix.fix0;
 
     public static void Init() {
         ConfigMgr.Init();
+        UIImpl.Init();
         ResFactory.Init();
         TowerFactory.Init();
         SoldierFactory.Init();
@@ -48,6 +48,8 @@ public class GameApp {
         }
         campMgr.CreatePlayer(GameConst.Uid1, 1);
         campMgr.CreatePlayer(GameConst.Uid2, 2);
+        campMgr.GetPlayer(GameConst.Uid1).mCardMgr.Create(new int[] { 1001, 1002, 1003, 1004, 1005 }, 5);
+        campMgr.GetPlayer(GameConst.Uid2).mCardMgr.Create(new int[] { 1001, 1002, 1003, 1004, 1005 }, 5);
     }
 
     public static void Stop() {

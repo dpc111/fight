@@ -6,14 +6,14 @@ public class CardMgr {
     public static int mCardNumMax = 5;
     public Card[] mCards = new Card[mCardNumMax];
     public int mCardNum = 0;
+    public Player mPlayer = null;
 
-    public void Init() {
+    public void Init(Player player) {
         for (int i = 0; i < mCardNumMax; i++) {
             mCards[i] = null;
         }
         mCardNum = 0;
-        // test
-        Create(new int[] { 1001, 1002, 1003 }, 3);
+        mPlayer = player;
     }
 
     public void Update() {
@@ -45,6 +45,7 @@ public class CardMgr {
             card.Init(cfg.Id, cfg.CreateCd);
             mCards[mCardNum] = card;
             mCardNum++;
+            UIApp.SetCreateTowerCd(mPlayer, i + 1, cfg.CreateCd);
         }
     }
 }

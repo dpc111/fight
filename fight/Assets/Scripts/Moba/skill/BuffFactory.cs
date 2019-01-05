@@ -12,6 +12,7 @@ public class BuffCfg {
     public int BuffUpdate = 0;
     public Fix TimeLife = Fix.fix0;
     public Fix TimeCd = Fix.fix0;
+    public string Prefab = "";
     public int[] MulEffectType = new int[GameConst.BuffCacSize];
     public Fix[] MulEffectValue = new Fix[GameConst.BuffCacSize];
     public int MulEffectNum = 0;
@@ -37,6 +38,7 @@ public class BuffFactory {
             buff.BuffUpdate = (int)cfg["BuffUpdate"];
             buff.TimeLife = GameTool.CfgFix((int)cfg["TimeLife"]);
             buff.TimeCd = GameTool.CfgFix((int)cfg["TimeCd"]);
+            buff.Prefab = (string)cfg["Prefab"];
             int index = 0;
             foreach (JToken v in cfg["MulEffectType"]) {
                 buff.MulEffectType[index] = (int)v;
@@ -48,7 +50,7 @@ public class BuffFactory {
             }
             index = 0;
             foreach (JToken v in cfg["MulEffectValue"]) {
-                buff.MulEffectValue[index] = GameTool.CfgFix((int)v);
+                buff.MulEffectValue[index] = GameTool.CfgFix((int)v) + Fix.fix1;
                 index++;
                 if (index >= GameConst.BuffCacSize) {
                     break;
@@ -94,18 +96,24 @@ public class BuffFactory {
         if (buff == null) {
             return null;
         }
+        buff.Init(cfg);
         buff.mUnitTri = tri;
         buff.mUnitTar = tar;
-        tar.mBuffMgr.Add(buff);
-        tri.mBuffMgr.AddTri(buff);
-        buff.Init(cfg);
-        buff.Start();
-        return buff;
+        if (tar.mBuffMgr.Add(buff)) {
+            tri.mBuffMgr.AddTri(buff);
+            buff.Start();
+            return buff;
+        }
+        return null;
     }
 
-    public static void RemoveBuff(BuffBase buff) {
+    public static void Remove(BuffBase buff) {
         buff.End();
-        buff.mUnitTar.mBuffMgr.Remove(buff);
-        buff.mUnitTri.mBuffMgr.RemoveTri(buff);
+        if (buff.mUnitTar != null) {
+            buff.mUnitTar.mBuffMgr.Remove(buff);
+        }
+        if (buff.mUnitTri != null) {
+            buff.mUnitTri.mBuffMgr.RemoveTri(buff);
+        }
     }
 }

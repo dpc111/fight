@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 public class BulletCfg : UnitCfg {
-    public int Id = 0;
     public int Type = 0;
     public int CheckHitType = 0;
     public int CheckHitCamp = 0;
@@ -24,6 +23,8 @@ public class BulletFactory {
         foreach (JToken cfgt in cfgs.Values()) {
             JObject cfg = cfgt.ToObject<JObject>();
             BulletCfg bullet = new BulletCfg();
+            bullet.UnitType = GameDefine.UnitTypeSoldier;
+            bullet.Id = (int)cfg["Id"];
             bullet.Hp = Fix.fix0;
             bullet.Armor = Fix.fix0;
             bullet.MoveSpeed = (Fix)(int)cfg["MoveSpeed"];
@@ -32,7 +33,6 @@ public class BulletFactory {
             bullet.AttackDamage = Fix.fix0;
             bullet.BlockRange = Fix.fix0;
             bullet.Prefab = (string)cfg["Prefab"];
-            bullet.Id = (int)cfg["Id"];
             bullet.Type = (int)cfg["Type"];
             bullet.CheckHitType = (int)cfg["CheckHitType"];
             bullet.CheckHitCamp = (int)cfg["CheckHitCamp"];

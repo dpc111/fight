@@ -4,59 +4,65 @@ using UnityEngine;
 
 public class UnitUnity {
     public GameObject mGameObj = null;
-    //public UnitAnimator mAnimator = null;
+    public UnitRange mUnitRange = null;
+    public UnitAnimator mAnimator = null;
     public FixVector3 mLastPos = new FixVector3(Fix.fix0, Fix.fix0, Fix.fix0);
     public FixVector3 mNextPos = new FixVector3(Fix.fix0, Fix.fix0, Fix.fix0);
     FixVector3 mRot;
     FixVector3 mScale;
-    public bool mIsKill = false;
-    public virtual bool Kill { get { return mIsKill; } set { mIsKill = value; } }
     public int mState = GameDefine.UnitStateNone;
+    public int UnitType { get; set; }
+    public virtual bool Kill { get; set; }
     public virtual int State {
         get {
             return mState;
         }
         set {
             mState = value;
-            UnitAnimator ani = mGameObj.GetComponent<UnitAnimator>();
-            if (ani != null) {
-                ani.SetState(mState);
-            }
+            mAnimator.SetState(mState);
         }
     }
 
     public virtual void Init(UnitCfg cfg) {
         mGameObj = ResFactory.prefabs.Create(cfg.Prefab);
-        if (mGameObj == null) {
-            Debug.LogError(cfg.Prefab);
-        }
         mGameObj.transform.localPosition = GetTransform().Pos.ToVector3();
         if (mGameObj.transform.forward != Vector3.zero && GetTransform().Dir.ToVector3() != Vector3.zero) {
             mGameObj.transform.forward = GetTransform().Dir.ToVector3();
         }
         mLastPos = GetTransform().Pos;
         mNextPos = GetTransform().Pos;
-        //mAnimator = new UnitAnimator();
-        //mAnimator.Init(mGameObj);
-        mGameObj.AddComponent<UnitAnimator>();
+        UnitType = cfg.UnitType;
+        mUnitRange = new UnitRange();
+        mUnitRange.Init(this);
+        mAnimator = new UnitAnimator();
+        mAnimator.Init(mGameObj);
         State = GameDefine.UnitStateBorn;
     }
 
     public virtual void Destory() {
         ResFactory.prefabs.Destory(mGameObj);
+        mUnitRange.Destory();
     }
 
     public virtual void Update() {
         TransformBase transform = GetTransform();
         if (transform.Move) {
             mLastPos = transform.Pos;
-            mNextPos = mLastPos + transform.Dir * transform.Speed * GameApp.timeFrame;
+            mNextPos = mLastPos + transform.Dir * transform.Speed * GameConst.TimeFrame;
             mGameObj.transform.localPosition = transform.Pos.ToVector3();
         }
     }
 
+    public virtual void OnAttackRangeChange(Fix value) {
+        mUnitRange.SetRange(value);
+    } 
+
     public virtual TransformBase GetTransform() {
         return null;
+    }
+
+    public virtual Fix GetAttr(int type) {
+        return Fix.fix0;
     }
 
     public void UpdateRender(float interpolation, bool IsUpdateForward) {
@@ -71,7 +77,7 @@ public class UnitUnity {
     }
 
     public void UpdateAnimator() {
-        //mAnimator.Update();
+        mAnimator.Update();
     }
 
     public void SetScale(FixVector3 value) {

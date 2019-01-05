@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitCfg {
+    public int UnitType = 0;
+    public int Id = 0;
     public Fix Hp = Fix.fix0;
     public Fix Armor = Fix.fix0;
     public Fix MoveSpeed = Fix.fix0;
@@ -26,6 +28,7 @@ public class UnitBase : UnitUnity {
     public TransformBase mTransform = new TransformBase();
     public BuffMgr mBuffMgr = new BuffMgr();
     public int Camp { get; set; }
+    public int Id { get; set; }
 
     public virtual void Init(UnitCfg cfg, UnitProperty pro) {
         mAttr.Init(this);
@@ -40,6 +43,7 @@ public class UnitBase : UnitUnity {
         GameApp.transformMgr.Add(mTransform);
         mBuffMgr.Init(this);
         Camp = pro.Camp;
+        Id = cfg.Id;
         base.Init(cfg);
         Kill = false;
     }
@@ -70,6 +74,10 @@ public class UnitBase : UnitUnity {
         return mTransform;
     }
 
+    public override Fix GetAttr(int type) {
+        return mAttr.GetAttr(type);
+    }
+
     public virtual void OnMoveStart() {
 
     }
@@ -87,9 +95,5 @@ public class UnitBase : UnitUnity {
             return false;
         }
         return true;
-    }
-
-    public Fix GetAttr(int type) {
-        return mAttr.GetAttr(type);
     }
 }

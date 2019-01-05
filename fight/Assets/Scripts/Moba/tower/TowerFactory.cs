@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 public class TowerCfg : UnitCfg {
-    public int Id = 0;
     public Fix CreateCd = Fix.fix0;
 }
 
@@ -20,6 +19,8 @@ public class TowerFactory {
         foreach (JToken cfgt in cfgs.Values()) {
             JObject cfg = cfgt.ToObject<JObject>();
             TowerCfg tower = new TowerCfg();
+            tower.Id = (int)cfg["Id"];
+            tower.UnitType = GameDefine.UnitTypeTower;
             tower.Hp = (Fix)(int)cfg["Hp"];
             tower.Armor = Fix.fix0;
             tower.MoveSpeed = Fix.fix0;
@@ -30,7 +31,6 @@ public class TowerFactory {
             tower.BlockRange = (Fix)(int)cfg["BlockRange"];
             tower.Prefab = (string)cfg["Prefab"];
             tower.SkillId = (int)cfg["SkillId"];
-            tower.Id = (int)cfg["Id"];
             tower.CreateCd = (Fix)(int)cfg["CreateCd"];
             towerCfgs[tower.Id] = tower;
         }

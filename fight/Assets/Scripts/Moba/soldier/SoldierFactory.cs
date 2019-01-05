@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 public class SoldierCfg : UnitCfg {
-    public int Id = 0;
     public int Type = 0;
 }
 
@@ -20,6 +19,8 @@ public class SoldierFactory {
         foreach (JToken cfgt in cfgs.Values()) {
             JObject cfg = cfgt.ToObject<JObject>();
             SoldierCfg soldier = new SoldierCfg();
+            soldier.UnitType = GameDefine.UnitTypeSoldier;
+            soldier.Id = (int)cfg["Id"];
             soldier.Hp = (Fix)(int)cfg["Hp"];
             soldier.Armor = Fix.fix0;
             soldier.MoveSpeed = (Fix)(int)cfg["MoveSpeed"];
@@ -30,7 +31,6 @@ public class SoldierFactory {
             soldier.BlockRange = (Fix)(int)cfg["BlockRange"];
             soldier.Prefab = (string)cfg["Prefab"];
             soldier.SkillId = (int)cfg["SkillId"];
-            soldier.Id = (int)cfg["Id"];
             soldier.Type = (int)cfg["Type"];
             soldierCfgs[soldier.Id] = soldier;
         }

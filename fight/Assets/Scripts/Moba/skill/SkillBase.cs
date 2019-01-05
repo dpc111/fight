@@ -146,6 +146,9 @@ public class SkillBase {
                 if (u.Kill || u == mUnitTri || (camp != 0 && camp != u.Camp)) {
                     continue;
                 }
+                if (!GameTool.IsInAttackRange(mUnitTri, u)) {
+                    continue;
+                }
                 Trigger(u);
             }
         }

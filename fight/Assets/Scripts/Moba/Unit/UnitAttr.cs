@@ -45,7 +45,7 @@ public class UnitAttr {
         if (mAttrCur[attr] < Fix.fix0) {
             mAttrCur[attr] = Fix.fix0;
         }
-        OnAddAttr(attr, mAttrCur[attr]);
+        OnAttrChange(attr, mAttrCur[attr]);
     }
 
     public void MulAttr(int attr, Fix value) {
@@ -53,13 +53,16 @@ public class UnitAttr {
             return;
         }
         mAttrCur[attr] *= value;
+        OnAttrChange(attr, mAttrCur[attr]);
     }
 
-    public void OnAddAttr(int attr, Fix value) {
+    public void OnAttrChange(int attr, Fix value) {
         if (attr == GameDefine.AttrTypeHp) {
             if (value <= Fix.fix0) {
                 mUnit.Kill = true;
             }
+        } else if (attr == GameDefine.AttrTypeAttackRange) {
+            mUnit.OnAttackRangeChange(value);
         }
     }
 }

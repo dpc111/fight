@@ -100,10 +100,10 @@ public class GameTool {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
         if (u1.mTransform.Move) {
-            pos1 += u1.mTransform.Dir * u1.mTransform.Speed * GameApp.timeFrame;
+            pos1 += u1.mTransform.Dir * u1.mTransform.Speed * GameConst.TimeFrame;
         }
         if (u2.mTransform.Move) {
-            pos2 += u2.mTransform.Dir * u2.mTransform.Speed * GameApp.timeFrame;
+            pos2 += u2.mTransform.Dir * u2.mTransform.Speed * GameConst.TimeFrame;
         }
         Fix blockRange = u2.mTransform.mBlock.BlockRange;
         if (Fix.Abs(pos1.x - pos2.x) > blockRange || Fix.Abs(pos1.z - pos2.z) > blockRange) {
@@ -119,10 +119,10 @@ public class GameTool {
         FixVector3 pos1 = u1.mTransform.Pos;
         FixVector3 pos2 = u2.mTransform.Pos;
         if (u1.mTransform.Move) {
-            pos1 += u1.mTransform.Dir * u1.mTransform.Speed * GameApp.timeFrame;
+            pos1 += u1.mTransform.Dir * u1.mTransform.Speed * GameConst.TimeFrame;
         }
         if (u2.mTransform.Move) {
-            pos2 += u2.mTransform.Dir * u2.mTransform.Speed * GameApp.timeFrame;
+            pos2 += u2.mTransform.Dir * u2.mTransform.Speed * GameConst.TimeFrame;
         }
         if (Fix.Abs(pos1.x - pos2.x) > blockRange || Fix.Abs(pos1.z - pos2.z) > blockRange) {
             return false;

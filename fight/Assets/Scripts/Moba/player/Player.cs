@@ -11,7 +11,7 @@ public class Player {
     public void Init(int uid, int camp) {
         mUid = uid;
         mCamp = camp;
-        mCardMgr.Init();
+        mCardMgr.Init(this);
         Data = new PlayerData();
         Data.Init();
     }

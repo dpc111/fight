@@ -1,0 +1,62 @@
+{
+      "1001" : {
+         "Id" : "1001",
+         "Hp" : 100,
+         "AttackCd" : 1,
+         "AttackRange" : 20,
+         "AttackDamage" : 10,
+         "AttackNum" : 1,
+         "BlockRange" : 2,
+         "Prefab" : "Elongata",
+         "SkillId" : 4002,
+         "CreateCd" : 4
+      },
+      "1002" : {
+         "Id" : "1002",
+         "Hp" : 100,
+         "AttackCd" : 4,
+         "AttackRange" : 100,
+         "AttackDamage" : 10,
+         "AttackNum" : 0,
+         "BlockRange" : 3,
+         "Prefab" : "plant",
+         "SkillId" : 4003,
+         "CreateCd" : 3
+      },
+      "1003" : {
+         "Id" : "1003",
+         "Hp" : 100,
+         "AttackCd" : 6,
+         "AttackRange" : 100,
+         "AttackDamage" : 20,
+         "AttackNum" : 0,
+         "BlockRange" : 5,
+         "Prefab" : "minigolem",
+         "SkillId" : 4004,
+         "CreateCd" : 3
+      },
+      "1004" : {
+         "Id" : "1004",
+         "Hp" : 100,
+         "AttackCd" : 1,
+         "AttackRange" : 20,
+         "AttackDamage" : 0,
+         "AttackNum" : 0,
+         "BlockRange" : 3,
+         "Prefab" : "wasp",
+         "SkillId" : 4005,
+         "CreateCd" : 2
+      },
+      "1005" : {
+         "Id" : "1005",
+         "Hp" : 100,
+         "AttackCd" : 1,
+         "AttackRange" : 30,
+         "AttackDamage" : 0,
+         "AttackNum" : 0,
+         "BlockRange" : 3,
+         "Prefab" : "evilSlime",
+         "SkillId" : 4006,
+         "CreateCd" : 2
+      }
+}

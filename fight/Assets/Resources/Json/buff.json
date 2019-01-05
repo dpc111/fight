@@ -1,0 +1,44 @@
+{
+      "1001" : {
+         "Id" : "1001",
+         "Type" : 1,
+         "Content" : "加速",
+         "BuffAdd" : 3,
+         "BuffUpdate" : 1,
+         "TimeLife" : 0,
+         "TimeCd" : 0,
+         "MulEffectType" : [3,4],
+         "MulEffectValue" : [1000,-500],
+         "AddEffectType" : [],
+         "AddEffectValue" : [],
+         "Prefab" : "AirShield"
+      },
+      "1002" : {
+         "Id" : "1002",
+         "Type" : 1,
+         "Content" : "加攻击",
+         "BuffAdd" : 3,
+         "BuffUpdate" : 1,
+         "TimeLife" : 0,
+         "TimeCd" : 0,
+         "MulEffectType" : [6],
+         "MulEffectValue" : [600],
+         "AddEffectType" : [],
+         "AddEffectValue" : [],
+         "Prefab" : "LifeShield"
+      },
+      "1003" : {
+         "Id" : "1003",
+         "Type" : 1,
+         "Content" : "加攻击范围",
+         "BuffAdd" : 3,
+         "BuffUpdate" : 1,
+         "TimeLife" : 0,
+         "TimeCd" : 0,
+         "MulEffectType" : [5],
+         "MulEffectValue" : [500],
+         "AddEffectType" : [],
+         "AddEffectValue" : [],
+         "Prefab" : "LifeShield"
+      }
+}

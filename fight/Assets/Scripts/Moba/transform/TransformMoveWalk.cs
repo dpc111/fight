@@ -18,7 +18,7 @@ public class TransformMoveTarget : TransformMoveBase {
         if (mTimeMove == Fix.fix0) {
             return;
         }
-        mTimePass += GameApp.timeFrame;
+        mTimePass += GameConst.TimeFrame;
         Fix timeScale = mTimePass / mTimeMove;
         if (timeScale >= (Fix)1) {
             mTransform.mPos = mPosEnd;

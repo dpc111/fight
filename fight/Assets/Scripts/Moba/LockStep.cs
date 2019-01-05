@@ -10,7 +10,7 @@ public class LockStep {
     public int mLogicFrame = 1;
 
     public void Init() {
-        mFrameLen = (float)GameApp.timeFrame;
+        mFrameLen = (float)GameConst.TimeFrame;
         mTotalTime = 0;
         mNextGameTime = 0;
         mFrameInterval = 0;
@@ -24,7 +24,7 @@ public class LockStep {
             GameApp.battleLogic.UpdateFrame();
             mNextGameTime += mFrameLen;
             mLogicFrame += 1;
-            GameApp.timeCur += GameApp.timeFrame;
+            GameApp.timeCur += GameConst.TimeFrame;
             //test
             if (mLogicFrame == 1000) {
                 GameApp.udpNet.DisconnectToServer();

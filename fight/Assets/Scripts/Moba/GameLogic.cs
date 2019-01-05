@@ -32,7 +32,7 @@ public class GameLogic {
         }
         GameApp.soldierMgr.UpdateRender(interpolation);
         GameApp.bulletMgr.UpdateRender(interpolation, false);
-        //GameApp.liveMgr.UpdateAnimator();
+        GameApp.liveMgr.UpdateAnimator();
     }
 
     public void StopBattle() {

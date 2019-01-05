@@ -13,16 +13,18 @@ public class BuffMgr {
         mTriBuffs.Clear();
     }
 
-    public void Add(BuffBase buff) {
+    public bool Add(BuffBase buff) {
         if (mTarBuffs.Contains(buff)) {
-            return;
+            return false;
         }
         if (buff.mCfg.BuffAdd == GameDefine.BuffAddLayer) {
             mTarBuffs.Add(buff);
+            return true;
         } else if (buff.mCfg.BuffAdd == GameDefine.BuffAddResetValue) {
             BuffBase old = FindBuff(buff.mCfg.Id);
             if (old == null) {
                 mTarBuffs.Add(buff);
+                return true;
             } else {
                 ResetData(old, buff);
             }
@@ -30,6 +32,7 @@ public class BuffMgr {
             BuffBase old = FindBuff(buff.mCfg.Id);
             if (old == null) {
                 mTarBuffs.Add(buff);
+                return true;
             } else {
                 old.mTimeLife += buff.mTimeLife;
             }
@@ -37,10 +40,12 @@ public class BuffMgr {
             BuffBase old = FindBuff(buff.mCfg.Id);
             if (old == null) {
                 mTarBuffs.Add(buff);
+                return true;
             } else {
                 old.mTimeAdd = GameApp.timeCur;
             }
         }
+        return false;
     }
 
     public void AddTri(BuffBase buff) {
@@ -82,14 +87,14 @@ public class BuffMgr {
     }
 
     public bool HasBuff(int id, UnitBase tri) {
-        BuffBase buff = FindBuff(id);
-        if (buff == null) {
-            return false;
+        for (int i = 0; i < mTarBuffs.Count; i++) {
+            BuffBase buff = mTarBuffs[i];
+            if (buff.mCfg.Id == id && buff.mUnitTri == tri) {
+                //Debug.LogError("xxxxs");
+                return true;
+            }
         }
-        if (buff.mUnitTri != tri) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     public BuffBase FindBuff(int id) {

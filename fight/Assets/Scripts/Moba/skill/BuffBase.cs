@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuffBase {
+public class BuffBase : BuffUnity {
     public BuffCfg mCfg = null;
     public int mType;
     public Fix mTimeLife = Fix.fix0;
@@ -13,31 +13,34 @@ public class BuffBase {
     public UnitBase mUnitTar = null;
 
     public virtual void Init(BuffCfg cfg) {
+        base.Init(cfg);
         mCfg = cfg;
         mTimeLife = mCfg.TimeLife;
         mTimeAdd = GameApp.timeCur;
         mTimeLast = GameApp.timeCur;
     }
 
-    public virtual void Start() {
-
+    public override void Start() {
+        base.Start();
     }
 
-    public virtual void End() {
+    public override void End() {
+        base.End();
+    }
 
+    public override UnitUnity GetTar() {
+        return mUnitTar;
     }
 
     public virtual void Update() {
-        if (mTimeLife <= Fix.fix0) {
+        if (mTimeLife <= Fix.fix0 || 
+            GameApp.timeCur - mTimeAdd <= mTimeLife) {
             return;
         }
-        if (GameApp.timeCur - mTimeAdd <= mTimeLife) {
-            return;
-        }
-        End();
+        BuffFactory.Remove(this);
     }
 
     public virtual void Refresh() {
-
+       
     }
 }
